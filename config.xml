@@ -22,6 +22,7 @@
     <plugin name="cordova-plugin-globalization" source="npm" spec="~1.0.7" />
     <plugin name="cordova-plugin-network-information" source="npm" spec="~1.3.3" />
     <plugin name="cordova-plugin-vibration" source="npm" spec="~2.1.5" />
+    <plugin name="cordova-android-support-gradle-release" />
 
     <plugin name="pushwoosh-cordova-plugin" spec="~7.3">
         <variable name="LOG_LEVEL" value="DEBUG" />
