@@ -365,8 +365,6 @@ function onDeviceReady(){
     initPushwoosh();
 }
 
-
-
 // llenar espacio de Noticias
 function fillNoticias(data) {
 
