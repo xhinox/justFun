@@ -8,22 +8,55 @@
         Mirage Dev Team
     </author>
     <content src="index.html" />
-    <preference name="phonegap-version" value="cli-7.1.0" />
+
+    <!-- PREFERENCIAS -->
+    <preference name="phonegap-version" value="cli-8.0.0" />
     <preference name="android-build-tool" value="gradle" />
-    <preference name="android-minSdkVersion" value="19" />
     <preference name="DisallowOverscroll" value="true" />
-    <preference name="AutoHideSplashScreen" value="true" />
-    <preference name="SplashScreenDelay" value="3000" />
-    <preference name="ShowSplashScreenSpinner" value="false"/>
     <preference name="orientation" value="portrait" />
-    <preference name="fullscreen" value="true" />
+
+    <preference name="AutoHideSplashScreen" value="true" />
+    <preference name="SplashScreenDelay" value="5000" />
+    <preference name="FadeSplashScreenDuration" value="100"/>
+    <preference name="SplashMaintainAspectRatio" value="true" />
+    <preference name="SplashShowOnlyFirstTime" value="false" />
+    <preference name="ShowSplashScreenSpinner" value="false"/>
+    <preference name="FadeSplashScreen" value="false"/>
+    <preference name="fullscreen" value="false" />
+    <!-- PREFERENCIAS -->
+
+    <!-- PLUGINS -->
     <plugin name="cordova-plugin-device" spec="~1.1.7" />
     <plugin name="cordova-plugin-camera" spec="~2.4.1" />
     <plugin name="cordova-plugin-network-information" spec="~1.3.4" />
     <plugin name="cordova-plugin-splashscreen" source="npm" />
     <plugin name="cordova-plugin-whitelist" spec="~1.3.3" />
     <gap:plugin name="pushwoosh-pgb-plugin" source="npm" />
+    <!-- PLUGINS -->
+
+    <!-- WHITELIST -->
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+
+    <allow-navigation href="http://*/*" />
+    <allow-navigation href="https://*/*" />
+    <allow-navigation href="data:*" />
+
+    <access origin="*" />
+    <access origin="*.pushwoosh.com" />
+    <!-- WHITELIST -->
+
     <platform name="android">
+        <allow-intent href="market:*" />
+        <preference name="load-url-timeout" value="50000" />
+        <preference name="android-minSdkVersion" value="19" />
+        <preference name="android-installLocation" value="internalOnly" />
+        <preference name="android-windowSoftInputMode" value="adjustResize" />
+
         <icon density="ldpi" src="res/icon/android/action_bar_ldpi.png" />
         <icon density="mdpi" src="res/icon/android/action_bar_mdpi.png" />
         <icon density="hdpi" src="res/icon/android/action_bar_hdpi.png" />
@@ -40,6 +73,7 @@
         <icon density="hdpi" src="res/icon/android/notification_hdpi.png" />
         <icon density="xhdpi" src="res/icon/android/notification_xhdpi.png" />
         <icon density="xxhdpi" src="res/icon/android/notification_xxhdpi.png" />
+
         <splash density="port-ldpi" src="res/screen/android/ldpi-port.png" />
         <splash density="port-mdpi" src="res/screen/android/mdpi-port.png" />
         <splash density="port-hdpi" src="res/screen/android/hdpi-port.png" />
@@ -47,7 +81,15 @@
         <splash density="port-xxhdpi" src="res/screen/android/xxhdpi-port.png" />
         <splash density="port-xxxhdpi" src="res/screen/android/xxxhdpi-port.png" />
     </platform>
+
     <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+        <preference name="target-device" value="handset" />
+        <preference name="prerendered-icon" value="true" />
+        <preference name="exit-on-suspend" value="true" />
+        <preference name="deployment-target" value="7.0" />
+
         <icon height="57" platform="ios" src="res/icon/ios/Icon.png" width="57" />
         <icon height="114" platform="ios" src="res/icon/ios/Icon@2x.png" width="114" />
         <icon height="20" platform="ios" src="res/icon/ios/Icon-Notification@2x.png" width="20" />
@@ -73,31 +115,6 @@
         <splash height="1136" platform="ios" src="res/screen/ios/Default-568h@2x.png" width="640" />
         <splash height="1334" platform="ios" src="res/screen/ios/Default-667h@2x.png" width="750" />
         <splash height="2208" platform="ios" src="res/screen/ios/Default-736h@3x.png" width="1242" />
-    </platform>
-    <access origin="*" />
-    <access origin="*.pushwoosh.com" />
-    <access origin="*.firebaseio.com" />
-    <access origin="*.herokuapp.com" />
-    <allow-intent href="http://*/*" />
-    <allow-intent href="https://*/*" />
-    <allow-intent href="tel:*" />
-    <allow-intent href="sms:*" />
-    <allow-intent href="mailto:*" />
-    <allow-intent href="geo:*" />
-    <platform name="android">
-        <allow-intent href="market:*" />
-        <preference name="SplashMaintainAspectRatio" value="true" />
-        <preference name="SplashShowOnlyFirstTime" value="false" />
-    </platform>
-    <platform name="ios">
-        <allow-intent href="itms:*" />
-        <allow-intent href="itms-apps:*" />
-        <preference name="FadeSplashScreen" value="false"/>
-        <preference name="FadeSplashScreenDuration" value="750"/>
-        <preference name="target-device" value="handset" />
-        <preference name="prerendered-icon" value="true" />
-        <preference name="exit-on-suspend" value="true" />
-        <preference name="deployment-target" value="7.0" />
     </platform>
 
 </widget>

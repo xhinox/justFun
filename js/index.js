@@ -396,6 +396,7 @@ function onDeviceReady(){
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 swal('Un momento', 'Fallo la conexión, favor de intentarlo de nuevo: ' + textStatus + '', 'warning');
+                swal('' + jqXHR.readyState + ' / ' + jqXHR.status + ' / ' + jqXHR.responseText + '', '');
             }
         });
     }
