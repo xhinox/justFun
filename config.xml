@@ -14,6 +14,7 @@
     <preference name="DisallowOverscroll" value="true" />
     <preference name="AutoHideSplashScreen" value="true" />
     <preference name="SplashScreenDelay" value="3000" />
+    <preference name="ShowSplashScreenSpinner" value="false"/>
     <plugin name="cordova-plugin-device" spec="~1.1.7" />
     <plugin name="cordova-plugin-camera" spec="~2.4.1" />
     <plugin name="cordova-plugin-network-information" spec="~1.3.4" />
@@ -73,6 +74,8 @@
     </platform>
     <access origin="*" />
     <access origin="*.pushwoosh.com" />
+    <access origin="*.firebaseio.com" />
+    <access origin="*.herokuapp.com" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -89,7 +92,6 @@
         <allow-intent href="itms-apps:*" />
         <preference name="FadeSplashScreen" value="false"/>
         <preference name="FadeSplashScreenDuration" value="750"/>
-        <preference name="ShowSplashScreenSpinner" value="false"/>
     </platform>
 
 </widget>
