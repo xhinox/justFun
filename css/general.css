@@ -1,12 +1,15 @@
 /* GENERALES */
 body {
     overflow: hidden;
+    background: url('../images/fondo.jpg');
+    background-size: cover;
 }
 
 .nav {
     color:white;
+    box-shadow: 0 1px 0 rgba(0,0,0,.3);
     font-size: 14px;
-    height:40px;
+    height:45px;
 }
 
 .container-fluid {
@@ -21,10 +24,14 @@ body {
     background: rgb(235,0,41);
 }
 
+.btn-continuar,
+.btn-checar {
+    box-shadow: inset 0 -15px 0 rgba(0,0,0,.07);
+}
+
 .is-left,
 .is-center,
-.is-right{
-    background: white;
+.is-right {
     -webkit-transition: all 330ms ease-in;
     transition: all 330ms ease-in;
     will-change: transform;
@@ -47,8 +54,39 @@ body {
     -ms-transform: translateX(100%);
     transform: translateX(100%);
 }
+
 .is-hidden {
     display: none;
+}
+
+.is-importHighHead {
+    background: rgb(133,13,4) !important;
+    color:white;
+}
+
+.is-importHighBody {
+    background: rgb(192,14,0) !important;
+    color:white;
+}
+
+.is-importMidHead {
+    background: rgb(151,118,1) !important;
+    color:white;
+}
+
+.is-importMidBody {
+    background: rgb(207,163,2) !important;
+    color:white;
+}
+
+.is-importLowHead {
+    background: rgb(5,97,28) !important;
+    color:white;
+}
+
+.is-importLowBody {
+    background: rgb(15,151,49) !important;
+    color:white;
 }
 
 .fa-bars,
@@ -65,6 +103,38 @@ label {
     font-size: 14px;
 }
 
+.card {
+    background: rgb(241,241,242)
+}
+
+.is-not-vanish {
+    animation-name: vanIn;
+    animation-duration:330ms;
+    opacity: 1;
+}
+
+.is-vanish {
+    animation-name: vanOut;
+    animation-duration: 330ms;
+    opacity: 0;
+}
+
+@keyframes vanIn {
+	0% { opacity: 0; }
+	100% { opacity: 1; }
+}
+
+@keyframes vanOut {
+	0% { opacity: 1; }
+	100% { opacity: 0; }
+}
+
+.btnMenu-back {
+    height: 45px;
+    width: 45px;
+    z-index: 100;
+}
+
 /* Generales */
 
 /* Menu */
@@ -79,6 +149,7 @@ label {
 .menu-item {
     cursor: pointer;
     padding: 15px;
+    background: rgb(241,241,242);
 }
 
 .menu-icon {
@@ -95,12 +166,34 @@ label {
 .UsuarioLocalizado {
     height: 25px;
 }
+
+.tecnicoImage {
+    border-radius: 3px;
+    overflow: hidden;
+    width: 150px;
+    height: 200px;
+    margin: 20px auto 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,.4)
+}
+
+.actCamera {
+    background: gray;
+    flex-flow: column;
+    align-items: center;
+    padding: 40px 0;
+    color: white;
+}
+
+.actCamera img {
+    width: 87px;
+}
 /* Registro */
 
 /* noticias */
 .noticia-wrapper {
     height: calc(100vh - 60px);
-    overflow-y:auto;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 .noticia-item {
@@ -115,6 +208,73 @@ label {
 .noticia-icon {
     width: 10px;
 }
+
+.notice.typeA {
+    width: 100%;
+}
+
+.notice.typeB {
+    width: calc(50% - 5px);
+}
+
+.notice.typeA > .notice-header,
+.notice.typeB > .notice-header {
+    background: rgb(87,87,87);
+    color:white;
+    padding:10px;
+}
+
+.notice.typeA > .notice-header {
+    width: 34.7%;
+}
+
+.notice.typeA > .notice-header > .notice-title,
+.notice.typeB > .notice-header > .notice-title {
+    font-weight: bold;
+    text-transform: uppercase;
+    word-wrap: break-word;
+}
+
+.notice.typeA > .notice-header > .notice-title {
+    font-size: 14px;
+}
+
+.notice.typeA > .notice-header > .notice-date,
+.notice.typeB > .notice-header > .notice-date {
+    font-size: 10px;
+}
+
+.notice.typeA > .notice-body,
+.notice.typeB > .notice-body {
+    background: rgb(122,122,122);
+    color:white;
+    word-wrap: break-word;
+}
+
+.notice.typeA > .notice-body {
+    font-size:12px;
+    padding:20px 15px;
+    width:65%;
+}
+
+.notice.typeA > .notice-body > .notice-text {
+    width:90%;
+}
+
+.notice.typeB > .notice-header > .notice-title {
+    font-size: 12px;
+}
+
+.notice.typeB > .notice-body {
+    font-size:12px;
+    padding:10px;
+    margin-top:1px;
+}
+
+.notice.typeB > .notice-body > .notice-text {
+    width:110px;
+}
+
 /* noticias */
 
 /* Aviso */

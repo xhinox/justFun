@@ -49,7 +49,7 @@
 // };
 
 // var swal = require('sweetalert');
-var uuid = 'prueba';
+var uuid = '';
 
 $(document).ready(function (){
     document.addEventListener("deviceready",onDeviceReady,false);
@@ -57,39 +57,6 @@ $(document).ready(function (){
     $('#txtTelefono').mask('(000) 000.0000');
     $('#codigoPostal').mask('00000');
     $("#NoCsam").prop("checked", true);
-
-    // var dataUser = JSON.parse(localStorage.getItem('dataUser'));
-    //
-    // // Validacion de usuario
-    // if (dataUser) {
-    //     $('.mnu-registro').addClass('is-hidden');
-    //     $('.mnu-noticias').removeClass('is-hidden');
-    // }
-    // else {
-    //     var url_put = 'https://tecnico-mirage.firebaseio.com/users/' + uuid + '.json';
-    //
-    //     $.ajax({
-    //         url: url_put,
-    //         type: "GET",
-    //         success: function (data) {
-    //
-    //             if (data) {
-    //                 var dataUser = {
-    //                     isCsam : data.csam,
-    //                     apellido : data.estado
-    //                 }
-    //
-    //                 localStorage.setItem('dataUser', JSON.stringify(dataUser));
-    //                 $('.mnu-registro').addClass('is-hidden');
-    //                 $('.mnu-noticias').removeClass('is-hidden');
-    //             }
-    //         },
-    //         error: function(error) {
-    //             console.log(error);
-    //         }
-    //     });
-    //
-    // }
 
 
     // INICIA MENU
@@ -100,6 +67,7 @@ $(document).ready(function (){
 
         if ($target.data('link') == 'registrate') {
             $('.regP1').removeClass('is-right').addClass('is-center');
+            $('.menu').removeClass('is-not-vanish').addClass('is-vanish');
         }
         else if ($target.data('link') == 'noticias') {
 
@@ -109,14 +77,39 @@ $(document).ready(function (){
                 url: url_put,
                 type: "GET",
                 success: function (data) {
-                    // Convertir Objeto -> Array
+
+                    var dataUser = JSON.parse(localStorage.getItem('dataUser'));
+
+                    var estado = checkEstado(dataUser.estado), today = moment(), isCsam = dataUser.isCsam;
+
                     var arr = [];
                     arr = $.map(data, function(value, index) {
-                        return [value];
+
+                        var fecha = value.fecha;
+                        var realDate = moment().year(parseInt(fecha.substr(6,4))).month(parseInt(fecha.substr(3,2)) -1).dates(parseInt(fecha.substr(0,2)));
+
+                        if (today.diff(realDate, 'days') >= 0) {
+
+                            if ((value.estado == estado) || (value.estado == 0)) {
+
+                                if (isCsam == 1) {
+                                    return [value];
+                                }
+                                else {
+                                    if (value.csam == 0) {
+                                        return [value];
+                                    }
+                                }
+
+                            }
+
+                        }
+
                     });
 
                     localStorage.setItem('news', JSON.stringify(arr));
 
+                    console.log(arr);
                     fillNoticias(arr);
                 },
                 error: function(error) {
@@ -125,12 +118,15 @@ $(document).ready(function (){
             });
 
             $('.noticia').removeClass('is-right').addClass('is-center');
+            $('.menu').removeClass('is-not-vanish').addClass('is-vanish');
         }
         else if ($target.data('link') == 'acerca') {
             $('.acerca').removeClass('is-right').addClass('is-center');
+            $('.menu').removeClass('is-not-vanish').addClass('is-vanish');
         }
         else if ($target.data('link') == 'aviso') {
             $('.aviso').removeClass('is-right').addClass('is-center');
+            $('.menu').removeClass('is-not-vanish').addClass('is-vanish');
         }
     });
     // TERMINA MENU
@@ -146,6 +142,7 @@ $(document).ready(function (){
 
         if ($target.data('link') == 'menu') {
             $('.regP1').removeClass('is-center').addClass('is-right');
+            $('.menu').removeClass('is-vanish').addClass('is-not-vanish');
         }
         else if ($target.data('link') == 'toRegP2') {
             var $nombre = $('#txtNombre').val(), $apellido = $('#txtApellido').val(),
@@ -255,12 +252,6 @@ $(document).ready(function (){
             $('.regP3').removeClass('is-center').addClass('is-right');
             $('.regP2').removeClass('is-left').addClass('is-center');
         }
-        else if ($target.data('link') === 'actCamera') {
-
-        }
-        else if ($target.data('link') === 'actImage') {
-
-        }
         else if ($target.data('link') == 'toRegP4') {
 
             var url_put = 'https://tecnico-mirage.firebaseio.com/users/' + uuid + '/.json';
@@ -272,10 +263,16 @@ $(document).ready(function (){
                 type: "PUT",
                 data: JSON.stringify(params),
                 success: function () {
-                    alert("success");
+                    swal("", "Sus datos han sido capturados con exito", "success");
+
+                    var html = "<span class='h5 d-block'>" + params.user + ' ' + params.apellido + "</span>";
+                        html += "<small class='d-block'>a nuestro programa</small>"
+
+                    var $html = $(html);
+                    $('.nombreTecnico').append($html);
                 },
                 error: function(error) {
-                    alert(error);
+                    swal("error");
                 }
             });
 
@@ -287,8 +284,9 @@ $(document).ready(function (){
     reg4.on('tap', function(ev) {
         var $target = $(ev.target);
 
-        if ($target.data('link') === 'toRegFinish') {
-
+        if ($target.data('link') == 'back') {
+            $('.regP4').removeClass('is-center').addClass('is-right');
+            $('.regP3').removeClass('is-left').addClass('is-center');
         }
     });
     // TERMINA REGISTRO
@@ -301,8 +299,10 @@ $(document).ready(function (){
 
         if ($target.data('item') == 'menu') {
             $('.noticia').removeClass('is-center').addClass('is-right');
+            $('.menu').removeClass('is-vanish').addClass('is-not-vanish');
         }
         else if ($target.data('link') == 'articulo') {
+            $('.articulo-fill').empty();
             var news = JSON.parse(localStorage.getItem('news'));
             var newIndex = $target.data('num');
             $('.articulo-fill').append(news[newIndex].articulo);
@@ -335,12 +335,12 @@ $(document).ready(function (){
     // INICIA ACERCA
     var acerca = document.querySelector('.acerca'), crc = new Hammer(acerca);
 
-
     crc.on("tap", function(ev) {
         var $target = $(ev.target);
 
         if ($target.data('item') == 'acerca') {
             $('.acerca').removeClass('is-center').addClass('is-right');
+            $('.menu').removeClass('is-vanish').addClass('is-not-vanish');
         }
 
     });
@@ -351,9 +351,11 @@ $(document).ready(function (){
 
     vso.on("tap", function(ev) {
         var $target = $(ev.target);
+        console.log($(ev.target));
 
         if ($target.data('item') == 'aviso') {
             $('.aviso').removeClass('is-center').addClass('is-right');
+            $('.menu').removeClass('is-vanish').addClass('is-not-vanish');
         }
 
     });
@@ -362,36 +364,184 @@ $(document).ready(function (){
 
 function onDeviceReady(){
     //write your function body here
-    initPushwoosh();
+    // initPushwoosh();
+    uuid = device.uuid;
+
+    // localStorage.removeItem('dataUser');
+    var dataUser = JSON.parse(localStorage.getItem('dataUser'));
+
+    // Validacion de usuario
+    if (dataUser) {
+        $('.mnu-registro').addClass('is-hidden');
+        $('.mnu-noticias').removeClass('is-hidden');
+    }
+    else {
+        var url_put = 'https://tecnico-mirage.firebaseio.com/users/' + uuid + '.json';
+
+        $.ajax({
+            url: url_put,
+            type: "GET",
+            success: function (data) {
+
+                if (data) {
+                    var dataUser = {
+                        isCsam : data.csam,
+                        estado : data.estado
+                    }
+
+                    localStorage.setItem('dataUser', JSON.stringify(dataUser));
+                    $('.mnu-registro').addClass('is-hidden');
+                    $('.mnu-noticias').removeClass('is-hidden');
+                }
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+    // swal(device.cordova + ', ' +  device.model + ', ' +  device.platform + ', ' +
+    //     device.uuid + ', ' +  device.version + ', ' +  device.manufacturer + ', ' +
+    //     device.isVirtual + ', ' +  device.serial)
+
+    document.addEventListener("offline", onOffline, false);
+
+    checkConnection();
+
+    $('.actCamera').on('click', function(){
+        navigator.camera.getPicture(uploadPhotoSuccess, cameraError, {
+            quality: 100,
+            destinationType: Camera.DestinationType.DATA_URL,
+            sourceType : Camera.PictureSourceType.CAMERA,
+            targetWidth: 200,
+            targetHeight: 200,
+            correctOrientation: true
+        });
+    });
+
+}
+
+function uploadPhotoSuccess(imageURI) {
+    $('.actCamera').css('background', 'green');
+    $('.actCameraIcon').attr('src', 'images/iconOk.png');
+
+    var user = JSON.parse(sessionStorage.getItem('user'));
+    user.image = 'data:image/jpeg;base64,' + imageURI;
+    sessionStorage.setItem('user', JSON.stringify(user));
+
+    var image = document.getElementById('tecnicoSelfie');
+    image.src = 'data:image/jpeg;base64,' + imageURI;
+}
+
+function cameraError(message) {
+    swal('', 'Failed because: ' + message);
+}
+
+// Validar que no se desconecte de la red
+function onOffline() {
+    swal('', 'Favor de conectarse a la red');
+}
+
+function checkConnection() {
+    var networkState = navigator.connection.type;
+
+    var states = {};
+    states[Connection.UNKNOWN]  = 'Unknown connection';
+    states[Connection.ETHERNET] = 'Ethernet connection';
+    states[Connection.WIFI]     = 'WiFi connection';
+    states[Connection.CELL_2G]  = 'Cell 2G connection';
+    states[Connection.CELL_3G]  = 'Cell 3G connection';
+    states[Connection.CELL_4G]  = 'Cell 4G connection';
+    states[Connection.CELL]     = 'Cell generic connection';
+    states[Connection.NONE]     = 'No network connection';
+
+    // document.getElementById("pgbNetwork").innerHTML = states[networkState] + "<p>";
 }
 
 // llenar espacio de Noticias
 function fillNoticias(data) {
 
+    // type 01
     var tmp = "";
-    tmp += "<div class='noticia-item border rounded d-flex justify-content-between' data-link='articulo' data-num=':num:'>";
-    tmp += "<div class='noticia-data d-flex' data-link='articulo' data-num=':num:'>";
-    tmp += "<h6 data-link='articulo' data-num=':num:'>:titulo:</h6>";
-    tmp += "<small class='text-muted' data-link='articulo' data-num=':num:'>:fecha:</small>";
-    tmp += "<small data-link='articulo' data-num=':num:'>:descripcion:.</small>";
-    tmp += "</div>";
-    tmp += "<div class='noticia-icon align-self-center' data-link='articulo' data-num=':num:'>";
-    tmp += "<i class='fas fa-angle-right' data-link='articulo' data-num=':num:'></i>";
-    tmp += "</div>";
-    tmp += "</div>";
+    tmp += "<section class='notice typeA d-flex justify-content-between mb-2' data-link='articulo' data-num=':num:'>";
+    tmp += "<header class='notice-header d-flex flex-column justify-content-between :importantHeader:' data-link='articulo' data-num=':num:'>";
+    tmp += "<div class='notice-title' data-link='articulo' data-num=':num:'>:titulo:</div>";
+    tmp += "<div class='notice-date' data-link='articulo' data-num=':num:'>:fecha:</div>";
+    tmp += "</header>";
+    tmp += "<article class='notice-body d-flex justify-content-between align-items-center :importantBody:' data-link='articulo' data-num=':num:'>";
+    tmp += "<div class='notice-text' data-link='articulo' data-num=':num:'>:descripcion:</div>";
+    tmp += "<i class='fas fa-chevron-right' data-link='articulo' data-num=':num:'></i>";
+    tmp += "</article>";
+    tmp += "</section>";
+
+    // type 02
+    var tmp2 = "";
+    tmp2 += "<section class='notice typeB d-flex flex-column' data-link='articulo' data-num=':num:'>";
+    tmp2 += "<header class='notice-header d-flex flex-column justify-content-between :importantHeader:' data-link='articulo' data-num=':num:'>";
+    tmp2 += "<div class='notice-title' data-link='articulo' data-num=':num:'>:titulo:</div>";
+    tmp2 += "<div class='notice-date' data-link='articulo' data-num=':num:'>:fecha:</div>";
+    tmp2 += "</header>";
+    tmp2 += "<article class='notice-body d-flex justify-content-between align-items-center :importantBody:' data-link='articulo' data-num=':num:'>";
+    tmp2 += "<div class='notice-text' data-link='articulo' data-num=':num:'>:descripcion:</div>";
+    tmp2 += "<i class='fas fa-chevron-right' data-link='articulo' data-num=':num:'></i>";
+    tmp2 += "</article>";
+    tmp2 += "</section>";
+
+    // var tmp = "";
+    // tmp += "<div class='noticia-item border rounded d-flex justify-content-between' data-link='articulo' data-num=':num:'>";
+    // tmp += "<div class='noticia-data d-flex' data-link='articulo' data-num=':num:'>";
+    // tmp += "<h6 data-link='articulo' data-num=':num:'>:titulo:</h6>";
+    // tmp += "<small class='text-muted' data-link='articulo' data-num=':num:'>:fecha:</small>";
+    // tmp += "<small data-link='articulo' data-num=':num:'>:descripcion:.</small>";
+    // tmp += "</div>";
+    // tmp += "<div class='noticia-icon align-self-center' data-link='articulo' data-num=':num:'>";
+    // tmp += "<i class='fas fa-angle-right' data-link='articulo' data-num=':num:'></i>";
+    // tmp += "</div>";
+    // tmp += "</div>";
 
     var dataUser = JSON.parse(localStorage.getItem('dataUser'));
 
     var finale = "";
     data.forEach(function (el, i) {
-        var temp = tmp.replace(':titulo:', el.titulo)
-                        .replace(':fecha:', el.fecha)
-                        .replace(':descripcion:', el.descripcion)
-                        .replace(/:num:/g, i);
+        var temp;
+
+        var headImportant = '', bodyImportant = '';
+
+        if (el.importancia === 1) {
+            headImportant = 'is-importHighHead';
+            bodyImportant = 'is-importHighBody';
+        }
+        else if (el.importancia === 2) {
+            headImportant = 'is-importMidHead';
+            bodyImportant = 'is-importMidBody';
+        }
+        else {
+            headImportant = 'is-importLowHead';
+            bodyImportant = 'is-importLowBody';
+        }
+
+        if (i === 0) {
+            temp = tmp.replace(':titulo:', el.titulo)
+                .replace(':fecha:', el.fecha)
+                .replace(':descripcion:', el.descripcion)
+                .replace(':importantHeader:', headImportant)
+                .replace(':importantBody:', bodyImportant)
+                .replace(/:num:/g, i);
+        }
+        else {
+            temp = tmp2.replace(':titulo:', el.titulo)
+                .replace(':fecha:', el.fecha)
+                .replace(':descripcion:', el.descripcion)
+                .replace(':importantHeader:', headImportant)
+                .replace(':importantBody:', bodyImportant)
+                .replace(/:num:/g, i);
+        }
+
         finale += temp;
     });
 
     var $finale = $(finale);
+    $('.noticia-fill').empty();
     $('.noticia-fill').append($finale);
 
 }
@@ -402,10 +552,7 @@ function validar_email( email ) {
     return regex.test(email) ? true : false;
 }
 
-
-
-
-
+// Pushwoosh
 function onPushwooshInitialized(pushNotification) {
 
 	//if you need push token at a later time you can always get it from Pushwoosh plugin
@@ -457,8 +604,8 @@ function initPushwoosh() {
 			var message = event.notification.message;
 			var userData = event.notification.userdata;
 
-			document.getElementById("pushMessage").innerHTML = message + "<p>";
-			document.getElementById("pushData").innerHTML = JSON.stringify(event.notification) + "<p>";
+			// document.getElementById("pushMessage").innerHTML = message + "<p>";
+			// document.getElementById("pushData").innerHTML = JSON.stringify(event.notification) + "<p>";
 
 			//dump custom data to the console if it exists
 			if (typeof(userData) != "undefined") {
@@ -472,8 +619,8 @@ function initPushwoosh() {
             var message = event.notification.message;
             var userData = event.notification.userdata;
 
-            document.getElementById("pushMessage").innerHTML = message + "<p>";
-            document.getElementById("pushData").innerHTML = JSON.stringify(event.notification) + "<p>";
+            // document.getElementById("pushMessage").innerHTML = message + "<p>";
+            // document.getElementById("pushData").innerHTML = JSON.stringify(event.notification) + "<p>";
 
             //dump custom data to the console if it exists
             if (typeof (userData) != "undefined") {
@@ -492,7 +639,7 @@ function initPushwoosh() {
 	//register for push notifications
 	pushNotification.registerDevice(
 		function(status) {
-			document.getElementById("pushToken").innerHTML = status.pushToken + "<p>";
+			// document.getElementById("pushToken").innerHTML = status.pushToken + "<p>";
 			onPushwooshInitialized(pushNotification);
 		},
 		function(status) {
@@ -500,4 +647,107 @@ function initPushwoosh() {
 			console.warn(JSON.stringify(['failed to register ', status]));
 		}
 	);
+}
+
+function checkEstado(str) {
+    switch (str) {
+        case ('Aguascalientes'):
+            return '1'
+            break;
+        case ('Baja California'):
+            return '2'
+            break;
+        case ('Baja California Sur'):
+            return '3'
+            break;
+        case ('Campeche'):
+            return '4'
+            break;
+        case ('Ciudad de México'):
+            return '5'
+            break;
+        case ('Coahuila'):
+            return '6'
+            break;
+        case ('Colima'):
+            return '7'
+            break;
+        case ('Chiapas'):
+            return '8'
+            break;
+        case ('Chihuahua'):
+            return '9'
+            break;
+        case ('Durango'):
+            return '10'
+            break;
+        case ('Guanajuato'):
+            return '11'
+            break;
+        case ('Guerrero'):
+            return '12'
+            break;
+        case ('Hidalgo'):
+            return '13'
+            break;
+        case ('Jalisco'):
+            return '14'
+            break;
+        case ('Edo. de México'):
+            return '15'
+            break;
+        case ('Michoacán'):
+            return '16'
+            break;
+        case ('Morelos'):
+            return '17'
+            break;
+        case ('Nayarit'):
+            return '18'
+            break;
+        case ('Nuevo León'):
+            return '19'
+            break;
+        case ('Oaxaca'):
+            return '20'
+            break;
+        case ('Puebla'):
+            return '21'
+            break;
+        case ('Querétaro'):
+            return '22'
+            break;
+        case ('Quintana Roo'):
+            return '23'
+            break;
+        case ('San Luis Potosí'):
+            return '24'
+            break;
+        case ('Sinaloa'):
+            return '25'
+            break;
+        case ('Sonora'):
+            return '26'
+            break;
+        case ('Tabasco'):
+            return '27'
+            break;
+        case ('Tamaulipas'):
+            return '28'
+            break;
+        case ('Tlaxcala'):
+            return '29'
+            break;
+        case ('Veracruz'):
+            return '30'
+            break;
+        case ('Yucatán'):
+            return '31'
+            break;
+        case ('Zacatecas'):
+            return '32'
+            break;
+        default:
+            return '0'
+    }
 }

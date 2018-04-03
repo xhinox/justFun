@@ -1,443 +1,455 @@
 <!DOCTYPE html>
-<!--
-    Copyright (c) 2012-2016 Adobe Systems Incorporated. All rights reserved.
-
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
 <html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+        <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' gap:; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: ms-appdata: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+        <!-- Good default declaration:
+        * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+        * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+        * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+            * Enable inline JS: add 'unsafe-inline' to default-src
+            * Enable eval(): add 'unsafe-eval' to default-src
+        * Create your own at http://cspisawesome.com
+        -->
+        <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
 
-<head>
-    <meta charset="utf-8" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="msapplication-tap-highlight" content="no" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
-    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
-    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' gap:; style-src 'self' 'unsafe-inline'; media-src *" />
-    <!-- Good default declaration:
-    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
-    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-        * Enable inline JS: add 'unsafe-inline' to default-src
-        * Enable eval(): add 'unsafe-eval' to default-src
-    * Create your own at http://cspisawesome.com
-    -->
-    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+        <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" href="css/sweetalert.min.css">
+        <link rel="stylesheet" href="css/general.css" />
+        <title>Hello World</title>
+    </head>
 
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/sweetalert.min.css">
-    <link rel="stylesheet" href="css/general.css" />
-    <title>Hello World</title>
-</head>
+    <body>
 
-<body>
-
-    <section class="menu container-fluid position-absolute">
-        <div class="container ">
-            <div class="menu-logo row text-center">
-                <div class="col">
-                    <img src="images/logo.png" alt="Técnico Embajador">
+        <section class="menu container-fluid position-absolute">
+            <div class="container ">
+                <div class="menu-logo row text-center">
+                    <div class="col">
+                        <img src="images/logo.png" alt="Técnico Embajador">
+                    </div>
                 </div>
-            </div>
 
-            <div class="row mnu-registro">
-                <div class="asd menu-item col border-bottom d-flex justify-content-center" data-link="registrate">
-                    <div class="menu-icon" data-link="registrate"><i class="fas fa-pencil-alt" data-link="registrate"></i></div>
-                    <div class="menu-text" data-link="registrate">Regisrate</div>
+                <div class="row mnu-registro">
+                    <div class="menu-item col border-bottom d-flex justify-content-center rounded-top" data-link="registrate">
+                        <div class="menu-icon" data-link="registrate"><i class="fas fa-pencil-alt" data-link="registrate"></i></div>
+                        <div class="menu-text" data-link="registrate">Registrate</div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row mnu-noticias is-hidden">
-                <div class="asd menu-item col border-bottom d-flex justify-content-center" data-link="noticias">
-                    <div class="menu-icon" data-link="noticias"><i class="fas fa-newspaper" data-link="noticias"></i></div>
-                    <div class="menu-text" data-link="noticias">Noticias</div>
+                <div class="row mnu-noticias is-hidden">
+                    <div class="menu-item col border-bottom d-flex justify-content-center rounded-top" data-link="noticias">
+                        <div class="menu-icon" data-link="noticias"><i class="fas fa-newspaper" data-link="noticias"></i></div>
+                        <div class="menu-text" data-link="noticias">Noticias</div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="menu-item col border-bottom d-flex justify-content-center" data-link="acerca">
-                    <div class="menu-icon" data-link="acerca"><i class="fas fa-info" data-link="acerca"></i></div>
-                    <div class="menu-text" data-link="acerca">Acerca de</div>
+                <div class="row">
+                    <div class="menu-item col border-bottom d-flex justify-content-center" data-link="acerca">
+                        <div class="menu-icon" data-link="acerca"><i class="fas fa-info" data-link="acerca"></i></div>
+                        <div class="menu-text" data-link="acerca">Acerca de</div>
+                    </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="menu-item col border-bottom d-flex justify-content-center" data-link="aviso">
-                    <div class="menu-icon" data-link="aviso"><i class="fas fa-book" data-link="aviso"></i></div>
-                    <div class="menu-text" data-link="aviso">Aviso de privacidad</div>
+                <div class="row">
+                    <div class="menu-item col border-bottom d-flex justify-content-center rounded-bottom" data-link="aviso">
+                        <div class="menu-icon" data-link="aviso"><i class="fas fa-book" data-link="aviso"></i></div>
+                        <div class="menu-text" data-link="aviso">Aviso de privacidad</div>
+                    </div>
                 </div>
+
+                <!-- <div class="row">
+                    <fieldset>
+                        <legend>Pushwoosh status:</legend>
+                        Push token: <br>
+                        <div class="statustext" id="pushToken"></div>
+                        Push message: <br>
+                        <div class="statustext" id="pushMessage"></div>
+                        Push data: <br>
+                        <div class="statustext" id="pushData"></div>
+                    </fieldset>
+                </div> -->
+
             </div>
+        </section>
 
-            <div class="row">
-                <fieldset>
-                    <legend>Pushwoosh status:</legend>
-                    Push token: <br>
-                    <div class="statustext" id="pushToken"></div>
-                    Push message: <br>
-                    <div class="statustext" id="pushMessage"></div>
-                    Push data: <br>
-                    <div class="statustext" id="pushData"></div>
-                </fieldset>
-            </div>
-        </div>
-    </section>
+        <!-- registro p1 -->
+        <section class="regP1 container-fluid position-absolute is-right">
+            <header class="sticky-top">
+                <div class="position-absolute btnMenu-back" data-link="menu"></div>
+                <nav class="nav row align-items-center">
+                    <div class="col-1"><i class="fas fa-bars fa-lg"></i></div>
+                    <div class="col-10 text-center">Registro de técnico</div>
+                </nav>
+            </header>
 
-    <!-- registro p1 -->
-    <section class="regP1 container-fluid position-absolute is-right">
-        <header class="sticky-top">
-            <nav class="nav row align-items-center">
-                <div class="col-1" data-link="menu"><i class="fas fa-bars fa-lg" data-link="menu"></i></div>
-                <div class="col-10 text-center">Registro de técnico</div>
-            </nav>
-        </header>
+            <article class="container">
+                <div class="row m-top20">
+                    <div class="col h5 text-center">
+                        Favor de capturar sus datos
+                    </div>
+                </div>
 
-        <article class="container">
-            <div class="row m-top20">
-                <div class="col">
-                    <label for="datoNom">Nombre</label>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="datoNom">
-                                <i class="fas fa-user fa-xs"></i>
-                            </span>
+                <div class="row">
+                    <div class="col">
+                        <label for="datoNom">Nombre</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="datoNom">
+                                    <i class="fas fa-user fa-xs"></i>
+                                </span>
+                            </div>
+                            <input type="text" id="txtNombre" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="datoNom">
                         </div>
-                        <input type="text" id="txtNombre" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="datoNom">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="">Apellido</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="datoApe">
+                                    <i class="fas fa-user fa-xs"></i>
+                                </span>
+                            </div>
+                            <input type="text" id=txtApellido class="form-control" placeholder="" aria-label="Apellido" aria-describedby="datoApe">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="">Correo</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="datoMail">
+                                    <i class="fas fa-envelope fa-xs"></i>
+                                </span>
+                            </div>
+                            <input type="email" id="txtCorreo" class="form-control" placeholder="" aria-label="Correo" aria-describedby="datoMail">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="">Teléfono</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="datoPhone">
+                                    <i class="fas fa-phone fa-xs"></i>
+                                </span>
+                            </div>
+                            <input type="tel" id="txtTelefono" class="form-control" placeholder="" aria-label="Telefono" aria-describedby="datoPhone">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-block text-white btn-continuar" data-link="toRegP2">Continuar</button>
+                    </div>
+                </div>
+
+            </article>
+        </section>
+        <!-- registro p1 -->
+
+        <!-- registro p2 -->
+        <section class="regP2 container-fluid position-absolute is-right">
+            <header class="sticky-top">
+                <div class="position-absolute btnMenu-back" data-link="back"></div>
+                <nav class="nav row align-items-center">
+                    <div class="col-1"><i class="fas fa-angle-left fa-lg"></i></div>
+                    <div class="col-10 text-center">Mirage App</div>
+                </nav>
+            </header>
+
+            <article class="container">
+                <div class="row m-top20">
+                    <div class="col">
+                        <label for="">Capture su código fiscal</label>
+                        <div class="input-group mb-3">
+                            <input id="codigoPostal" type="tel" class="form-control" placeholder="" aria-label="codigo postal" aria-describedby="basic-addon5">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary text-white btn-checar" type="button" data-link="look">Buscar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <label for="">Usted esta en:</label>
+                    </div>
+                    <div class="col-12">
+                        <p class="border-bottom UsuarioLocalizado"></p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="row text-center m-top20">
+                            <h5 class="col">¿Eres Centro de Servicio Autorizado Mirage?</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="row justify-content-center">
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="SiCsam" name="csam" class="custom-control-input">
+                                <label class="custom-control-label" for="SiCsam">Si</label>
+                            </div>
+                            <div class="custom-control custom-radio custom-control-inline">
+                                <input type="radio" id="NoCsam" name="csam" class="custom-control-input">
+                                <label class="custom-control-label" for="NoCsam">No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-danger btn-block m-top20" data-link="toRegP3">Continuar</button>
+                    </div>
+                </div>
+
+            </article>
+        </section>
+        <!-- registro p2 -->
+
+        <!-- registro 03 -->
+        <article class="regP3 container-fluid position-absolute is-right">
+            <header class="sticky-top">
+                <div class="position-absolute btnMenu-back" data-link="back"></div>
+                <nav class="nav row align-items-center">
+                    <div class="col-1"><i class="fas fa-angle-left fa-lg"></i></div>
+                    <div class="col-10 text-center">Mirage App</div>
+                </nav>
+            </header>
+
+            <div class="container m-top20">
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-img-top actCamera d-flex">
+                                <img class="actCameraIcon" src="images/iconCam.png">
+                                <!-- <span class="h4">tap aqui</span> -->
+                            </div>
+                            <div class="card-body text-center">
+                                <span>Favor de tomarse una foto</span>
+                                <!-- <button type="button" class="btn btn-danger btn-block m-top20 upPhoto">Subir foto</button> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-danger btn-block m-top20" data-link="toRegP4">Continuar</button>
                     </div>
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row text-center m-top20">
                 <div class="col">
-                    <label for="">Apellido</label>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="datoApe">
-                                <i class="fas fa-user fa-xs"></i>
-                            </span>
-                        </div>
-                        <input type="text" id=txtApellido class="form-control" placeholder="" aria-label="Apellido" aria-describedby="datoApe">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col">
-                    <label for="">Correo</label>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="datoMail">
-                                <i class="fas fa-envelope fa-xs"></i>
-                            </span>
-                        </div>
-                        <input type="email" id="txtCorreo" class="form-control" placeholder="" aria-label="Correo" aria-describedby="datoMail">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col">
-                    <label for="">Teléfono</label>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="datoPhone">
-                                <i class="fas fa-phone fa-xs"></i>
-                            </span>
-                        </div>
-                        <input type="text" id="txtTelefono" class="form-control" placeholder="" aria-label="Telefono" aria-describedby="datoPhone">
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col">
-                    <button type="button" class="btn btn-block text-white btn-continuar" data-link="toRegP2">Continuar</button>
+                    <small class="muted">He leido el aviso de privacidad</small>
                 </div>
             </div>
 
         </article>
-    </section>
-    <!-- registro p1 -->
+        <!-- registro 03 -->
 
-    <!-- registro p2 -->
-    <section class="regP2 container-fluid position-absolute is-right">
-        <header class="sticky-top">
-            <nav class="nav row align-items-center">
-                <div class="col-1" data-link="back"><i class="fas fa-angle-left fa-lg" data-link="back"></i></div>
-                <div class="col-10 text-center">Mirage App</div>
-            </nav>
-        </header>
+        <!-- registro 04 -->
+        <article class="regP4 container-fluid position-absolute is-right">
+            <header class="sticky-top">
+                <div class="position-absolute btnMenu-back" data-link="back"></div>
+                <nav class="nav row align-items-center">
+                    <div class="col-1"><i class="fas fa-angle-left fa-lg"></i></div>
+                    <div class="col-10 text-center">Mirage App</div>
+                </nav>
+            </header>
 
-        <article class="container">
-            <div class="row m-top20">
-                <div class="col">
-                    <label for="">Capture su código fiscal</label>
-                    <div class="input-group mb-3">
-                        <input id="codigoPostal" type="text" class="form-control" placeholder="" aria-label="codigo postal" aria-describedby="basic-addon5">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary text-white btn-checar" type="button" data-link="look">Buscar</button>
+            <div class="container m-top20">
+                <div class="row">
+                    <div class="col">
+                        <h4 class="text-center">Bienvenido</h4>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="card">
+                            <div class="tecnicoImage">
+                                <img id="tecnicoSelfie" class="" data-src="" src="">
+                            </div>
+                            <div class="card-body text-center">
+                                <p class="card-text nombreTecnico">
+                                </p>
+                                <img src="images/logo.png" alt="Técnico Embajador" class="" style="width:40%;">
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-12">
-                    <label for="">Usted esta en:</label>
-                </div>
-                <div class="col-12">
-                    <p class="border-bottom UsuarioLocalizado"></p>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col">
-                    <div class="row text-center m-top20">
-                        <h5 class="col">¿Eres Centro de Servicio Autorizado Mirage?</h5>
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-danger btn-block m-top20" data-link="toRegFinish">Terminar</button>
                     </div>
                 </div>
             </div>
+        </article>
+        <!-- registro 04 -->
 
-            <div class="row">
-                <div class="col">
-                    <div class="row justify-content-center">
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="SiCsam" name="csam" class="custom-control-input">
-                            <label class="custom-control-label" for="SiCsam">Si</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="NoCsam" name="csam" class="custom-control-input">
-                            <label class="custom-control-label" for="NoCsam">No</label>
-                        </div>
+        <!-- noticias -->
+        <article class="noticia container-fluid position-absolute is-right">
+            <header class="sticky-top">
+                <div class="position-absolute btnMenu-back" data-item="menu"></div>
+                <nav class="nav row align-items-center">
+                    <div class="col-1"><i class="fas fa-bars fa-lg"></i></div>
+                    <div class="col-10 text-center">Mirage App</div>
+                </nav>
+            </header>
+
+            <article class="container">
+                <div class="row m-top20">
+                    <div class="col noticia-fill d-flex justify-content-between" style="flex-wrap:wrap;">
+
+                        <!-- <section class='notice typeA d-flex justify-content-between mb-2' >
+                        <header class='notice-header d-flex flex-column justify-content-between :importantHeader:'>
+                        <div class='notice-title'>123456789012345678901234567890</div>
+                        <div class='notice-date'>28/10/0312</div>
+                        </header>
+                        <article class='notice-body d-flex justify-content-between align-items-center :importantBody'>
+                        <div class='notice-text'>12345678901234567890123456789012345678901234567890123456</div>
+                        <i class='fas fa-chevron-right'></i>
+                        </article>
+                        </section>
+
+                        <section class='notice typeB d-flex justify-content-between flex-column mb-2'>
+                        <header class='notice-header d-flex flex-column justify-content-between'>
+                        <div class='notice-title'>123456789012345678901234567890</div>
+                        <div class='notice-date'>28/10/0312</div>
+                        </header>
+                        <article class='notice-body d-flex justify-content-between align-items-center'>
+                        <div class='notice-text'>12345678901234567890123456789012345678901234567890123456</div>
+                        <i class='fas fa-chevron-right'></i>
+                        </article>
+                        </section> -->
+
                     </div>
                 </div>
-            </div>
-
-            <div class="row">
-                <div class="col">
-                    <button type="button" class="btn btn-danger btn-block m-top20" data-link="toRegP3">Continuar</button>
-                </div>
-            </div>
-
+            </article>
         </article>
-    </section>
-    <!-- registro p2 -->
+        <!-- noticias -->
 
-    <!-- registro 03 -->
-    <article class="regP3 container-fluid position-absolute is-right">
-        <header class="sticky-top">
-            <nav class="nav row align-items-center">
-                <div class="col-1" data-link="back"><i class="fas fa-angle-left fa-lg" data-link="back"></i></div>
-                <div class="col-10 text-center">Mirage App</div>
-            </nav>
-        </header>
+        <!-- articule -->
+        <article class="articulo container-fluid position-absolute is-right">
+            <header class="sticky-top">
+                <div class="position-absolute btnMenu-back" data-link="back"></div>
+                <nav class="nav row align-items-center">
+                    <div class="col-1"><i class="fas fa-angle-left fa-lg"></i></div>
+                    <div class="col-10 text-center">Mirage App</div>
+                </nav>
+            </header>
 
-        <div class="container m-top20">
-            <div class="row">
-                <div class="col">
-                    <div class="card">
-                        <img class="card-img-top" data-link="actCamera" data-src="holder.js/100px180/" alt="100%x180" style="height: 120px; width: 100%; display: block;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22286%22%20height%3D%22180%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20286%20180%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_161fdcfd9d8%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A14pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_161fdcfd9d8%22%3E%3Crect%20width%3D%22286%22%20height%3D%22180%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22107.18333435058594%22%20y%3D%2296.3%22%3E286x180%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true">
-                        <div class="card-body text-center">
-                            <p class="card-text">
-                                O
-                                <br/>
-                                subala de su album de fotos
-                            </p>
-                            <button type="button" class="btn btn-danger btn-block m-top20">Subir foto</button>
-                        </div>
+            <article class="articulo-wrapper container">
+                <div class="row m-top20">
+                    <div class="col articulo-fill">
+
+
                     </div>
                 </div>
-            </div>
+            </article>
+        </article>
+        <!-- articule -->
 
-            <div class="row">
-                <div class="col">
-                    <button type="button" class="btn btn-danger btn-block m-top20" data-link="toRegP4">Continuar</button>
-                </div>
-            </div>
-        </div>
+        <!-- acerca de -->
+        <article class="acerca container-fluid position-absolute is-right">
+            <header class="sticky-top">
+                <div class="position-absolute btnMenu-back" data-item="acerca"></div>
+                <nav class="nav row align-items-center">
+                    <div class="col-1"><i class="fas fa-bars fa-lg"></i></div>
+                    <div class="col-10 text-center">Mirage App</div>
+                </nav>
+            </header>
 
-        <div class="row text-center m-top20">
-            <div class="col">
-                <small class="muted">He leido el aviso de privacidad</small>
-            </div>
-        </div>
-
-    </article>
-    <!-- registro 03 -->
-
-    <!-- registro 04 -->
-    <article class="regP4 container-fluid position-absolute is-right">
-        <header class="sticky-top">
-            <nav class="nav row align-items-center">
-                <div class="col-1" data-link="back"><i class="fas fa-angle-left fa-lg" data-link="back"></i></div>
-                <div class="col-10 text-center">Mirage App</div>
-            </nav>
-        </header>
-
-        <div class="container m-top20">
-            <div class="row">
-                <div class="col">
-                    <h4 class="text-center">Bienvenido</h4>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col">
-                    <div class="card">
-                        <img class="card-img-top" data-src="holder.js/100px100/" alt="100%x100" style="height: 120px; width: 100%; display: block;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22286%22%20height%3D%22180%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20286%20180%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_161fdcfd9d8%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A14pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_161fdcfd9d8%22%3E%3Crect%20width%3D%22286%22%20height%3D%22180%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22107.18333435058594%22%20y%3D%2296.3%22%3E286x180%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true">
-                        <div class="card-body text-center">
-                            <p class="card-text">
-                                <span class="h5">Juan Hernández</span>
-                                <br>
-                                <small>a nuestro programa</small>
-                            </p>
-                            <img src="images/logo.png" alt="Técnico Embajador" class="" style="width:40%;">
-                        </div>
+            <article class="container">
+                <div class="row m-top20">
+                    <div class="acerca-item col">
+                        <img data-src="holder.js/100px100/" alt="100%x100" style="height: 120px; width: 100%; display: block;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22286%22%20height%3D%22180%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20286%20180%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_161fdcfd9d8%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A14pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_161fdcfd9d8%22%3E%3Crect%20width%3D%22286%22%20height%3D%22180%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22107.18333435058594%22%20y%3D%2296.3%22%3E286x180%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true">
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col">
-                    <button type="button" class="btn btn-danger btn-block m-top20" data-link="toRegFinish">Terminar</button>
+                <div class="row m-top20">
+                    <div class="acerca-item col border-bottom d-flex">
+                        <small>Nombre completo</small>
+                        <span>Jesus Rafael Romero Reyes Reyna</span>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-
-    </article>
-    <!-- registro 04 -->
-
-    <!-- noticias -->
-    <article class="noticia container-fluid position-absolute is-right">
-        <header class="sticky-top">
-            <nav class="nav row align-items-center">
-                <div class="col-1" data-item="menu"><i class="fas fa-bars fa-lg" data-item="menu"></i></div>
-                <div class="col-10 text-center">Mirage App</div>
-            </nav>
-        </header>
-
-        <article class="noticia-wrapper container">
-            <div class="row m-top20">
-                <div class="col noticia-fill">
-
-
+                <div class="row m-top20">
+                    <div class="acerca-item col border-bottom d-flex">
+                        <small>Correo electronico</small>
+                        <span>rrr@mkt.com</span>
+                    </div>
                 </div>
-            </div>
+
+                <div class="row m-top20">
+                    <div class="acerca-item col border-bottom d-flex">
+                        <small>Telefono</small>
+                        <span>(644) 123.4567</span>
+                    </div>
+                </div>
+
+                <div class="row m-top20">
+                    <div class="col">
+                        <button type="button" class="btn btn-block text-white btn-continuar">Editar</button>
+                    </div>
+                </div>
+            </article>
         </article>
-    </article>
-    <!-- noticias -->
+        <!-- acerca de -->
 
-    <!-- articule -->
-    <article class="articulo container-fluid position-absolute is-right">
-        <header class="sticky-top">
-            <nav class="nav row align-items-center">
-                <div class="col-1" data-link="back"><i class="fas fa-angle-left fa-lg" data-link="back"></i></div>
-                <div class="col-10 text-center">Mirage App</div>
-            </nav>
-        </header>
+        <!-- aviso de privacidad -->
+        <article class="aviso container-fluid position-absolute is-right">
+            <header class="sticky-top">
+                <div class="position-absolute btnMenu-back" data-item="aviso"></div>
+                <nav class="nav row align-items-center">
+                    <div class="col-1"><i class="fas fa-bars fa-lg"></i></div>
+                    <div class="col-10 text-center">Mirage App</div>
+                </nav>
+            </header>
 
-        <article class="articulo-wrapper container">
-            <div class="row m-top20">
-                <div class="col articulo-fill">
-
-
+            <article class="container">
+                <div class="row m-top20">
+                    <div class="col">
+                        <h4>Aviso de privacidad</h4>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit dolorum magnam, nobis natus quibusdam maxime, consequatur, eos autem obcaecati perferendis totam minima nihil possimus, itaque mollitia deserunt vitae illum omnis?</p>
+                    </div>
                 </div>
-            </div>
+            </article>
         </article>
-    </article>
-    <!-- articule -->
+        <!-- aviso de privacidad -->
 
-    <!-- acerca de -->
-    <article class="acerca container-fluid position-absolute is-right">
-        <header class="sticky-top">
-            <nav class="nav row align-items-center">
-                <div class="col-1" data-item="acerca"><i class="fas fa-bars fa-lg" data-item="acerca"></i></div>
-                <div class="col-10 text-center">Mirage App</div>
-            </nav>
-        </header>
-
-        <article class="container">
-            <div class="row m-top20">
-                <div class="acerca-item col">
-                    <img data-src="holder.js/100px100/" alt="100%x100" style="height: 120px; width: 100%; display: block;" src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22286%22%20height%3D%22180%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20286%20180%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_161fdcfd9d8%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A14pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_161fdcfd9d8%22%3E%3Crect%20width%3D%22286%22%20height%3D%22180%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22107.18333435058594%22%20y%3D%2296.3%22%3E286x180%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E" data-holder-rendered="true">
-                </div>
-            </div>
-
-            <div class="row m-top20">
-                <div class="acerca-item col border-bottom d-flex">
-                    <small>Nombre completo</small>
-                    <span>Jesus Rafael Romero Reyes Reyna</span>
-                </div>
-            </div>
-
-            <div class="row m-top20">
-                <div class="acerca-item col border-bottom d-flex">
-                    <small>Correo electronico</small>
-                    <span>rrr@mkt.com</span>
-                </div>
-            </div>
-
-            <div class="row m-top20">
-                <div class="acerca-item col border-bottom d-flex">
-                    <small>Telefono</small>
-                    <span>(644) 123.4567</span>
-                </div>
-            </div>
-
-            <div class="row m-top20">
-                <div class="col">
-                    <button type="button" class="btn btn-block text-white btn-continuar">Editar</button>
-                </div>
-            </div>
-        </article>
-    </article>
-    <!-- acerca de -->
-
-    <!-- aviso de privacidad -->
-    <article class="aviso container-fluid position-absolute is-right">
-        <header class="sticky-top">
-            <nav class="nav row align-items-center">
-                <div class="col-1" data-item="aviso"><i class="fas fa-bars fa-lg" data-item="aviso"></i></div>
-                <div class="col-10 text-center">Mirage App</div>
-            </nav>
-        </header>
-
-        <article class="container">
-            <div class="row m-top20">
-                <div class="col">
-                    <h4>Aviso de privacidad</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit dolorum magnam, nobis natus quibusdam maxime, consequatur, eos autem obcaecati perferendis totam minima nihil possimus, itaque mollitia deserunt vitae illum omnis?</p>
-                </div>
-            </div>
-        </article>
-    </article>
-    <!-- aviso de privacidad -->
-
-    <script type="text/javascript" src="cordova.js"></script>
-    <script src="js/jquery.min.js" charset="utf-8"></script>
-    <script src="js/bootstrap.bundle.js" charset="utf-8"></script>
-    <script src="js/hammer.min.js" charset="utf-8"></script>
-    <script src="js/fontawesome-all.min.js" charset="utf-8"></script>
-    <script src="js/sweetalert.min.js" charset="utf-8"></script>
-    <script src="js/jquery.mask.min.js" charset="utf-8"></script>
-    <script type="text/javascript" src="js/index.js"></script>
-    <!-- <script type="text/javascript">
-        app.initialize();
-    </script> -->
-</body>
-
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/jquery.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/bootstrap.bundle.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/hammer.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/fontawesome-all.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/sweetalert.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/jquery.mask.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/moment.min.js" charset="utf-8"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <!-- <script type="text/javascript">
+            app.initialize();
+        </script> -->
+    </body>
 </html>
