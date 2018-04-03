@@ -265,7 +265,7 @@ $(document).ready(function (){
                 success: function () {
                     swal("", "Sus datos han sido capturados con exito", "success");
 
-                    var html = "<span class='h5 d-block'>" + params.user + ' ' + params.apellido + "</span>";
+                    var html = "<span class='h5 d-block'>" + params.nombre + ' ' + params.apellido + "</span>";
                         html += "<small class='d-block'>a nuestro programa</small>"
 
                     var $html = $(html);
@@ -287,6 +287,19 @@ $(document).ready(function (){
         if ($target.data('link') == 'back') {
             $('.regP4').removeClass('is-center').addClass('is-right');
             $('.regP3').removeClass('is-left').addClass('is-center');
+        }
+        else if (true) {
+            $('.regP1, .regP2, .regP3').addClass('is-hidden');
+
+            setTimeout(function () {
+                $('.regP1, .regP2, .regP3').removeClass('is-left').addClass('is-right');
+                $('.regP1, .regP2, .regP3').removeClass('is-hidden');
+            }, 3000);
+
+            $('.mnu-registro').addClass('is-hidden');
+            $('.mnu-noticias').removeClass('is-hidden');
+            $('.regP4').removeClass('is-center').addClass('is-right');
+            $('.menu').removeClass('is-vanish').addClass('is-not-vanish');
         }
     });
     // TERMINA REGISTRO
@@ -394,9 +407,8 @@ function onDeviceReady(){
                     $('.mnu-noticias').removeClass('is-hidden');
                 }
             },
-            error: function(jqXHR, textStatus, errorThrown) {
-                swal('Un momento', 'Fallo la conexión, favor de intentarlo de nuevo: ' + textStatus + '', 'warning');
-                swal('' + jqXHR.readyState + ' / ' + jqXHR.status + ' / ' + jqXHR.responseText + '', '');
+            error: function(error) {
+                swal('Un momento', 'Fallo la conexión, favor de intentarlo de nuevo', 'warning');
             }
         });
     }
@@ -465,11 +477,11 @@ function fillNoticias(data) {
     // type 01
     var tmp = "";
     tmp += "<section class='notice typeA d-flex justify-content-between mb-2' data-link='articulo' data-num=':num:'>";
-    tmp += "<header class='notice-header d-flex flex-column justify-content-between :importantHeader:' data-link='articulo' data-num=':num:'>";
+    tmp += "<header class='notice-header d-flex flex-column justify-content-between rounded-left :importantHeader:' data-link='articulo' data-num=':num:'>";
     tmp += "<div class='notice-title' data-link='articulo' data-num=':num:'>:titulo:</div>";
     tmp += "<div class='notice-date' data-link='articulo' data-num=':num:'>:fecha:</div>";
     tmp += "</header>";
-    tmp += "<article class='notice-body d-flex justify-content-between align-items-center :importantBody:' data-link='articulo' data-num=':num:'>";
+    tmp += "<article class='notice-body d-flex justify-content-between align-items-center rounded-right :importantBody:' data-link='articulo' data-num=':num:'>";
     tmp += "<div class='notice-text' data-link='articulo' data-num=':num:'>:descripcion:</div>";
     tmp += "<i class='fas fa-chevron-right' data-link='articulo' data-num=':num:'></i>";
     tmp += "</article>";
@@ -477,12 +489,12 @@ function fillNoticias(data) {
 
     // type 02
     var tmp2 = "";
-    tmp2 += "<section class='notice typeB d-flex flex-column' data-link='articulo' data-num=':num:'>";
-    tmp2 += "<header class='notice-header d-flex flex-column justify-content-between :importantHeader:' data-link='articulo' data-num=':num:'>";
+    tmp2 += "<section class='notice typeB d-flex flex-column mb-2' data-link='articulo' data-num=':num:'>";
+    tmp2 += "<header class='notice-header d-flex flex-column justify-content-between rounded-top :importantHeader:' data-link='articulo' data-num=':num:'>";
     tmp2 += "<div class='notice-title' data-link='articulo' data-num=':num:'>:titulo:</div>";
     tmp2 += "<div class='notice-date' data-link='articulo' data-num=':num:'>:fecha:</div>";
     tmp2 += "</header>";
-    tmp2 += "<article class='notice-body d-flex justify-content-between align-items-center :importantBody:' data-link='articulo' data-num=':num:'>";
+    tmp2 += "<article class='notice-body d-flex justify-content-between align-items-center rounded-bottom :importantBody:' data-link='articulo' data-num=':num:'>";
     tmp2 += "<div class='notice-text' data-link='articulo' data-num=':num:'>:descripcion:</div>";
     tmp2 += "<i class='fas fa-chevron-right' data-link='articulo' data-num=':num:'></i>";
     tmp2 += "</article>";
@@ -508,11 +520,11 @@ function fillNoticias(data) {
 
         var headImportant = '', bodyImportant = '';
 
-        if (el.importancia === 1) {
+        if (el.importancia === "1") {
             headImportant = 'is-importHighHead';
             bodyImportant = 'is-importHighBody';
         }
-        else if (el.importancia === 2) {
+        else if (el.importancia === "2") {
             headImportant = 'is-importMidHead';
             bodyImportant = 'is-importMidBody';
         }
