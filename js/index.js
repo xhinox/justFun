@@ -394,8 +394,8 @@ function onDeviceReady(){
                     $('.mnu-noticias').removeClass('is-hidden');
                 }
             },
-            error: function(error) {
-                swal('Un momento', 'Fallo la conexión, favor de intentarlo de nuevo: ' + error + '', 'warning');
+            error: function(jqXHR, textStatus, errorThrown) {
+                swal('Un momento', 'Fallo la conexión, favor de intentarlo de nuevo: ' + textStatus + '', 'warning');
             }
         });
     }
