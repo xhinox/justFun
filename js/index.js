@@ -395,7 +395,7 @@ function onDeviceReady(){
                 }
             },
             error: function(error) {
-                console.log(error);
+                swal('Un momento', 'Fallo la conexión, favor de intentarlo de nuevo: ' + error + '', 'warning');
             }
         });
     }

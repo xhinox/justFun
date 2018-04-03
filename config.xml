@@ -42,12 +42,12 @@
         <icon density="xhdpi" src="res/icon/android/notification_xhdpi.png" />
         <icon density="xxhdpi" src="res/icon/android/notification_xxhdpi.png" />
 
-        <splash density="port-ldpi" src="res/screen/android/ldpi-port.png" />
-        <splash density="port-mdpi" src="res/screen/android/mdpi-port.png" />
-        <splash density="port-hdpi" src="res/screen/android/hdpi-port.png" />
-        <splash density="port-xhdpi" src="res/screen/android/xhdpi-port.png" />
-        <splash density="port-xxhdpi" src="res/screen/android/xxhdpi-port.png" />
-        <splash density="port-xxxhdpi" src="res/screen/android/xxxhdpi-port.png" />
+        <splash density="port-ldpi" src="res/screen/android/ldpi-port.jpg" />
+        <splash density="port-mdpi" src="res/screen/android/mdpi-port.jpg" />
+        <splash density="port-hdpi" src="res/screen/android/hdpi-port.jpg" />
+        <splash density="port-xhdpi" src="res/screen/android/xhdpi-port.jpg" />
+        <splash density="port-xxhdpi" src="res/screen/android/xxhdpi-port.jpg" />
+        <splash density="port-xxxhdpi" src="res/screen/android/xxxhdpi-port.jpg" />
     </platform>
     <platform name="ios">
         <icon height="57" platform="ios" src="res/icon/ios/Icon.png" width="57" />
@@ -71,11 +71,11 @@
         <icon height="76" platform="ios" src="res/icon/ios/Icon-Small-76.png" width="76" />
         <icon height="152" platform="ios" src="res/icon/ios/Icon-Small-76@2x.png" width="152" />
 
-        <splash height="480" platform="ios" src="res/screen/ios/Default.png" width="320" />
-        <splash height="960" platform="ios" src="res/screen/ios/Default@2x.png" width="640" />
-        <splash height="1136" platform="ios" src="res/screen/ios/Default-568h@2x.png" width="640" />
-        <splash height="1334" platform="ios" src="res/screen/ios/Default-667h@2x.png" width="750" />
-        <splash height="2208" platform="ios" src="res/screen/ios/Default-736h@3x.png" width="1242" />
+        <splash height="480" platform="ios" src="res/screen/ios/Default.jpg" width="320" />
+        <splash height="960" platform="ios" src="res/screen/ios/Default@2x.jpg" width="640" />
+        <splash height="1136" platform="ios" src="res/screen/ios/Default-568h@2x.jpg" width="640" />
+        <splash height="1334" platform="ios" src="res/screen/ios/Default-667h@2x.jpg" width="750" />
+        <splash height="2208" platform="ios" src="res/screen/ios/Default-736h@3x.jpg" width="1242" />
     </platform>
     <access origin="*" />
     <access origin="*.pushwoosh.com" />
