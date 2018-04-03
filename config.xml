@@ -8,7 +8,7 @@
         Mirage Dev Team
     </author>
     <content src="index.html" />
-    <preference name="phonegap-version" value="cli-7.1.0" />
+    <preference name="phonegap-version" value="cli-8.0.0" />
     <preference name='pgb-builder-version' value='1' />
     <preference name="android-build-tool" value="gradle" />
     <preference name="android-minSdkVersion" value="19" />
