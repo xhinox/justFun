@@ -428,7 +428,8 @@ function onDeviceReady(){
             sourceType : Camera.PictureSourceType.CAMERA,
             targetWidth: 200,
             targetHeight: 200,
-            correctOrientation: true
+            correctOrientation: true,
+            cameraDirection: 1
         });
     });
 
