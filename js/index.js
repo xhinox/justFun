@@ -58,6 +58,16 @@ $(document).ready(function (){
     $('#codigoPostal').mask('00000');
     $("#NoCsam").prop("checked", true);
 
+    // MODAL SAVE datoApe
+    var svData = document.getElementById('saveDataLoader'), saveData = new Hammer(svData);
+
+    saveData.on('tap', function(ev) {
+        var $target = $(ev.target);
+
+        if ($target.hasClass('saveData')) {
+            guardarRegistro();
+        }
+    });
 
     // INICIA MENU
     var mnu = document.querySelector('.menu'), menu = new Hammer(mnu);
@@ -79,7 +89,6 @@ $(document).ready(function (){
                 success: function (data) {
 
                     var dataUser = JSON.parse(localStorage.getItem('dataUser'));
-
                     var estado = checkEstado(dataUser.estado), today = moment(), isCsam = dataUser.isCsam;
 
                     var arr = [];
@@ -100,16 +109,12 @@ $(document).ready(function (){
                                         return [value];
                                     }
                                 }
-
                             }
-
                         }
-
                     });
 
                     localStorage.setItem('news', JSON.stringify(arr));
 
-                    console.log(arr);
                     fillNoticias(arr);
                 },
                 error: function(error) {
@@ -182,10 +187,7 @@ $(document).ready(function (){
                     $('.regP1').removeClass('is-center').addClass('is-left');
                     $('.regP2').removeClass('is-right').addClass('is-center');
                 }
-
             }
-
-
         }
     });
 
@@ -202,8 +204,8 @@ $(document).ready(function (){
 
             if ($codigo.length < 5) {
                 swal ("Un momento", "Favor de capturar su código postal completo", "warning");
-
-            } else {
+            }
+            else {
                 var url_link = 'https://api-codigos-postales.herokuapp.com/v2/codigo_postal/' + cp + '';
 
                 $.ajax({
@@ -211,25 +213,24 @@ $(document).ready(function (){
                     dataType: 'json',
                     url: url_link,
                     success: function(data) {
-                        var user = JSON.parse(sessionStorage.getItem('user'));
-                        $('.UsuarioLocalizado').text(data.estado + ', ' + data.municipio);
-                        user.estado = data.estado;
-                        user.municipio = data.municipio;
-                        user.cp = cp;
-                        if ($('#SiCsam:checked').length === 1) {
-                            user.csam = 1;
-                        }
-                        else {
-                            user.csam = 0;
-                        }
+                        setTimeout(function() {
+                            $('#loader').modal('hide');
+                            var user = JSON.parse(sessionStorage.getItem('user'));
+                            $('.UsuarioLocalizado').text(data.estado + ', ' + data.municipio);
+                            user.estado = data.estado;
+                            user.municipio = data.municipio;
+                            user.cp = cp;
 
-                        sessionStorage.setItem('user', JSON.stringify(user));
+                            sessionStorage.setItem('user', JSON.stringify(user));
+                        }, 1000);
+
                     },
                     error: function(data) {
                         swal('Un momento', 'Fallo la conexión, favor de intentarlo de nuevo', 'warning');
                     }
                 });
             }
+
         }
         else if ($target.data('link') == 'toRegP3') {
             var $Codigo = $('.UsuarioLocalizado').text();
@@ -238,10 +239,14 @@ $(document).ready(function (){
                 swal('Un momento', 'Favor de localizar su ubicación por medio de su código postal', 'warning')
             }
             else {
+
+                var user = JSON.parse(sessionStorage.getItem('user'));
+                user.csam = parseInt($('input[name=csam]:checked').val());
+                sessionStorage.setItem('user', JSON.stringify(user));
+
                 $('.regP2').removeClass('is-center').addClass('is-left');
                 $('.regP3').removeClass('is-right').addClass('is-center');
             }
-
         }
     });
 
@@ -253,28 +258,12 @@ $(document).ready(function (){
             $('.regP2').removeClass('is-left').addClass('is-center');
         }
         else if ($target.data('link') == 'toRegP4') {
-
-            var url_put = 'https://tecnico-mirage.firebaseio.com/users/' + uuid + '/.json';
-
-            var params = JSON.parse(sessionStorage.getItem('user'));
-
-            $.ajax({
-                url: url_put,
-                type: "PUT",
-                data: JSON.stringify(params),
-                success: function () {
-                    swal("", "Sus datos han sido capturados con exito", "success");
-
-                    var html = "<span class='h5 d-block'>" + params.nombre + ' ' + params.apellido + "</span>";
-                        html += "<small class='d-block'>a nuestro programa</small>"
-
-                    var $html = $(html);
-                    $('.nombreTecnico').append($html);
-                },
-                error: function(error) {
-                    swal("error");
-                }
-            });
+            var user = JSON.parse(sessionStorage.getItem('user'));
+            $('.userName').text('' + user.nombre + ' ' + user.apellido );
+            $('.userLocale').text('' + user.municipio + ', ' + user.estado + '. ' + user.cp);
+            $('.userMail').text('' + user.correo + '');
+            console.log(user.csam);
+            $('.userCsam').text('' + user.csam == 1 ? 'Si' : 'No' + '');
 
             $('.regP3').removeClass('is-center').addClass('is-left');
             $('.regP4').removeClass('is-right').addClass('is-center');
@@ -287,19 +276,6 @@ $(document).ready(function (){
         if ($target.data('link') == 'back') {
             $('.regP4').removeClass('is-center').addClass('is-right');
             $('.regP3').removeClass('is-left').addClass('is-center');
-        }
-        else if (true) {
-            $('.regP1, .regP2, .regP3').addClass('is-hidden');
-
-            setTimeout(function () {
-                $('.regP1, .regP2, .regP3').removeClass('is-left').addClass('is-right');
-                $('.regP1, .regP2, .regP3').removeClass('is-hidden');
-            }, 3000);
-
-            $('.mnu-registro').addClass('is-hidden');
-            $('.mnu-noticias').removeClass('is-hidden');
-            $('.regP4').removeClass('is-center').addClass('is-right');
-            $('.menu').removeClass('is-vanish').addClass('is-not-vanish');
         }
     });
     // TERMINA REGISTRO
@@ -341,7 +317,6 @@ $(document).ready(function (){
             $('.articulo').removeClass('is-center').addClass('is-right');
             $('.noticia').removeClass('is-left').addClass('is-center');
         }
-
     });
     // TERMINA ARTICULO
 
@@ -355,7 +330,6 @@ $(document).ready(function (){
             $('.acerca').removeClass('is-center').addClass('is-right');
             $('.menu').removeClass('is-vanish').addClass('is-not-vanish');
         }
-
     });
     // TERMINA ACERCA
 
@@ -364,13 +338,11 @@ $(document).ready(function (){
 
     vso.on("tap", function(ev) {
         var $target = $(ev.target);
-        console.log($(ev.target));
 
         if ($target.data('item') == 'aviso') {
             $('.aviso').removeClass('is-center').addClass('is-right');
             $('.menu').removeClass('is-vanish').addClass('is-not-vanish');
         }
-
     });
     // TERMINA AVISO
 });
@@ -408,7 +380,7 @@ function onDeviceReady(){
                 }
             },
             error: function(error) {
-                swal('Un momento', 'Fallo la conexión, favor de intentarlo de nuevo', 'warning');
+                console.log(error);
             }
         });
     }
@@ -428,11 +400,9 @@ function onDeviceReady(){
             sourceType : Camera.PictureSourceType.CAMERA,
             targetWidth: 200,
             targetHeight: 200,
-            correctOrientation: true,
-            cameraDirection: 1
+            correctOrientation: true
         });
     });
-
 }
 
 function uploadPhotoSuccess(imageURI) {
@@ -560,6 +530,44 @@ function fillNoticias(data) {
 
 }
 
+// guardar datos
+function guardarRegistro() {
+    var url_put = 'https://tecnico-mirage.firebaseio.com/users/' + uuid + '/.json';
+
+    var params = JSON.parse(sessionStorage.getItem('user'));
+
+    $.ajax({
+        url: url_put,
+        type: "PUT",
+        data: JSON.stringify(params),
+        success: function (data) {
+            console.log(JSON.stringify(data));
+            setTimeout(function() {
+                $('#loader').modal('hide');
+
+                swal("", "Sus datos han sido capturados con exito", "success");
+
+                $('.regP1, .regP2, .regP3').addClass('is-hidden');
+
+                setTimeout(function () {
+                    $('.regP1, .regP2, .regP3').removeClass('is-left').addClass('is-right');
+                    $('.regP1, .regP2, .regP3').removeClass('is-hidden');
+                }, 3000);
+
+                $('.mnu-registro').addClass('is-hidden');
+                $('.mnu-noticias').removeClass('is-hidden');
+                $('.regP4').removeClass('is-center').addClass('is-right');
+                $('.menu').removeClass('is-vanish').addClass('is-not-vanish');
+            }, 1000);
+
+        },
+        error: function(error) {
+            swal("error");
+        }
+    });
+
+}
+
 // Validar correo electronico
 function validar_email( email ) {
     var regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
@@ -572,14 +580,14 @@ function onPushwooshInitialized(pushNotification) {
 	//if you need push token at a later time you can always get it from Pushwoosh plugin
 	pushNotification.getPushToken(
 		function(token) {
-			console.info('push token: ' + token);
+			swal('','push token: ' + token);
 		}
 	);
 
 	//and HWID if you want to communicate with Pushwoosh API
 	pushNotification.getPushwooshHWID(
 		function(token) {
-			console.info('Pushwoosh HWID: ' + token);
+			swal('','Pushwoosh HWID: ' + token);
 		}
 	);
 
@@ -589,19 +597,19 @@ function onPushwooshInitialized(pushNotification) {
 			intTagName: 10
 		},
 		function(status) {
-			console.info('setTags success: ' + JSON.stringify(status));
+			swal('','setTags success: ' + JSON.stringify(status));
 		},
 		function(status) {
-			console.warn('setTags failed');
+			swal('','setTags failed');
 		}
 	);
 
 	pushNotification.getTags(
 		function(status) {
-			console.info('getTags success: ' + JSON.stringify(status));
+			swal('','getTags success: ' + JSON.stringify(status));
 		},
 		function(status) {
-			console.warn('getTags failed');
+			swal('','getTags failed');
 		}
 	);
 
@@ -617,13 +625,15 @@ function initPushwoosh() {
 		function(event) {
 			var message = event.notification.message;
 			var userData = event.notification.userdata;
+            swal('' + message + '', '' + userData + '');
+            swal('' + JSON.stringify(event.notification) + '');
 
 			// document.getElementById("pushMessage").innerHTML = message + "<p>";
 			// document.getElementById("pushData").innerHTML = JSON.stringify(event.notification) + "<p>";
 
 			//dump custom data to the console if it exists
 			if (typeof(userData) != "undefined") {
-				console.warn('user data: ' + JSON.stringify(userData));
+				swal('','user data: ' + JSON.stringify(userData));
 			}
 		}
     );
@@ -632,13 +642,15 @@ function initPushwoosh() {
         function (event) {
             var message = event.notification.message;
             var userData = event.notification.userdata;
+            swal('' + message + '', '' + userData + '');
+            swal('' + JSON.stringify(event.notification) + '');
 
             // document.getElementById("pushMessage").innerHTML = message + "<p>";
             // document.getElementById("pushData").innerHTML = JSON.stringify(event.notification) + "<p>";
 
             //dump custom data to the console if it exists
             if (typeof (userData) != "undefined") {
-                console.warn('user data: ' + JSON.stringify(userData));
+                swal('','user data: ' + JSON.stringify(userData));
             }
         }
     );
@@ -657,8 +669,7 @@ function initPushwoosh() {
 			onPushwooshInitialized(pushNotification);
 		},
 		function(status) {
-			alert("failed to register: " + status);
-			console.warn(JSON.stringify(['failed to register ', status]));
+			swal('', JSON.stringify(['failed to register ', status]));
 		}
 	);
 }
