@@ -231,7 +231,7 @@ $(document).ready(function (){
                 estado : user.estado
             }
 
-            localStorage.setItem('dataUser', JSON.stringify(dataUser));
+            sessionStorage.setItem('dataUser', JSON.stringify(dataUser));
 
             $('.regP3').removeClass('is-center').addClass('is-left');
             $('.regP4').removeClass('is-right').addClass('is-center');
@@ -267,7 +267,7 @@ $(document).ready(function (){
             }
             else if ($target.data('link') == 'articulo') {
                 $('.articulo-fill').empty();
-                var news = JSON.parse(localStorage.getItem('news'));
+                var news = JSON.parse(sessionStorage.getItem('news'));
                 var newIndex = $target.data('num');
                 $('.articulo-fill').append(news[newIndex].articulo);
 
@@ -466,7 +466,7 @@ function loadNoticias() {
 
             setTimeout(function() {
                 if (data) {
-                    var dataUser = JSON.parse(localStorage.getItem('dataUser'));
+                    var dataUser = JSON.parse(sessionStorage.getItem('dataUser'));
                     var estado = checkEstado(dataUser.estado), today = moment(), isCsam = dataUser.isCsam;
 
                     var arr = [];
@@ -493,7 +493,7 @@ function loadNoticias() {
                         }
                     });
 
-                    localStorage.setItem('news', JSON.stringify(arr));
+                    sessionStorage.setItem('news', JSON.stringify(arr));
 
                     fillNoticias(arr);
                 }
@@ -551,7 +551,7 @@ function fillNoticias(data) {
     // tmp += "</div>";
     // tmp += "</div>";
 
-    var dataUser = JSON.parse(localStorage.getItem('dataUser'));
+    var dataUser = JSON.parse(sessionStorage.getItem('dataUser'));
 
     var finale = "";
     data.forEach(function (el, i) {
