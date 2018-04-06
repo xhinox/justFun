@@ -332,40 +332,33 @@ function onDeviceReady(){
     initPushwoosh();
     uuid = device.uuid;
 
-    var dataUser = JSON.parse(localStorage.getItem('dataUser'));
-
     // Validacion de usuario
-    if (dataUser) {
-        if (dataUser.isCsam == 1) {
-            $('.mnu-registro').addClass('is-hidden');
-            $('.mnu-noticias').removeClass('is-hidden');
-        }
-        else {
-            localStorage.removeItem('dataUser');
-            var url_put = 'https://tecnico-mirage.firebaseio.com/users/' + uuid + '.json';
+    var url_put = 'https://tecnico-mirage.firebaseio.com/users/' + uuid + '.json';
 
-            $.ajax({
-                url: url_put,
-                type: "GET",
-                success: function (data) {
+    $.ajax({
+        url: url_put,
+        type: "GET",
+        success: function (data) {
 
-                    if (data) {
-                        var dataUser = {
-                            isCsam : data.csam,
-                            estado : data.estado
-                        }
-
-                        localStorage.setItem('dataUser', JSON.stringify(dataUser));
-                        $('.mnu-registro').addClass('is-hidden');
-                        $('.mnu-noticias').removeClass('is-hidden');
-                    }
-                },
-                error: function(error) {
-                    swal('', 'Estamos presentando una falla, favor de regresar mas tarde. (err01)');
+            if (data) {
+                var dataUser = {
+                    isCsam : data.csam,
+                    estado : data.estado
                 }
-            });
+
+                sessionStorage.setItem('dataUser', JSON.stringify(dataUser));
+                $('.mnu-registro').addClass('is-hidden');
+                $('.mnu-noticias').removeClass('is-hidden');
+            }
+            else {
+                $('.mnu-noticias').addClass('is-hidden');
+                $('.mnu-registro').removeClass('is-hidden');
+            }
+        },
+        error: function(error) {
+            swal('', 'Estamos presentando una falla, favor de regresar mas tarde. (err01)');
         }
-    }
+    });
 
     // swal(device.cordova + ', ' +  device.model + ', ' +  device.platform + ', ' +
     //     device.uuid + ', ' +  device.version + ', ' +  device.manufacturer + ', ' +
@@ -617,14 +610,14 @@ function onPushwooshInitialized(pushNotification) {
 	//if you need push token at a later time you can always get it from Pushwoosh plugin
 	pushNotification.getPushToken(
 		function(token) {
-			swal('','push token: ' + token);
+			console.log('push token: ' + token);
 		}
 	);
 
 	//and HWID if you want to communicate with Pushwoosh API
 	pushNotification.getPushwooshHWID(
 		function(token) {
-			swal('','Pushwoosh HWID: ' + token);
+			console.log('Pushwoosh HWID: ' + token);
 		}
 	);
 
@@ -634,24 +627,22 @@ function onPushwooshInitialized(pushNotification) {
 			intTagName: 10
 		},
 		function(status) {
-			swal('','setTags success: ' + JSON.stringify(status));
+			console.log('setTags success: ' + JSON.stringify(status));
 		},
 		function(status) {
-			swal('','setTags failed');
+			console.log('setTags failed');
 		}
 	);
 
 	pushNotification.getTags(
 		function(status) {
-			swal('','getTags success: ' + JSON.stringify(status));
+			console.log('getTags success: ' + JSON.stringify(status));
 		},
 		function(status) {
-			swal('','getTags failed');
+			console.log('getTags failed');
 		}
 	);
 
-	//start geo tracking.
-	pushNotification.startLocationTracking();
 }
 
 function initPushwoosh() {
@@ -662,15 +653,15 @@ function initPushwoosh() {
 		function(event) {
 			var message = event.notification.message;
 			var userData = event.notification.userdata;
-            swal('' + message + '', '' + userData + '');
-            swal('' + JSON.stringify(event.notification) + '');
+            console.log('' + message + '', '' + userData + '');
+            console.log('' + JSON.stringify(event.notification) + '');
 
 			// document.getElementById("pushMessage").innerHTML = message + "<p>";
 			// document.getElementById("pushData").innerHTML = JSON.stringify(event.notification) + "<p>";
 
 			//dump custom data to the console if it exists
 			if (typeof(userData) != "undefined") {
-				swal('','user data: ' + JSON.stringify(userData));
+				console.log('user data: ' + JSON.stringify(userData));
 			}
 		}
     );
@@ -679,15 +670,15 @@ function initPushwoosh() {
         function (event) {
             var message = event.notification.message;
             var userData = event.notification.userdata;
-            swal('' + message + '', '' + userData + '');
-            swal('' + JSON.stringify(event.notification) + '');
+            console.log('' + message + '', '' + userData + '');
+            console.log('' + JSON.stringify(event.notification) + '');
 
             // document.getElementById("pushMessage").innerHTML = message + "<p>";
             // document.getElementById("pushData").innerHTML = JSON.stringify(event.notification) + "<p>";
 
             //dump custom data to the console if it exists
             if (typeof (userData) != "undefined") {
-                swal('','user data: ' + JSON.stringify(userData));
+                console.log('','user data: ' + JSON.stringify(userData));
             }
         }
     );
@@ -706,7 +697,7 @@ function initPushwoosh() {
 			onPushwooshInitialized(pushNotification);
 		},
 		function(status) {
-			swal('', JSON.stringify(['failed to register ', status]));
+			console.log(JSON.stringify(['failed to register ', status]));
 		}
 	);
 }

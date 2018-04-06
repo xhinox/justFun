@@ -4,7 +4,7 @@
     xmlns:android = "http://schemas.android.com/apk/res/android"
     id="org.tecnico.mrg"
     version="1.0.0">
-    
+
     <name>tecnicoMirage</name>
     <description>
         Aplicacion para mantener una comunicacion con nuestros tecnicos.
@@ -36,7 +36,7 @@
     <plugin name="cordova-plugin-network-information" spec="~1.3.4" />
     <plugin name="cordova-plugin-splashscreen" source="npm" />
     <plugin name="cordova-plugin-whitelist" spec="~1.3.3" />
-    <gap:plugin name="pushwoosh-pgb-plugin" source="npm" />
+    <plugin name="pushwoosh-cordova-plugin" spec="~7.1.0" />
     <!-- PLUGINS -->
 
     <!-- WHITELIST -->
