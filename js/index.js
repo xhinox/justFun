@@ -80,50 +80,11 @@ $(document).ready(function (){
             $('.menu').removeClass('is-not-vanish').addClass('is-vanish');
         }
         else if ($target.data('link') == 'noticias') {
-
-            var url_put = 'https://tecnico-mirage.firebaseio.com/news.json';
-
-            $.ajax({
-                url: url_put,
-                type: "GET",
-                success: function (data) {
-
-                    var dataUser = JSON.parse(localStorage.getItem('dataUser'));
-                    var estado = checkEstado(dataUser.estado), today = moment(), isCsam = dataUser.isCsam;
-
-                    var arr = [];
-                    arr = $.map(data, function(value, index) {
-
-                        var fecha = value.fecha;
-                        var realDate = moment().year(parseInt(fecha.substr(6,4))).month(parseInt(fecha.substr(3,2)) -1).dates(parseInt(fecha.substr(0,2)));
-
-                        if (today.diff(realDate, 'days') >= 0) {
-
-                            if ((value.estado == estado) || (value.estado == 0)) {
-
-                                if (isCsam == 1) {
-                                    return [value];
-                                }
-                                else {
-                                    if (value.csam == 0) {
-                                        return [value];
-                                    }
-                                }
-                            }
-                        }
-                    });
-
-                    localStorage.setItem('news', JSON.stringify(arr));
-
-                    fillNoticias(arr);
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-            });
-
             $('.noticia').removeClass('is-right').addClass('is-center');
             $('.menu').removeClass('is-not-vanish').addClass('is-vanish');
+
+            $('#loader').modal('show');
+            loadNoticias();
         }
         else if ($target.data('link') == 'acerca') {
             $('.acerca').removeClass('is-right').addClass('is-center');
@@ -262,8 +223,15 @@ $(document).ready(function (){
             $('.userName').text('' + user.nombre + ' ' + user.apellido );
             $('.userLocale').text('' + user.municipio + ', ' + user.estado + '. ' + user.cp);
             $('.userMail').text('' + user.correo + '');
-            console.log(user.csam);
+            $('.userPhone').text('' + user.tel + '');
             $('.userCsam').text('' + user.csam == 1 ? 'Si' : 'No' + '');
+
+            var dataUser = {
+                isCsam : user.csam,
+                estado : user.estado
+            }
+
+            localStorage.setItem('dataUser', JSON.stringify(dataUser));
 
             $('.regP3').removeClass('is-center').addClass('is-left');
             $('.regP4').removeClass('is-right').addClass('is-center');
@@ -283,27 +251,39 @@ $(document).ready(function (){
     // INICIA NOTICIA
     var noticia = document.querySelector('.noticia'), ntc = new Hammer(noticia);
 
-    ntc.on("tap", function(ev) {
+    ntc.get('swipe').set({
+        direction: Hammer.DIRECTION_DOWN,
+        threshold: 1,
+        velocity:0.1
+    });
+
+    ntc.on("tap swipedown", function(ev) {
         var $target = $(ev.target);
 
-        if ($target.data('item') == 'menu') {
-            $('.noticia').removeClass('is-center').addClass('is-right');
-            $('.menu').removeClass('is-vanish').addClass('is-not-vanish');
-        }
-        else if ($target.data('link') == 'articulo') {
-            $('.articulo-fill').empty();
-            var news = JSON.parse(localStorage.getItem('news'));
-            var newIndex = $target.data('num');
-            $('.articulo-fill').append(news[newIndex].articulo);
+        if (ev.type == 'tap') {
+            if ($target.data('item') == 'menu') {
+                $('.noticia').removeClass('is-center').addClass('is-right');
+                $('.menu').removeClass('is-vanish').addClass('is-not-vanish');
+            }
+            else if ($target.data('link') == 'articulo') {
+                $('.articulo-fill').empty();
+                var news = JSON.parse(localStorage.getItem('news'));
+                var newIndex = $target.data('num');
+                $('.articulo-fill').append(news[newIndex].articulo);
 
-            $('.noticia').removeClass('is-center').addClass('is-left');
-            $('.articulo').removeClass('is-right').addClass('is-center');
+                $('.noticia').removeClass('is-center').addClass('is-left');
+                $('.articulo').removeClass('is-right').addClass('is-center');
+            }
+            else if ($target.data('link') == 'back') {
+                $('.articulo').removeClass('is-center').addClass('is-right');
+                $('.noticia').removeClass('is-left').addClass('is-center');
+            }
         }
-        else if ($target.data('link') == 'back') {
-            $('.articulo').removeClass('is-center').addClass('is-right');
-            $('.noticia').removeClass('is-left').addClass('is-center');
+        else {
+            $('#loader').modal('show');
+            $('.noticia-fill').empty();
+            loadNoticias();
         }
-
     });
     // TERMINA NOTICIA
 
@@ -352,37 +332,39 @@ function onDeviceReady(){
     // initPushwoosh();
     uuid = device.uuid;
 
-    // localStorage.removeItem('dataUser');
     var dataUser = JSON.parse(localStorage.getItem('dataUser'));
 
     // Validacion de usuario
     if (dataUser) {
-        $('.mnu-registro').addClass('is-hidden');
-        $('.mnu-noticias').removeClass('is-hidden');
-    }
-    else {
-        var url_put = 'https://tecnico-mirage.firebaseio.com/users/' + uuid + '.json';
+        if (dataUser.isCsam == 1) {
+            $('.mnu-registro').addClass('is-hidden');
+            $('.mnu-noticias').removeClass('is-hidden');
+        }
+        else {
+            localStorage.removeItem('dataUser');
+            var url_put = 'https://tecnico-mirage.firebaseio.com/users/' + uuid + '.json';
 
-        $.ajax({
-            url: url_put,
-            type: "GET",
-            success: function (data) {
+            $.ajax({
+                url: url_put,
+                type: "GET",
+                success: function (data) {
 
-                if (data) {
-                    var dataUser = {
-                        isCsam : data.csam,
-                        estado : data.estado
+                    if (data) {
+                        var dataUser = {
+                            isCsam : data.csam,
+                            estado : data.estado
+                        }
+
+                        localStorage.setItem('dataUser', JSON.stringify(dataUser));
+                        $('.mnu-registro').addClass('is-hidden');
+                        $('.mnu-noticias').removeClass('is-hidden');
                     }
-
-                    localStorage.setItem('dataUser', JSON.stringify(dataUser));
-                    $('.mnu-registro').addClass('is-hidden');
-                    $('.mnu-noticias').removeClass('is-hidden');
+                },
+                error: function(error) {
+                    swal('', 'Estamos presentando una falla, favor de regresar mas tarde. (err01)');
                 }
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
+            });
+        }
     }
 
     // swal(device.cordova + ', ' +  device.model + ', ' +  device.platform + ', ' +
@@ -394,6 +376,7 @@ function onDeviceReady(){
     checkConnection();
 
     $('.actCamera').on('click', function(){
+        console.log('entro');
         navigator.camera.getPicture(uploadPhotoSuccess, cameraError, {
             quality: 100,
             destinationType: Camera.DestinationType.DATA_URL,
@@ -442,6 +425,98 @@ function checkConnection() {
     // document.getElementById("pgbNetwork").innerHTML = states[networkState] + "<p>";
 }
 
+// guardar datos
+function guardarRegistro() {
+    var url_put = 'https://tecnico-mirage.firebaseio.com/users/' + uuid + '/.json';
+
+    var params = JSON.parse(sessionStorage.getItem('user'));
+
+    $.ajax({
+        url: url_put,
+        type: "PUT",
+        data: JSON.stringify(params),
+        success: function (data) {
+            setTimeout(function() {
+                $('#loader').modal('hide');
+
+                swal("", "Sus datos han sido capturados con exito", "success");
+
+                $('.regP1, .regP2, .regP3').addClass('is-hidden');
+
+                setTimeout(function () {
+                    $('.regP1, .regP2, .regP3').removeClass('is-left').addClass('is-right');
+                    $('.regP1, .regP2, .regP3').removeClass('is-hidden');
+                }, 3000);
+
+                $('.mnu-registro').addClass('is-hidden');
+                $('.mnu-noticias').removeClass('is-hidden');
+                $('.regP4').removeClass('is-center').addClass('is-right');
+                $('.menu').removeClass('is-vanish').addClass('is-not-vanish');
+            }, 1000);
+
+        },
+        error: function(error) {
+            swal('', 'Hubo un error al intentar guardar su información, favor de intentarlo de nuevo. (err02)');
+        }
+    });
+
+}
+
+// Descargar Noticias
+function loadNoticias() {
+    var url_put = 'https://tecnico-mirage.firebaseio.com/news.json';
+
+    $.ajax({
+        url: url_put,
+        type: "GET",
+        success: function (data) {
+
+            setTimeout(function() {
+                if (data) {
+                    var dataUser = JSON.parse(localStorage.getItem('dataUser'));
+                    var estado = checkEstado(dataUser.estado), today = moment(), isCsam = dataUser.isCsam;
+
+                    var arr = [];
+                    arr = $.map(data, function(value, index) {
+
+                        var fecha = value.fecha;
+                        var realDate = moment().year(parseInt(fecha.substr(6,4))).month(parseInt(fecha.substr(3,2)) -1).date(parseInt(fecha.substr(0,2)));
+
+                        console.log(realDate);
+
+                        if (today.diff(realDate, 'days') >= 0) {
+
+                            if ((value.estado == estado) || (value.estado == 0)) {
+
+                                if (isCsam == 1) {
+                                    return [value];
+                                }
+                                else {
+                                    if (value.csam == 0) {
+                                        return [value];
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    localStorage.setItem('news', JSON.stringify(arr));
+
+                    fillNoticias(arr);
+                }
+                else {
+                    swall('', 'Por el momento no tenemos articulos que mostrar', 'info')
+                }
+
+                $('#loader').modal('hide');
+            }, 1000);
+
+        },
+        error: function(error) {
+            swall('', 'Ocurrio un error de al descargar las noticias, favor de intentarlo de nuevo. (err03)');
+        }
+    });
+}
 // llenar espacio de Noticias
 function fillNoticias(data) {
 
@@ -527,44 +602,6 @@ function fillNoticias(data) {
     var $finale = $(finale);
     $('.noticia-fill').empty();
     $('.noticia-fill').append($finale);
-
-}
-
-// guardar datos
-function guardarRegistro() {
-    var url_put = 'https://tecnico-mirage.firebaseio.com/users/' + uuid + '/.json';
-
-    var params = JSON.parse(sessionStorage.getItem('user'));
-
-    $.ajax({
-        url: url_put,
-        type: "PUT",
-        data: JSON.stringify(params),
-        success: function (data) {
-            console.log(JSON.stringify(data));
-            setTimeout(function() {
-                $('#loader').modal('hide');
-
-                swal("", "Sus datos han sido capturados con exito", "success");
-
-                $('.regP1, .regP2, .regP3').addClass('is-hidden');
-
-                setTimeout(function () {
-                    $('.regP1, .regP2, .regP3').removeClass('is-left').addClass('is-right');
-                    $('.regP1, .regP2, .regP3').removeClass('is-hidden');
-                }, 3000);
-
-                $('.mnu-registro').addClass('is-hidden');
-                $('.mnu-noticias').removeClass('is-hidden');
-                $('.regP4').removeClass('is-center').addClass('is-right');
-                $('.menu').removeClass('is-vanish').addClass('is-not-vanish');
-            }, 1000);
-
-        },
-        error: function(error) {
-            swal("error");
-        }
-    });
 
 }
 
