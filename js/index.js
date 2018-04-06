@@ -329,7 +329,7 @@ $(document).ready(function (){
 
 function onDeviceReady(){
     //write your function body here
-    // initPushwoosh();
+    initPushwoosh();
     uuid = device.uuid;
 
     var dataUser = JSON.parse(localStorage.getItem('dataUser'));
