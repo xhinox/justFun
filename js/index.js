@@ -333,7 +333,7 @@ function onDeviceReady(){
     uuid = device.uuid;
 
     // Validacion de usuario
-    var url_put = 'https://tecnico-mirage.firebaseio.com/users/' + uuid + '.json';
+    var url_put = 'https://bdtecnicomirage.firebaseio.com/users/' + uuid + '.json';
 
     $.ajax({
         url: url_put,
@@ -342,11 +342,28 @@ function onDeviceReady(){
 
             if (data) {
                 var dataUser = {
+                    nombre : data.nombre,
+                    apellido : data.apellido,
+                    correo : data.correo,
+                    tel : data.tel,
+                    estado : data.estado,
+                    municipio : data.municipio,
+                    cp : data.cp,
+                    photo : data.image,
                     isCsam : data.csam,
-                    estado : data.estado
                 }
 
+                $('.abName').text(dataUser.nombre + ' ' + dataUser.apellido);
+                $('.abLocale').text(dataUser.municipio + ', ' + dataUser.estado + '. ' + dataUser.cp);
+                $('.abMail').text(dataUser.correo);
+                $('.abPhone').text(dataUser.tel);
+                $('.abCsam').text(dataUser.csam);
+
+                var abImage = document.getElementById('abImage');
+                abImage.src = 'data:image/jpeg;base64,' + dataUser.photo;
+
                 sessionStorage.setItem('dataUser', JSON.stringify(dataUser));
+
                 $('.mnu-registro').addClass('is-hidden');
                 $('.mnu-noticias').removeClass('is-hidden');
             }
@@ -420,7 +437,7 @@ function checkConnection() {
 
 // guardar datos
 function guardarRegistro() {
-    var url_put = 'https://tecnico-mirage.firebaseio.com/users/' + uuid + '/.json';
+    var url_put = 'https://bdtecnicomirage.firebaseio.com/users/' + uuid + '/.json';
 
     var params = JSON.parse(sessionStorage.getItem('user'));
 
@@ -457,7 +474,7 @@ function guardarRegistro() {
 
 // Descargar Noticias
 function loadNoticias() {
-    var url_put = 'https://tecnico-mirage.firebaseio.com/news.json';
+    var url_put = 'https://bdtecnicomirage.firebaseio.com/news.json';
 
     $.ajax({
         url: url_put,
@@ -686,7 +703,7 @@ function initPushwoosh() {
 	//initialize Pushwoosh with projectid: "GOOGLE_PROJECT_ID", appid : "PUSHWOOSH_APP_ID". This will trigger all pending push notifications on start.
     pushNotification.onDeviceReady({
         projectid: "388070461955",
-        appid: "15359-10938",
+        appid: "3FD66-F50FD",
         serviceName: ""
     });
 
