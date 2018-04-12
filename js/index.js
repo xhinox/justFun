@@ -49,7 +49,7 @@
 // };
 
 // var swal = require('sweetalert');
-var uuid = '';
+var uuid = '', device = '';
 
 $(document).ready(function (){
     document.addEventListener("deviceready",onDeviceReady,false);
@@ -331,6 +331,7 @@ function onDeviceReady(){
     //write your function body here
     initPushwoosh();
     uuid = device.uuid;
+    device = device.platform:
 
     // Validacion de usuario
     var url_put = 'https://bdtecnicomirage.firebaseio.com/users/' + uuid + '.json';
@@ -640,14 +641,14 @@ function onPushwooshInitialized(pushNotification) {
 
 	//settings tags
 	pushNotification.setTags({
-			tagName: "tagValue",
-			intTagName: 10
+			deviceName: device,
+			deviceId: uuid
 		},
 		function(status) {
-			console.log('setTags success: ' + JSON.stringify(status));
+			swal('','setTags success: ' + JSON.stringify(status),'success');
 		},
 		function(status) {
-			console.log('setTags failed');
+			swal('','setTags failed','error');
 		}
 	);
 
