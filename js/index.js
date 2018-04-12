@@ -49,7 +49,7 @@
 // };
 
 // var swal = require('sweetalert');
-var uuid = '', device = '';
+var uuid = '';
 
 $(document).ready(function (){
     document.addEventListener("deviceready",onDeviceReady,false);
@@ -330,8 +330,8 @@ $(document).ready(function (){
 function onDeviceReady(){
     //write your function body here
     initPushwoosh();
+
     uuid = device.uuid;
-    device = device.platform:
 
     // Validacion de usuario
     var url_put = 'https://bdtecnicomirage.firebaseio.com/users/' + uuid + '.json';
@@ -625,30 +625,30 @@ function validar_email( email ) {
 // Pushwoosh
 function onPushwooshInitialized(pushNotification) {
 
-	//if you need push token at a later time you can always get it from Pushwoosh plugin
+	// if you need push token at a later time you can always get it from Pushwoosh plugin
 	pushNotification.getPushToken(
 		function(token) {
 			console.log('push token: ' + token);
 		}
 	);
 
-	//and HWID if you want to communicate with Pushwoosh API
+	// and HWID if you want to communicate with Pushwoosh API
 	pushNotification.getPushwooshHWID(
 		function(token) {
 			console.log('Pushwoosh HWID: ' + token);
 		}
 	);
 
-	//settings tags
+	// settings tags
 	pushNotification.setTags({
-			deviceName: device,
-			deviceId: uuid
+			tagName: "tagValue",
+			intTagName: 10
 		},
 		function(status) {
-			swal('','setTags success: ' + JSON.stringify(status),'success');
+			console.log('setTags success: ' + JSON.stringify(status));
 		},
 		function(status) {
-			swal('','setTags failed','error');
+			console.log('setTags failed');
 		}
 	);
 
@@ -663,10 +663,12 @@ function onPushwooshInitialized(pushNotification) {
 
 }
 
+
+
 function initPushwoosh() {
 	var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
-
-	//set push notifications handler
+    //
+	// //set push notifications handler
 	document.addEventListener('push-notification',
 		function(event) {
 			var message = event.notification.message;
@@ -683,7 +685,7 @@ function initPushwoosh() {
 			}
 		}
     );
-
+    //
     document.addEventListener('push-receive',
         function (event) {
             var message = event.notification.message;
@@ -700,10 +702,10 @@ function initPushwoosh() {
             }
         }
     );
-
-	//initialize Pushwoosh with projectid: "GOOGLE_PROJECT_ID", appid : "PUSHWOOSH_APP_ID". This will trigger all pending push notifications on start.
+    //
+	// //initialize Pushwoosh with projectid: "GOOGLE_PROJECT_ID", appid : "PUSHWOOSH_APP_ID". This will trigger all pending push notifications on start.
     pushNotification.onDeviceReady({
-        projectid: "388070461955",
+        projectid: "430274723087",
         appid: "3FD66-F50FD",
         serviceName: ""
     });
@@ -715,7 +717,7 @@ function initPushwoosh() {
 			onPushwooshInitialized(pushNotification);
 		},
 		function(status) {
-			console.log(JSON.stringify(['failed to register ', status]));
+			swal(JSON.stringify(['failed to register ', status]));
 		}
 	);
 }
