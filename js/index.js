@@ -150,6 +150,27 @@ $(document).ready(function (){
                 }
             }
         }
+
+        $('#txtNombre').on('keydown', function (e) {
+            var keycode = (e.keyCode ? e.keyCode : e.which);
+            if (keycode == '13') {
+                $('#txtApellido').focus();
+            }
+        });
+
+        $('#txtApellido').on('keydown', function (e) {
+            var keycode = (e.keyCode ? e.keyCode : e.which);
+            if (keycode == '13') {
+                $('#txtCorreo').focus();
+            }
+        });
+
+        $('#txtCorreo').on('keydown', function (e) {
+            var keycode = (e.keyCode ? e.keyCode : e.which);
+            if (keycode == '13') {
+                $('#txtTelefono').focus();
+            }
+        });
     });
 
     reg2.on("tap", function(ev) {
@@ -328,7 +349,9 @@ $(document).ready(function (){
 });
 
 function onDeviceReady(){
-    //write your function body here
+
+    document.addEventListener("backbutton", onBackKeyDown, false);
+
     initPushwoosh();
 
     uuid = device.uuid;
@@ -528,6 +551,7 @@ function loadNoticias() {
         }
     });
 }
+
 // llenar espacio de Noticias
 function fillNoticias(data) {
 
@@ -662,8 +686,6 @@ function onPushwooshInitialized(pushNotification) {
 	);
 
 }
-
-
 
 function initPushwoosh() {
 	var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
@@ -824,3 +846,21 @@ function checkEstado(str) {
             return '0'
     }
 }
+
+function onBackKeyDown(e){
+    e.preventDefault();
+    navigator.app.backHistory();
+    swal('', 'quit', 'error');
+}
+
+// if($.mobile.activePage.is('#homepage')){
+//         /*
+//          Event preventDefault/stopPropagation not required as adding backbutton
+//           listener itself override the default behaviour. Refer below PhoneGap link.
+//         */
+//         //e.preventDefault();
+//     navigator.app.exitApp();
+// }
+// else {
+//     navigator.app.backHistory()
+// }
