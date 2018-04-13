@@ -849,8 +849,8 @@ function checkEstado(str) {
 
 function onBackKeyDown(e){
     e.preventDefault();
+    History.go(-1);
     navigator.app.backHistory();
-    swal('', 'quit', 'error');
 }
 
 // if($.mobile.activePage.is('#homepage')){
