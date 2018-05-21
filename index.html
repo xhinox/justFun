@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Security-Policy" content="img-src 'self' data:; default-src 'self' https://bdtecnicomirage.firebaseio.com/ https://api-codigos-postales.herokuapp.com/v2/codigo_postal/ 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; ">
+        <meta http-equiv="Content-Security-Policy" content="img-src 'self' data:; default-src 'self' https://mirage.mx/ https://www.mirage.mx/ https://bdtecnicomirage.firebaseio.com/ https://api-codigos-postales.herokuapp.com/v2/codigo_postal/ 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; ">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
@@ -19,8 +19,8 @@
         <div class="modal fade" id="loader" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
-                    <div class="modal-body text-center">
-                        <img src="images/24.gif" alt="" class="mr-4" />
+                    <div class="modal-body d-flex justify-content-center">
+                        <img src="images/24.gif" class="mr-3" alt="" width="24" height="24" />
                         Cargando
                     </div>
                 </div>
@@ -50,59 +50,86 @@
             <div class="container ">
                 <div class="menu-logo row text-center">
                     <div class="col">
-                        <img src="images/logo.png" alt="Técnico Embajador">
+                        <img src="images/logo-b.png" alt="Técnico Embajador">
                     </div>
                 </div>
 
-                <div class="row mnu-registro">
+                <div class="row mnu-registro is-hidden">
                     <div class="menu-item col border-bottom d-flex justify-content-center rounded-top" data-link="registrate">
-                        <div class="menu-icon" data-link="registrate"><i class="fas fa-pencil-alt" data-link="registrate"></i></div>
+                        <div class="menu-icon mr-1" data-link="registrate"><i class="fas fa-user rounded-circle" data-link="registrate"></i></div>
                         <div class="menu-text" data-link="registrate">Registrate</div>
                     </div>
                 </div>
 
                 <div class="row mnu-noticias is-hidden">
                     <div class="menu-item col border-bottom d-flex justify-content-center rounded-top" data-link="noticias">
-                        <div class="menu-icon" data-link="noticias"><i class="fas fa-newspaper" data-link="noticias"></i></div>
+                        <div class="menu-icon mr-1" data-link="noticias"><i class="fas fa-newspaper rounded-circle" data-link="noticias"></i></div>
                         <div class="menu-text" data-link="noticias">Noticias</div>
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="menu-item col border-bottom d-flex justify-content-center" data-link="acerca">
-                        <div class="menu-icon" data-link="acerca"><i class="fas fa-info" data-link="acerca"></i></div>
-                        <div class="menu-text" data-link="acerca">Acerca de</div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="menu-item col border-bottom d-flex justify-content-center rounded-bottom" data-link="aviso">
-                        <div class="menu-icon" data-link="aviso"><i class="fas fa-book" data-link="aviso"></i></div>
-                        <div class="menu-text" data-link="aviso">Aviso de privacidad</div>
+                <div class="row mnu-perfil is-hidden">
+                    <div class="menu-item col border-bottom d-flex justify-content-center" data-link="perfil">
+                        <div class="menu-icon mr-1" data-link="perfil"><i class="fas fa-user rounded-circle" data-link="perfil"></i></div>
+                        <div class="menu-text" data-link="perfil">Mi cuenta</div>
                     </div>
                 </div>
 
                 <!-- <div class="row">
-                    <fieldset>
-                        <legend>Pushwoosh status:</legend>
-                        Push token: <br>
-                        <div class="statustext" id="pushToken"></div>
-                        Push message: <br>
-                        <div class="statustext" id="pushMessage"></div>
-                        Push data: <br>
-                        <div class="statustext" id="pushData"></div>
-                    </fieldset>
+                    <div class="menu-item col border-bottom d-flex justify-content-center" data-link="video">
+                        <div class="menu-icon mr-1" data-link="video"><i class="fas fa-play rounded-circle" data-link="video"></i></div>
+                        <div class="menu-text" data-link="video">Videos</div>
+                    </div>
                 </div> -->
+
+                <div class="row">
+                    <div class="menu-item col border-bottom d-flex justify-content-center" data-link="video">
+                        <div class="menu-icon mr-1" data-link="aviso"><i class="fas fa-book rounded-circle" data-link="aviso"></i></div>
+                        <div class="menu-text" data-link="aviso">Aviso de privacidad</div>
+                    </div>
+                </div>
 
             </div>
         </section>
 
-        <!-- registro p1 -->
-        <section class="regP1 container-fluid position-absolute is-right">
+        <!-- Bienvenida -->
+        <section class="regP0 container-fluid position-absolute is-right">
             <header class="sticky-top">
                 <div class="position-absolute btnMenu-back" data-link="menu"></div>
                 <nav class="nav row align-items-center">
                     <div class="col-1"><i class="fas fa-bars fa-lg"></i></div>
+                    <div class="col-10 text-center">Registro de técnico</div>
+                </nav>
+            </header>
+
+            <section class="container">
+                <div class="row m-top20">
+                    <div class="col">
+                        <div class="card">
+                            <div class="card-tilte text-center pt-3">
+                                <h5>Bienvenido</h5>
+                            </div>
+                            <div class="card-body text-center pt-2">
+                                <img class="mx-auto d-block mb-3" src="images/logo.png" alt="Técnico Embajador" style="width: 60%" />
+
+                                <div class="card-text">Esta aplicación esta hecha para mantenerlos al tanto de temas de interes, asi como fechas de capacitación, ventas nocturnas y promociones.</div>
+                            </div>
+                            <div class="card-footer">
+                                <button class="btn btn-success btn-lg btn-block btnRegistrar" data-link="toRegP1">Empezar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+        <!-- Bienvenida -->
+
+        <!-- registro p1 -->
+        <section class="regP1 container-fluid position-absolute is-right">
+            <header class="sticky-top">
+                <div class="position-absolute btnMenu-back" data-link="back"></div>
+                <nav class="nav row align-items-center">
+                    <div class="col-1"><i class="fas fa-angle-left fa-lg"></i></div>
                     <div class="col-10 text-center">Registro de técnico</div>
                 </nav>
             </header>
@@ -117,7 +144,7 @@
                 <div class="row">
                     <div class="col">
                         <label for="datoNom">Nombre</label>
-                        <div class="input-group mb-3">
+                        <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="datoNom">
                                     <i class="fas fa-user fa-xs"></i>
@@ -131,7 +158,7 @@
                 <div class="row">
                     <div class="col">
                         <label for="">Apellido</label>
-                        <div class="input-group mb-3">
+                        <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="datoApe">
                                     <i class="fas fa-user fa-xs"></i>
@@ -145,7 +172,7 @@
                 <div class="row">
                     <div class="col">
                         <label for="">Correo</label>
-                        <div class="input-group mb-3">
+                        <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="datoMail">
                                     <i class="fas fa-envelope fa-xs"></i>
@@ -159,7 +186,7 @@
                 <div class="row">
                     <div class="col">
                         <label for="">Teléfono</label>
-                        <div class="input-group mb-3">
+                        <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="datoPhone">
                                     <i class="fas fa-phone fa-xs"></i>
@@ -186,11 +213,12 @@
                 <div class="position-absolute btnMenu-back" data-link="back"></div>
                 <nav class="nav row align-items-center">
                     <div class="col-1"><i class="fas fa-angle-left fa-lg"></i></div>
-                    <div class="col-10 text-center">Mirage App</div>
+                    <div class="col-10 text-center">Registro de técnico</div>
                 </nav>
             </header>
 
             <article class="container">
+
                 <div class="row m-top20">
                     <div class="col">
                         <label for="">Capture su código fiscal</label>
@@ -212,11 +240,9 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row text-center">
                     <div class="col">
-                        <div class="row text-center m-top20">
-                            <h5 class="col">¿Eres Centro de Servicio Autorizado Mirage?</h5>
-                        </div>
+                        <h6>¿Eres Centro de Servicio Autorizado Mirage?</h6>
                     </div>
                 </div>
 
@@ -225,13 +251,23 @@
                         <div class="row justify-content-center">
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input type="radio" id="SiCsam" name="csam" class="custom-control-input" value="1">
-                                <label class="custom-control-label" for="SiCsam">Si</label>
+                                <label class="custom-control-label" for="SiCsam" data-link="check">Si</label>
                             </div>
                             <div class="custom-control custom-radio custom-control-inline">
                                 <input type="radio" id="NoCsam" name="csam" class="custom-control-input" value="0">
-                                <label class="custom-control-label" for="NoCsam">No</label>
+                                <label class="custom-control-label" for="NoCsam" data-link="check">No</label>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col">
+                        <label for="">Capture el número del CESAM al que pertenece</label>
+                        <div class="input-group">
+                            <input id="codigoCesam" type="tel" class="form-control" placeholder="" aria-label="numerocsam" aria-describedby="basic-addon5" maxlength="4" readonly>
+                        </div>
+                        <small class="text-muted">Este número consiguelo con tu jefe</small>
                     </div>
                 </div>
 
@@ -246,12 +282,12 @@
         <!-- registro p2 -->
 
         <!-- registro 03 -->
-        <article class="regP3 container-fluid position-absolute is-right">
+        <!-- <article class="regP3 container-fluid position-absolute is-right">
             <header class="sticky-top">
                 <div class="position-absolute btnMenu-back" data-link="back"></div>
                 <nav class="nav row align-items-center">
                     <div class="col-1"><i class="fas fa-angle-left fa-lg"></i></div>
-                    <div class="col-10 text-center">Mirage App</div>
+                    <div class="col-10 text-center">Registro de técnico</div>
                 </nav>
             </header>
 
@@ -261,11 +297,9 @@
                         <div class="card">
                             <div class="card-img-top actCamera d-flex">
                                 <img class="actCameraIcon" src="images/iconCam.png">
-                                <!-- <span class="h4">tap aqui</span> -->
                             </div>
                             <div class="card-body text-center">
                                 <span>Favor de tomarse una foto</span>
-                                <!-- <button type="button" class="btn btn-danger btn-block m-top20 upPhoto">Subir foto</button> -->
                             </div>
                         </div>
                     </div>
@@ -284,7 +318,7 @@
                 </div>
             </div>
 
-        </article>
+        </article> -->
         <!-- registro 03 -->
 
         <!-- registro 04 -->
@@ -293,7 +327,7 @@
                 <div class="position-absolute btnMenu-back" data-link="back"></div>
                 <nav class="nav row align-items-center">
                     <div class="col-1"><i class="fas fa-angle-left fa-lg"></i></div>
-                    <div class="col-10 text-center">Mirage App</div>
+                    <div class="col-10 text-center">Registro de técnico</div>
                 </nav>
             </header>
 
@@ -301,38 +335,33 @@
 
                 <div class="row">
                     <div class="col">
-                        <div class="card userDetail">
-                            <div class="card-body d-flex justify-content-between pb-2">
-                                <div class="tecnicoImage">
-                                    <img id="tecnicoSelfie" class="" data-src="" src="" />
-                                </div>
-                                <div class="" style="width:105px;">
-                                    <p class="card-text">
-                                        <small class="text-muted">Nombre:</small>
-                                        <br/>
-                                        <span class="userName"></span>
-                                    </p>
-                                    <p class="card-text">
-                                        <small class="text-muted">Localidad:</small>
-                                        <br/>
-                                        <span class="userLocale"></span>
-                                    </p>
-                                </div>
-                            </div>
-
+                        <div class="card">
                             <div class="card-body pt-2">
+                                <div class="card-title my-2">
+                                    Favor de revisar sus datos antes de guardarlos.
+                                </div>
                                 <p class="card-text mb-2">
-                                    <small class="text-muted">Correo:</small>
+                                    <small class="text-muted">Nombre</small>
+                                    <br/>
+                                    <span class="userName"></span>
+                                </p>
+                                <p class="card-text mb-2">
+                                    <small class="text-muted">Localidad</small>
+                                    <br/>
+                                    <span class="userLocale"></span>
+                                </p>
+                                <p class="card-text mb-2">
+                                    <small class="text-muted">Correo</small>
                                     <br/>
                                     <span class="userMail"></span>
                                 </p>
                                 <p class="card-text mb-2">
-                                    <small class="text-muted">Telefono:</small>
+                                    <small class="text-muted">Telefono</small>
                                     <br/>
                                     <span class="userPhone"></span>
                                 </p>
-                                <p class="card-text mb-2">
-                                    <small class="text-muted">Csam:</small>
+                                <p class="card-text">
+                                    <small class="text-muted">Csam</small>
                                     <br/>
                                     <span class="userCsam"></span>
                                 </p>
@@ -343,7 +372,7 @@
 
                 <div class="row">
                     <div class="col">
-                        <button type="button" class="btn btn-danger btn-block m-top20" data-link="toRegFinish"  data-toggle="modal" data-target="#saveDataLoader">Continuar</button>
+                        <button type="button" class="btn btn-danger btn-block m-top20" data-link="toRegFinish"  data-toggle="modal" data-target="#saveDataLoader">Guardar datos</button>
                     </div>
                 </div>
             </div>
@@ -356,13 +385,15 @@
                 <div class="position-absolute btnMenu-back" data-item="menu"></div>
                 <nav class="nav row align-items-center">
                     <div class="col-1"><i class="fas fa-bars fa-lg"></i></div>
-                    <div class="col-10 text-center">Mirage App</div>
+                    <div class="col-10 text-center">Noticias</div>
                 </nav>
             </header>
 
             <article class="container">
                 <div class="row m-top20">
                     <div class="col noticia-fill d-flex justify-content-between" style="flex-wrap:wrap;">
+
+
 
                         <!-- <section class='notice typeA d-flex justify-content-between mb-2' >
                         <header class='notice-header d-flex flex-column justify-content-between :importantHeader:'>
@@ -398,64 +429,89 @@
                 <div class="position-absolute btnMenu-back" data-link="back"></div>
                 <nav class="nav row align-items-center">
                     <div class="col-1"><i class="fas fa-angle-left fa-lg"></i></div>
-                    <div class="col-10 text-center">Mirage App</div>
+                    <div class="col-10 text-center">Artículo</div>
                 </nav>
             </header>
 
             <article class="articulo-wrapper container">
                 <div class="row m-top20">
-                    <div class="col articulo-fill">
-
-
-                    </div>
+                    <div class="col articulo-fill"></div>
                 </div>
             </article>
         </article>
         <!-- articule -->
 
         <!-- acerca de -->
-        <article class="acerca container-fluid position-absolute is-right">
+        <article class="perfil container-fluid position-absolute is-right">
             <header class="sticky-top">
-                <div class="position-absolute btnMenu-back" data-item="acerca"></div>
+                <div class="position-absolute btnMenu-back" data-item="perfil"></div>
                 <nav class="nav row align-items-center">
                     <div class="col-1"><i class="fas fa-bars fa-lg"></i></div>
-                    <div class="col-10 text-center">Mirage App</div>
+                    <div class="col-10 text-center">Mi perfil</div>
                 </nav>
             </header>
 
-            <article class="container">
-                <div class="row m-top20">
-                    <div class="acerca-item col">
-                        <img src="" id="abImage" />
-                    </div>
-                </div>
+            <article class="container mt-2">
 
-                <div class="row mt-2">
-                    <div class="acerca-item col border-bottom d-flex">
-                        <small>Nombre completo</small>
-                        <span class="abName"></span>
-                    </div>
-                </div>
-
-                <div class="row mt-2">
-                    <div class="acerca-item col border-bottom d-flex">
-                        <small>Correo electronico</small>
-                        <span class="abMail"></span>
-                    </div>
-                </div>
-
-                <div class="row mt-2">
-                    <div class="acerca-item col border-bottom d-flex">
-                        <small>Telefono</small>
-                        <span class="abPhone"></span>
-                    </div>
-                </div>
-
-                <!-- <div class="row m-top20">
+                <div class="row">
                     <div class="col">
-                        <button type="button" class="btn btn-block text-white btn-continuar">Editar</button>
+                        <label for="abName">Nombre y Apellido</label>
+                        <div class="input-group mb-2">
+                            <input type="text" id="abName" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abName">
+                            <input type="text" id="abLast" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abName">
+                        </div>
                     </div>
-                </div> -->
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="abLocale">Localidad: <span class="abDireccion"></span></label>
+                        <div class="input-group mb-2">
+                            <input id="abLocale" type="tel" class="form-control" placeholder="" aria-label="codigo postal" aria-describedby="basic-addon5">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary text-white btn-checar" type="button" data-link="look" data-toggle="modal" data-target="#loader">Buscar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="abMail">Correo electrónico</label>
+                        <div class="input-group mb-2">
+                            <input type="text" id="abMail" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abMail">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="abPhone">Teléfono</label>
+                        <div class="input-group mb-2">
+                            <input type="text" id="abPhone" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abPhone">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <label for="abPhone">Perteneces a algun CESAM</label>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <input type="checkbox" id="csamCheck" name="upCsam" aria-label="Checkbox for following text input" readonly />
+                                </div>
+                            </div>
+                            <input type="text" id="abCsam" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abPhone">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col">
+                        <button type="button" class="btn btn-block text-white btn-continuar" data-link="update" data-toggle="modal" data-target="#saveDataLoader">Grabar</button>
+                    </div>
+                </div>
             </article>
         </article>
         <!-- acerca de -->
@@ -466,15 +522,155 @@
                 <div class="position-absolute btnMenu-back" data-item="aviso"></div>
                 <nav class="nav row align-items-center">
                     <div class="col-1"><i class="fas fa-bars fa-lg"></i></div>
-                    <div class="col-10 text-center">Mirage App</div>
+                    <div class="col-10 text-center">Aviso privacidad</div>
                 </nav>
             </header>
 
             <article class="container">
                 <div class="row m-top20">
                     <div class="col">
-                        <h4>Aviso de privacidad</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reprehenderit dolorum magnam, nobis natus quibusdam maxime, consequatur, eos autem obcaecati perferendis totam minima nihil possimus, itaque mollitia deserunt vitae illum omnis?</p>
+                        <div class="card">
+                            <div class="card-body aviso-body">
+                                <div class="card-title">
+                                    <h4>Aviso de privacidad</h4>
+                                </div>
+                                <div class="card-text">
+                                    <p>
+                                        Mirage, en carácter de Responsable del tratamiento de los datos personales de los Usuarios de la Aplicación "Técnico Mirage", pone a tu disposición el presente Aviso de Privacidad Integral, el cual ha sido elaborado en apego a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares y su regulación secundaria.
+                                    </p>
+
+                                    <p>
+                                        Mirage está legalmente representado por AIRPAC, S.A. de C.V con domicilio en Prolongación López Mateos Número 8597, Colonia San Agustin, Tlajomulco de Zúñiga, Jalisco, Código Postal 45645, México, Teléfono de contacto: (644) 410 9800, correo electrónico privacidad@mirage.mx y horario de atención de lunes a jueves de 10 a 16 h.
+                                    </p>
+
+                                    <p>
+                                        Te informamos que en Mirage, como consecuencia del uso de nuestra aplicación móvil, realizamos el tratamiento de los siguientes datos personales: Datos de Contacto (Correo electrónico personal o laboral y Teléfono particular o móvil) y Datos de Identificación (Nombre completo, Código Postal y Fotografía).
+                                    </p>
+
+                                    <p>
+                                        No recabamos ni realizamos el tratamiento de datos personales de carácter sensible de nuestros Usuarios de la Aplicación Técnico Mirage. En caso de que sea requerido un cambio al respecto, haremos de tu conocimiento dicha modificación en nuestro Aviso de Privacidad Integral.
+                                    </p>
+
+                                    <p>Los datos personales que recabamos los obtenemos de forma directa a través de nuestra aplicación móvil identificada como "Técnico Mirage".</p>
+
+                                    <h6 class="aviso-h6">FINALIDADES DEL TRATAMIENTO DE DATOS PERSONALES</h6>
+                                    <p>
+                                        Las finalidades son aquellas que motivan el tratamiento de tus datos personales, para tu entendimiento y por disposición de ley se clasifican en primarias y secundarias, siendo las primarias aquellas que son necesarias para el desarrollo de una obligación jurídica o del motivo principal por el cual existe una relación entre el Titular (tu) y el Responsable (nosotros); la finalidad secundaria es aquella que no es necesaria para el desarrollo de una relación jurídica, por lo cual puedes indicarnos que no autorizas el tratamiento de tus datos personales en alguna o todas las que se mencionan.
+                                    </p>
+
+                                    <ul class="pl-4">
+                                     	<li>Enviar invitaciones a ventas especiales.</li>
+                                     	<li>Enviar invitaciones sobre capacitaciones especializadas.</li>
+                                     	<li>Enviar noticias sobre productos actuales o en lanzamiento.</li>
+                                     	<li>Enviar notificaciones sobre modificaciones y/o actualizaciones de la aplicación móvil.</li>
+                                     	<li>Enviar promociones sobre productos de lanzamiento.</li>
+                                     	<li>Registrar una cuenta de usuario.</li>
+                                    </ul>
+
+                                    <h6>FINALIDADES SECUNDARIAS</h6>
+                                    <ul class="pl-4">
+                                        <li>Llevar a cabo encuentas de satisfacción.</li>
+                                    </ul>
+
+                                    <h6>MECANISMO PARA MANIFESTAR SU NO ACEPTACIÓN FINAL A LAS FINALIDADES SECUNDARIAS</h6>
+                                    <ol class="pl-4">
+                                        <li type="i">En cualquier otro momento, usted deberá hacer uso del ejercicio de su Derecho de Oposición establecido en la seccion "Derechso de Acceso, Rectificación, Cancelación y Oposición (ARCO)"</li>
+                                    </ol>
+
+                                    <h6 class="aviso-h6">TRANSFERENCIA DE DATOS PERSONALES</h6>
+                                    <p>
+                                        No realizamos transferencia nacional ni internacional de tus datos personales a terceros.
+                                    </p>
+
+                                    <h6 class="aviso-h6">DERECHOS DE ACCESO, RECTIFICACIÓN, CANCELACIÓN y OPOSICIÓN (ARCO)</h6>
+                                    <p>
+                                        Los derechos ARCO son el mecanismo legal que te permiten ejercer tus Derechos de Acceso, Rectificación, Cancelación y Oposición, los cuales consisten en:
+                                        <ul class="pl-4">
+                                            <li>Acceder a tus datos personales, exclusivamente a los tuyos salvo que sea representante legal o tutor de otro titular, que se encuentran bajo nuestro tratamiento.</li>
+                                            <li>Solicitar que realicemos correcciones o actualizaciones de tus datos personales.</li>
+                                            <li>Solicitar que eliminemos tus datos personales, cuando esto sea legalmente procedente.</li>
+                                            <li>Oponerse a la realización de las finalidades primarias establecidas en este Aviso de Privacidad — supuesto bajo el cual no seguirán prestándose los servicios que ofrecemos.</li>
+                                            <li>Solicitar tu oposición a la realización de las finalidades secundarias indicadas</li>
+                                            <li>Solicitar que tus datos personales no sean transferidos a terceros.</li>
+                                            <li>Limitar el uso o bien revocar el consentimiento al tratamiento de tus datos personales.</li>
+                                        </ul>
+                                    </p>
+
+                                    <p>
+                                        Para que ejerzas cualesquiera de tus derechos ARCO, deberás realizarlo en forma personal siguiendo el procedimiento que se indica en la sección "Procedimiento para ejercer los Derechos ARCO" de este Aviso.
+                                    </p>
+
+                                    <p>
+                                        El titular de los datos personales deberá presentar en Prolongación López Mateos Número 8597, Colonia San Agustin, Tlajomulco de Zúñiga, Jalisco, Código Postal 45645, México, de lunes a jueves en un horario de atención de 10:00 a 13:00, un escrito libre que incluya como mínimo los siguientes datos:
+                                        <ul class="pl-4">
+                                            <li>Nombre completo del titular de los datos personales.</li>
+                                            <li>Formas de contactarte y comunicar la respuesta, ya sea dirección para recibir mensajería de SEPOMEX, Número de teléfono particular, Número de teléfono celular y/o Dirección de correo electrónico.</li>
+                                            <li>Mención clara y precisa del derecho que buscas ejercer, debiendo señalar uno a la vez.</li>
+                                            <li>Identificación oficial vigente, la cual deberá de presentarse en original y copia para su cotejo.</li>
+                                            <li>En caso de no ser el titular de los datos personales, deberá adjuntar el documento que lo acredite como representante legal.</li>
+                                            <li>En caso de solicitar cambios derivados de correcciones o actualizaciones, deberás presentar el documento legal que acredite este hecho.</li>
+                                            <li>Información adicional y precisa que nos facilite la búsqueda de los datos solicitados, señalando - en medida de lo posible - aquellos que nos hayas proporcionado y/o el periodo en el que fueron proporcionados.</li>
+                                            <li>Firma autógrafa, la cual deberá de coincidir con la identificación oficial que presentes para realizar el trámite.</li>
+                                        </ul>
+                                    </p>
+
+                                    <p>
+                                        En un plazo no mayor a 5 días hábiles siguientes a recibir tu solicitud, en caso de que exista una duda o requiramos más información sobre tu solicitud, te contactaremos a efectos de comunicarte dicha situación y obtener más información de tu parte respecto a la solicitud. La respuesta a nuestra solicitud deberás hacerla en un plazo que no deberá exceder de 10 días hábiles. En un plazo no mayor a 20 días hábiles siguientes a recibir tu solicitud, o posteriores a haber respondido las aclaraciones solicitadas por nuestra parte, te contactaremos a efectos de comunicarte la respuesta a tu solicitud, esta respuesta será entregada de manera personal en nuestro domicilio, previa acreditación del titular o de tu representante.
+                                    </p>
+
+                                    <p>
+                                        Para más información acerca de este Aviso de Privacidad o cualquier duda sobre como ejercer tus Derechos de Acceso, Revocación, Cancelación y Oposición (ARCO), limitar el uso o Revocar tu consentimiento, deberá enviar un correo electrónico a: privacidad@mirage.mx, con el asunto "Información de Derechos ARCO" o bien llamar al número telefónico: (644) 410 9800 en los días y horarios de atención previamente mencionados.
+                                    </p>
+
+                                    <h6 class="aviso-h6">CONSENTIMIENTO</h6>
+                                    <p>
+                                        Te informamos que no recabamos, ni tratamos datos personales de carácter sensible, por Io que no es necesario que manifiestes tu consentimiento de manera expresa en este documento. Salvo que ejerzas alguno de tus Derechos de Acceso, Rectificación, Cancelación u Oposición (ARCO), limites el uso o revoques el consentimiento al tratamiento de tus datos personales, consideramos que aceptas lo establecido en el presente Aviso de Privacidad Integral.
+                                    </p>
+
+                                    <h6>MECANISMO PARA REVOCAR EL CONSENTIMIENTO OTORGADO PARA EL TRATAMIENTO DE TUS DATOS PERSONALES</h6>
+                                    <p>
+                                        En caso de que quieras revocar el consentimiento al tratamiento de tus datos personales, deberás realizar el mismo procedimiento que está establecido en la sección "Derechos de Acceso, Rectificación, Cancelación y Oposición (ARCO)".
+                                    </p>
+
+                                    <p>
+                                        Tu solicitud quedará sujeta a la revisión de la misma en nuestra Area de Privacidad; en caso de que no se cumpla con una excepción de ley o no exista alguna disposición jurídica que nos sujete a realizar el tratamiento de tus datos personales, tu solicitud será procedente y le será comunicada la decisión en un término de 10 días hábiles.
+                                    </p>
+
+                                    <h6 class="aviso-h6">LIMITACIÓN PARA USO Y DIVULGACIÓN DE DATOS PERSONALES</h6>
+                                    <p>
+                                        En caso de que usted quiera solicitar la limitación al uso y/o divulgación de tus datos personales, usted deberá realizar cualquiera de las siguientes acciones:
+                                    </p>
+
+                                    <h6>PARA TEMAS COMERCIALES</h6>
+                                    <p>
+                                        Visite el sitio web de la Procuraduría Federal de Consumidor en donde está a tu disposición el Registro Público de Consumidores (RPC) previsto en la Ley Federal de Protección al Consumidor, donde usted decidirá sobre el uso de tus datos personales en el sector comercial, turístico y de telecomunicaciones.
+                                    </p>
+
+                                    <h6 class="aviso-h6">AUTORIDAD COMPETENTE</h6>
+                                    <p>
+                                        Tras haber ejercido tus Derechos de Acceso, Rectificación, Cancelación u Oposición; Haber limitado el uso o divulgación de tus datos personales, o hayas revocado tu consentimiento al uso de tus datos personales, sí consideras que hemos realizado alguna omisión o alguna acción violatoria a lo establecido en la Ley Federal de Protección de Datos Personales en Posesión de los Particulares, te informamos que la autoridad mexicana competente ante la cual deberá interponer tu denuncia o inconformidad es el Instituto Nacional de Transparencia, Acceso a la Información y Protección de Datos Personales (INAI).
+                                    </p>
+
+                                    <h6 class="aviso-h6">USO DE COOKIES, WEB BEACONS U OTRAS TECNOLOGÍAS SIMILARES</h6>
+                                    <p>
+                                        En nuesta aplicación móvil no recabamos cookies y no recabamos web beacons.
+                                    </p>
+
+                                    <h6 class="aviso-h6">ACTUALIZACIONES</h6>
+                                    <p>
+                                        Este Aviso de Privacidad Integral será actualizado en tiempo futuro derivado de modificaciones al marco jurídico en materia de protección de datos personales, cambios en el modelo de negocio, nuevos datos personales que se recaben y/o cambio en las finalidades.
+                                    </p>
+
+                                    <p>
+                                        Las actualizaciones y modificaciones que se realicen al presente Aviso de Privacidad Integral se harán de tu conocimiento a través de una publicación en esta aplicación móvil.
+                                    </p>
+
+                                    <p>
+                                        La versión actualizada de este Aviso de Privacidad se ha realizado con fecha 05 de abril de 2018.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </article>

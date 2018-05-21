@@ -1,62 +1,21 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-// var app = {
-//     // Application Constructor
-//     initialize: function() {
-//         this.bindEvents();
-//     },
-//     // Bind Event Listeners
-//     //
-//     // Bind any events that are required on startup. Common events are:
-//     // 'load', 'deviceready', 'offline', and 'online'.
-//     bindEvents: function() {
-//         document.addEventListener('deviceready', this.onDeviceReady, false);
-//     },
-//     // deviceready Event Handler
-//     //
-//     // The scope of 'this' is the event. In order to call the 'receivedEvent'
-//     // function, we must explicitly call 'app.receivedEvent(...);'
-//     onDeviceReady: function() {
-//         app.receivedEvent('deviceready');
-//     },
-//     // Update DOM on a Received Event
-//     receivedEvent: function(id) {
-//         var parentElement = document.getElementById(id);
-//         var listeningElement = parentElement.querySelector('.listening');
-//         var receivedElement = parentElement.querySelector('.received');
-//
-//         listeningElement.setAttribute('style', 'display:none;');
-//         receivedElement.setAttribute('style', 'display:block;');
-//
-//         console.log('Received Event: ' + id);
-//     }
-// };
 
-// var swal = require('sweetalert');
 var uuid = '';
+var boolUpdate = false;
+
 
 $(document).ready(function (){
+
+    if (window.screen.height > 480) {
+        $('.regP1, .perfil').find('div.input-group').addClass('input-group-lg');
+        $('.regP1, .perfil').find('div.input-group').removeClass('mb-2').addClass('mb-3');
+    }
+
     document.addEventListener("deviceready",onDeviceReady,false);
 
     $('#txtTelefono').mask('(000) 000.0000');
     $('#codigoPostal').mask('00000');
     $("#NoCsam").prop("checked", true);
+    $('#codigoCesam').prop("readonly", true);
 
     // MODAL SAVE datoApe
     var svData = document.getElementById('saveDataLoader'), saveData = new Hammer(svData);
@@ -65,7 +24,12 @@ $(document).ready(function (){
         var $target = $(ev.target);
 
         if ($target.hasClass('saveData')) {
-            guardarRegistro();
+            if (!boolUpdate) {
+                guardarRegistro();
+            }
+            else {
+                actualizarRegistro();
+            }
         }
     });
 
@@ -73,42 +37,73 @@ $(document).ready(function (){
     var mnu = document.querySelector('.menu'), menu = new Hammer(mnu);
 
     menu.on("tap", function(ev) {
-        var $target = $(ev.target);
+        var $target = $(ev.target), $registro = $('.regP0'), $noticia = $('.noticia'), $perfil = $('.perfil'), $aviso = $('.aviso');
+
+        var fuente = [$registro, $noticia, $perfil, $aviso];
+
+        $('.regP0, .noticia').css("transition","");
 
         if ($target.data('link') == 'registrate') {
-            $('.regP1').removeClass('is-right').addClass('is-center');
-            $('.menu').removeClass('is-not-vanish').addClass('is-vanish');
+            checkOutMenu($registro, fuente);
         }
         else if ($target.data('link') == 'noticias') {
-            $('.noticia').removeClass('is-right').addClass('is-center');
-            $('.menu').removeClass('is-not-vanish').addClass('is-vanish');
+            checkOutMenu($noticia, fuente);
 
             $('#loader').modal('show');
             loadNoticias();
         }
-        else if ($target.data('link') == 'acerca') {
-            $('.acerca').removeClass('is-right').addClass('is-center');
-            $('.menu').removeClass('is-not-vanish').addClass('is-vanish');
+        else if ($target.data('link') == 'perfil') {
+            checkOutMenu($perfil, fuente);
         }
         else if ($target.data('link') == 'aviso') {
-            $('.aviso').removeClass('is-right').addClass('is-center');
-            $('.menu').removeClass('is-not-vanish').addClass('is-vanish');
+            checkOutMenu($aviso, fuente);
         }
     });
     // TERMINA MENU
 
+    function checkOutMenu(element, fuente) {
+        var $e1 = $(element[0]);
+
+        for (var i = 0; i < fuente.length; i++) {
+            var e = fuente[i];
+            e.removeClass('is-half').removeClass('is-center').addClass('is-right');
+        }
+
+        $e1.removeClass('is-right').addClass('is-center');
+    }
+
     // INICIA REGISTRO
-    var registro1 = document.querySelector('.regP1'), reg1 = new Hammer(registro1),
+    var registro0 = document.querySelector('.regP0'), reg0 = new Hammer(registro0),
+        registro1 = document.querySelector('.regP1'), reg1 = new Hammer(registro1),
         registro2 = document.querySelector('.regP2'), reg2 = new Hammer(registro2),
-        registro3 = document.querySelector('.regP3'), reg3 = new Hammer(registro3),
+        // registro3 = document.querySelector('.regP3'), reg3 = new Hammer(registro3),
         registro4 = document.querySelector('.regP4'), reg4 = new Hammer(registro4);
+
+    reg0.on("tap", function(ev) {
+            var $target = $(ev.target);
+
+            if ($target.data('link') == 'menu') {
+
+                if ($('.regP0').hasClass('is-center')) {
+                    $('.regP0').removeClass('is-center').addClass('is-half');
+                }
+                else {
+                    $('.regP0').removeClass('is-half').addClass('is-center');
+                }
+            }
+            else if ($target.data('link') == 'toRegP1') {
+                $('.regP0').css("transition","");
+                $('.regP0').removeClass('is-center').addClass('is-left');
+                $('.regP1').removeClass('is-right').addClass('is-center');
+            }
+        });
 
     reg1.on("tap", function(ev) {
         var $target = $(ev.target);
 
-        if ($target.data('link') == 'menu') {
+        if ($target.data('link') == 'back') {
             $('.regP1').removeClass('is-center').addClass('is-right');
-            $('.menu').removeClass('is-vanish').addClass('is-not-vanish');
+            $('.regP0').removeClass('is-left').addClass('is-center');
         }
         else if ($target.data('link') == 'toRegP2') {
             var $nombre = $('#txtNombre').val(), $apellido = $('#txtApellido').val(),
@@ -150,28 +145,29 @@ $(document).ready(function (){
                 }
             }
         }
-
-        $('#txtNombre').on('keydown', function (e) {
-            var keycode = (e.keyCode ? e.keyCode : e.which);
-            if (keycode == '13') {
-                $('#txtApellido').focus();
-            }
-        });
-
-        $('#txtApellido').on('keydown', function (e) {
-            var keycode = (e.keyCode ? e.keyCode : e.which);
-            if (keycode == '13') {
-                $('#txtCorreo').focus();
-            }
-        });
-
-        $('#txtCorreo').on('keydown', function (e) {
-            var keycode = (e.keyCode ? e.keyCode : e.which);
-            if (keycode == '13') {
-                $('#txtTelefono').focus();
-            }
-        });
     });
+
+    $('#txtNombre').on('keydown', function(ev) {
+        if ( ev.which == 13 ) {
+            ev.preventDefault();
+            $('#txtApellido').focus();
+        }
+    });
+
+    $('#txtApellido').on('keydown', function(ev) {
+        if ( ev.which == 13 ) {
+            ev.preventDefault();
+            $('#txtCorreo').focus();
+        }
+    });
+
+    $('#txtCorreo').on('keydown', function(ev) {
+        if ( ev.which == 13 ) {
+            ev.preventDefault();
+            $('#txtTelefono').focus();
+        }
+    });
+
 
     reg2.on("tap", function(ev) {
         var $target = $(ev.target);
@@ -212,7 +208,6 @@ $(document).ready(function (){
                     }
                 });
             }
-
         }
         else if ($target.data('link') == 'toRegP3') {
             var $Codigo = $('.UsuarioLocalizado').text();
@@ -224,40 +219,64 @@ $(document).ready(function (){
 
                 var user = JSON.parse(sessionStorage.getItem('user'));
                 user.csam = parseInt($('input[name=csam]:checked').val());
+                user.csamNum = parseInt($('#codigoCesam').val());
+                user.csamAut = 0;
+
+                $('.userName').text('' + user.nombre + ' ' + user.apellido );
+                $('.userLocale').text('' + user.municipio + ', ' + user.estado + '. ' + user.cp);
+                $('.userMail').text('' + user.correo + '');
+                $('.userPhone').text('' + user.tel + '');
+
+                $('.userCsam').text('' + user.csam == 1 ? 'Si' : 'No' + '');
+
+                var dataUser = {
+                    isCsam : user.csam,
+                    estado : user.estado
+                }
+
                 sessionStorage.setItem('user', JSON.stringify(user));
 
                 $('.regP2').removeClass('is-center').addClass('is-left');
-                $('.regP3').removeClass('is-right').addClass('is-center');
+                $('.regP4').removeClass('is-right').addClass('is-center');
             }
         }
     });
 
-    reg3.on("tap", function(ev) {
-        var $target = $(ev.target);
-
-        if ($target.data('link') == 'back') {
-            $('.regP3').removeClass('is-center').addClass('is-right');
-            $('.regP2').removeClass('is-left').addClass('is-center');
+    $('input[name=csam]').on('change', function (ev) {
+        if (ev.target.id == 'SiCsam') {
+            $('#codigoCesam').attr('readonly', false);
         }
-        else if ($target.data('link') == 'toRegP4') {
-            var user = JSON.parse(sessionStorage.getItem('user'));
-            $('.userName').text('' + user.nombre + ' ' + user.apellido );
-            $('.userLocale').text('' + user.municipio + ', ' + user.estado + '. ' + user.cp);
-            $('.userMail').text('' + user.correo + '');
-            $('.userPhone').text('' + user.tel + '');
-            $('.userCsam').text('' + user.csam == 1 ? 'Si' : 'No' + '');
-
-            var dataUser = {
-                isCsam : user.csam,
-                estado : user.estado
-            }
-
-            sessionStorage.setItem('dataUser', JSON.stringify(dataUser));
-
-            $('.regP3').removeClass('is-center').addClass('is-left');
-            $('.regP4').removeClass('is-right').addClass('is-center');
+        else {
+            $('#codigoCesam').prop("readonly", true);
         }
     });
+
+    // reg3.on("tap", function(ev) {
+    //     var $target = $(ev.target);
+    //
+    //     if ($target.data('link') == 'back') {
+    //         $('.regP3').removeClass('is-center').addClass('is-right');
+    //         $('.regP2').removeClass('is-left').addClass('is-center');
+    //     }
+    //     else if ($target.data('link') == 'toRegP4') {
+    //         var user = JSON.parse(sessionStorage.getItem('user'));
+    //         $('.userName').text('' + user.nombre + ' ' + user.apellido );
+    //         $('.userLocale').text('' + user.municipio + ', ' + user.estado + '. ' + user.cp);
+    //         $('.userMail').text('' + user.correo + '');
+    //         $('.userPhone').text('' + user.tel + '');
+    //         $('.userCsam').text('' + user.csam == 1 ? 'Si' : 'No' + '');
+    //
+    //         var dataUser = {
+    //             isCsam : user.csam,
+    //             estado : user.estado
+    //         }
+    //
+    //         sessionStorage.setItem('dataUser', JSON.stringify(dataUser));
+    //
+    //         $('.regP3').removeClass('is-center').addClass('is-left');
+    //         $('.regP4').removeClass('is-right').addClass('is-center');
+    //     }
+    // });
 
     reg4.on('tap', function(ev) {
         var $target = $(ev.target);
@@ -265,6 +284,9 @@ $(document).ready(function (){
         if ($target.data('link') == 'back') {
             $('.regP4').removeClass('is-center').addClass('is-right');
             $('.regP3').removeClass('is-left').addClass('is-center');
+        }
+        else if ($target.data('toRegFinish')) {
+            boolUpdate = false;
         }
     });
     // TERMINA REGISTRO
@@ -282,12 +304,18 @@ $(document).ready(function (){
         var $target = $(ev.target);
 
         if (ev.type == 'tap') {
+            $('.noticia').css("transition","");
+
             if ($target.data('item') == 'menu') {
-                $('.noticia').removeClass('is-center').addClass('is-right');
-                $('.menu').removeClass('is-vanish').addClass('is-not-vanish');
+                if ($('.noticia').hasClass('is-center')) {
+                    $('.noticia').removeClass('is-center').addClass('is-half');
+                }
+                else {
+                    $('.noticia').removeClass('is-half').addClass('is-center');
+                }
             }
             else if ($target.data('link') == 'articulo') {
-                $('.articulo-fill').empty();
+                $('.articulo-fill').empty();210
                 var news = JSON.parse(sessionStorage.getItem('news'));
                 var newIndex = $target.data('num');
                 $('.articulo-fill').append(news[newIndex].articulo);
@@ -315,22 +343,85 @@ $(document).ready(function (){
         var $target = $(ev.target);
 
         if ($target.data('link') == 'back') {
-            $('.articulo').removeClass('is-center').addClass('is-right');
-            $('.noticia').removeClass('is-left').addClass('is-center');
+            $('.articulo').removeClass('is-center').addClass('is-half');
         }
     });
     // TERMINA ARTICULO
 
     // INICIA ACERCA
-    var acerca = document.querySelector('.acerca'), crc = new Hammer(acerca);
+    var perfil = document.querySelector('.perfil'), prf = new Hammer(perfil);
 
-    crc.on("tap", function(ev) {
+    prf.on("tap", function(ev) {
         var $target = $(ev.target);
 
-        if ($target.data('item') == 'acerca') {
-            $('.acerca').removeClass('is-center').addClass('is-right');
-            $('.menu').removeClass('is-vanish').addClass('is-not-vanish');
+        if ($target.data('item') == 'perfil') {
+            if ($('.perfil').hasClass('is-center')) {
+                $('.perfil').removeClass('is-center').addClass('is-half');
+            }
+            else {
+                $('.perfil').removeClass('is-half').addClass('is-center');
+            }
         }
+        /************* BUSCA CODIGO FISCAL **************/
+        else if ($target.data('link') == 'look') {
+            var $codigo = $('#abLocale').val();
+            var cp = parseInt($codigo);
+
+            if ($codigo.length < 5) {
+                swal ("Un momento", "Favor de capturar su código postal completo", "warning");
+            }
+            else {
+                var url_link = 'https://api-codigos-postales.herokuapp.com/v2/codigo_postal/' + cp + '';
+
+                $.ajax({
+                    type: 'GET',
+                    dataType: 'json',
+                    url: url_link,
+                    success: function(data) {
+
+                        setTimeout(function() {
+
+                            $('#loader').modal('hide');
+                            var user = JSON.parse(sessionStorage.getItem('user'));
+                            $('.abDireccion').text(data.estado + ', ' + data.municipio);
+                            user.estado = data.estado;
+                            user.municipio = data.municipio;
+                            user.cp = cp;
+
+                            sessionStorage.setItem('user', JSON.stringify(user));
+                        }, 1000);
+
+                    },
+                    error: function(data) {
+                        swal('Un momento', 'Fallo la conexión, favor de intentarlo de nuevo', 'warning');
+                    }
+                });
+            }
+        }
+        /************* BUSCA CODIGO FISCAL **************/
+        /************* ACTUALIZA DATOSL **************/
+        else if ($target.data('link') == 'update') {
+
+            var user = JSON.parse(sessionStorage.getItem('user'));
+
+            user.nombre = $('#abName').val();
+            user.apellido = $('#abLast').val();
+            user.correo = $('#abMail').val();
+            user.tel = $('#abPhone').val();
+            user.csamNum = $('#abCsam').val();
+
+            user.estado = user.estado;
+            user.municipio = user.municipio;
+            user.cp = cp;
+
+            user.csam = parseInt($('input[name=upCsam]:checked').val());
+
+
+            sessionStorage.setItem('user', JSON.stringify(user));
+
+            boolUpdate = true;
+        }
+        /************* ACTUALIZA DATOSL **************/
     });
     // TERMINA ACERCA
 
@@ -341,8 +432,12 @@ $(document).ready(function (){
         var $target = $(ev.target);
 
         if ($target.data('item') == 'aviso') {
-            $('.aviso').removeClass('is-center').addClass('is-right');
-            $('.menu').removeClass('is-vanish').addClass('is-not-vanish');
+            if ($('.aviso').hasClass('is-center')) {
+                $('.aviso').removeClass('is-center').addClass('is-half');
+            }
+            else {
+                $('.aviso').removeClass('is-half').addClass('is-center');
+            }
         }
     });
     // TERMINA AVISO
@@ -350,11 +445,8 @@ $(document).ready(function (){
 
 function onDeviceReady(){
 
-    document.addEventListener("backbutton", onBackKeyDown, false);
-
-    initPushwoosh();
-
-    uuid = device.uuid;
+    uuid = 'afb4ae8805f9b60b';
+    // uuid = device.uuid;
 
     // Validacion de usuario
     var url_put = 'https://bdtecnicomirage.firebaseio.com/users/' + uuid + '.json';
@@ -373,26 +465,41 @@ function onDeviceReady(){
                     estado : data.estado,
                     municipio : data.municipio,
                     cp : data.cp,
-                    photo : data.image,
+                    // photo : data.image,
                     isCsam : data.csam,
+                    csamNum : data.csamNum,
+                    csamAut : data.csamAut,
                 }
 
-                $('.abName').text(dataUser.nombre + ' ' + dataUser.apellido);
-                $('.abLocale').text(dataUser.municipio + ', ' + dataUser.estado + '. ' + dataUser.cp);
-                $('.abMail').text(dataUser.correo);
-                $('.abPhone').text(dataUser.tel);
-                $('.abCsam').text(dataUser.csam);
+                if (data.csamAut == 1) {
+                    $('#csamCheck').attr('checked', 'true');
+                }
+                else {
+                    $('#csamCheck').attr('checked', 'false');
+                }
 
-                var abImage = document.getElementById('abImage');
-                abImage.src = 'data:image/jpeg;base64,' + dataUser.photo;
+                $('#abName').val(dataUser.nombre);
+                $('#abLast').val(dataUser.apellido);
+                $('.abDireccion').text(dataUser.municipio + ', ' + dataUser.estado + '.');
+                $('#abLocale').val(dataUser.cp);
+                $('#abMail').val(dataUser.correo);
+                $('#abPhone').val(dataUser.tel);
+                $('#abCsam').val(dataUser.csamNum);
 
-                sessionStorage.setItem('dataUser', JSON.stringify(dataUser));
+                // var abImage = document.getElementById('abImage');
+                // abImage.src = dataUser.photo;
 
-                $('.mnu-registro').addClass('is-hidden');
-                $('.mnu-noticias').removeClass('is-hidden');
+                sessionStorage.setItem('user', JSON.stringify(dataUser));
+
+                $('.noticia').removeClass('is-right').addClass('is-center').css("transition","none");
+                $('.mnu-noticias, .mnu-acerca, .mnu-perfil').removeClass('is-hidden');
+
+                $('#loader').modal('show');
+                $('.noticia-fill').empty();
+                loadNoticias();
             }
             else {
-                $('.mnu-noticias').addClass('is-hidden');
+                $('.regP0').removeClass('is-right').addClass('is-center').css("transition","none");
                 $('.mnu-registro').removeClass('is-hidden');
             }
         },
@@ -401,42 +508,38 @@ function onDeviceReady(){
         }
     });
 
-    // swal(device.cordova + ', ' +  device.model + ', ' +  device.platform + ', ' +
-    //     device.uuid + ', ' +  device.version + ', ' +  device.manufacturer + ', ' +
-    //     device.isVirtual + ', ' +  device.serial)
-
     document.addEventListener("offline", onOffline, false);
 
     checkConnection();
 
-    $('.actCamera').on('click', function(){
-        console.log('entro');
-        navigator.camera.getPicture(uploadPhotoSuccess, cameraError, {
-            quality: 100,
-            destinationType: Camera.DestinationType.DATA_URL,
-            sourceType : Camera.PictureSourceType.CAMERA,
-            targetWidth: 200,
-            targetHeight: 200,
-            correctOrientation: true
-        });
-    });
+    // $('.actCamera').on('click', function(){
+    //     console.log('entro');
+    //     navigator.camera.getPicture(uploadPhotoSuccess, cameraError, {
+    //         quality: 100,
+    //         destinationType: Camera.DestinationType.DATA_URL,
+    //         sourceType : Camera.PictureSourceType.CAMERA,
+    //         targetWidth: 150,
+    //         targetHeight: 150,
+    //         correctOrientation: true
+    //     });
+    // });
 }
 
-function uploadPhotoSuccess(imageURI) {
-    $('.actCamera').css('background', 'green');
-    $('.actCameraIcon').attr('src', 'images/iconOk.png');
-
-    var user = JSON.parse(sessionStorage.getItem('user'));
-    user.image = 'data:image/jpeg;base64,' + imageURI;
-    sessionStorage.setItem('user', JSON.stringify(user));
-
-    var image = document.getElementById('tecnicoSelfie');
-    image.src = 'data:image/jpeg;base64,' + imageURI;
-}
-
-function cameraError(message) {
-    swal('', 'Failed because: ' + message);
-}
+// function uploadPhotoSuccess(imageURI) {
+//     $('.actCamera').css('background', 'green');
+//     $('.actCameraIcon').attr('src', 'images/iconOk.png');
+//
+//     var user = JSON.parse(sessionStorage.getItem('user'));
+//     user.image = 'data:image/jpeg;base64,' + imageURI;
+//     sessionStorage.setItem('user', JSON.stringify(user));
+//
+//     var image = document.getElementById('tecnicoSelfie');
+//     image.src = 'data:image/jpeg;base64,' + imageURI;
+// }
+//
+// function cameraError(message) {
+//     swal('', 'Failed because: ' + message);
+// }
 
 // Validar que no se desconecte de la red
 function onOffline() {
@@ -461,6 +564,7 @@ function checkConnection() {
 
 // guardar datos
 function guardarRegistro() {
+
     var url_put = 'https://bdtecnicomirage.firebaseio.com/users/' + uuid + '/.json';
 
     var params = JSON.parse(sessionStorage.getItem('user'));
@@ -470,22 +574,23 @@ function guardarRegistro() {
         type: "PUT",
         data: JSON.stringify(params),
         success: function (data) {
+
             setTimeout(function() {
                 $('#loader').modal('hide');
 
                 swal("", "Sus datos han sido capturados con exito", "success");
 
-                $('.regP1, .regP2, .regP3').addClass('is-hidden');
+                $('.regP0, .regP1, .regP2').addClass('is-hidden');
 
                 setTimeout(function () {
-                    $('.regP1, .regP2, .regP3').removeClass('is-left').addClass('is-right');
-                    $('.regP1, .regP2, .regP3').removeClass('is-hidden');
+                    $('.regP0, .regP1, .regP2').removeClass('is-left').addClass('is-right');
+                    $('.regP0, .regP1, .regP2').removeClass('is-hidden');
                 }, 3000);
 
                 $('.mnu-registro').addClass('is-hidden');
-                $('.mnu-noticias').removeClass('is-hidden');
+                $('.mnu-noticias, .mnu-perfil, .mnu-acerca').removeClass('is-hidden');
                 $('.regP4').removeClass('is-center').addClass('is-right');
-                $('.menu').removeClass('is-vanish').addClass('is-not-vanish');
+                $('.noticia').removeClass('is-right').addClass('is-center');
             }, 1000);
 
         },
@@ -494,6 +599,30 @@ function guardarRegistro() {
         }
     });
 
+}
+
+function actualizarRegistro() {
+    var url_put = 'https://bdtecnicomirage.firebaseio.com/users/' + uuid + '.json';
+
+    var params = JSON.parse(sessionStorage.getItem('user'));
+
+    $.ajax({
+        url: url_put,
+        type: "PATCH",
+        data: JSON.stringify(params),
+        success: function (data) {
+
+            setTimeout(function() {
+                $('#loader').modal('hide');
+
+                swal("", "Sus datos han sido actualizados con exito", "success");
+            }, 1000);
+
+        },
+        error: function(error) {
+            swal('', 'Hubo un error al intentar guardar su información, favor de intentarlo de nuevo. (err02)');
+        }
+    });
 }
 
 // Descargar Noticias
@@ -506,9 +635,10 @@ function loadNoticias() {
         success: function (data) {
 
             setTimeout(function() {
-                if (data) {
-                    var dataUser = JSON.parse(sessionStorage.getItem('dataUser'));
-                    var estado = checkEstado(dataUser.estado), today = moment(), isCsam = dataUser.isCsam;
+
+                if (data != null) {
+                    var dataUser = JSON.parse(sessionStorage.getItem('user'));
+                    var estado = checkEstado(dataUser.estado), today = moment(), isCsam = dataUser.csamAut;
 
                     var arr = [];
                     arr = $.map(data, function(value, index) {
@@ -516,12 +646,9 @@ function loadNoticias() {
                         var fecha = value.fecha;
                         var realDate = moment().year(parseInt(fecha.substr(6,4))).month(parseInt(fecha.substr(3,2)) -1).date(parseInt(fecha.substr(0,2)));
 
-                        console.log(realDate);
-
                         if (today.diff(realDate, 'days') >= 0) {
 
                             if ((value.estado == estado) || (value.estado == 0)) {
-
                                 if (isCsam == 1) {
                                     return [value];
                                 }
@@ -533,13 +660,12 @@ function loadNoticias() {
                             }
                         }
                     });
-
+                    arr.reverse();
                     sessionStorage.setItem('news', JSON.stringify(arr));
-
-                    fillNoticias(arr);
+                    fillNoticias(arr, true);
                 }
                 else {
-                    swall('', 'Por el momento no tenemos articulos que mostrar', 'info')
+                    fillNoticias(data, false)
                 }
 
                 $('#loader').modal('hide');
@@ -547,92 +673,99 @@ function loadNoticias() {
 
         },
         error: function(error) {
-            swall('', 'Ocurrio un error de al descargar las noticias, favor de intentarlo de nuevo. (err03)');
+            fillNoticias(data, false)
         }
     });
 }
-
 // llenar espacio de Noticias
-function fillNoticias(data) {
-
-    // type 01
-    var tmp = "";
-    tmp += "<section class='notice typeA d-flex justify-content-between mb-2' data-link='articulo' data-num=':num:'>";
-    tmp += "<header class='notice-header d-flex flex-column justify-content-between rounded-left :importantHeader:' data-link='articulo' data-num=':num:'>";
-    tmp += "<div class='notice-title' data-link='articulo' data-num=':num:'>:titulo:</div>";
-    tmp += "<div class='notice-date' data-link='articulo' data-num=':num:'>:fecha:</div>";
-    tmp += "</header>";
-    tmp += "<article class='notice-body d-flex justify-content-between align-items-center rounded-right :importantBody:' data-link='articulo' data-num=':num:'>";
-    tmp += "<div class='notice-text' data-link='articulo' data-num=':num:'>:descripcion:</div>";
-    tmp += "<i class='fas fa-chevron-right' data-link='articulo' data-num=':num:'></i>";
-    tmp += "</article>";
-    tmp += "</section>";
-
-    // type 02
-    var tmp2 = "";
-    tmp2 += "<section class='notice typeB d-flex flex-column mb-2' data-link='articulo' data-num=':num:'>";
-    tmp2 += "<header class='notice-header d-flex flex-column justify-content-between rounded-top :importantHeader:' data-link='articulo' data-num=':num:'>";
-    tmp2 += "<div class='notice-title' data-link='articulo' data-num=':num:'>:titulo:</div>";
-    tmp2 += "<div class='notice-date' data-link='articulo' data-num=':num:'>:fecha:</div>";
-    tmp2 += "</header>";
-    tmp2 += "<article class='notice-body d-flex justify-content-between align-items-center rounded-bottom :importantBody:' data-link='articulo' data-num=':num:'>";
-    tmp2 += "<div class='notice-text' data-link='articulo' data-num=':num:'>:descripcion:</div>";
-    tmp2 += "<i class='fas fa-chevron-right' data-link='articulo' data-num=':num:'></i>";
-    tmp2 += "</article>";
-    tmp2 += "</section>";
-
-    // var tmp = "";
-    // tmp += "<div class='noticia-item border rounded d-flex justify-content-between' data-link='articulo' data-num=':num:'>";
-    // tmp += "<div class='noticia-data d-flex' data-link='articulo' data-num=':num:'>";
-    // tmp += "<h6 data-link='articulo' data-num=':num:'>:titulo:</h6>";
-    // tmp += "<small class='text-muted' data-link='articulo' data-num=':num:'>:fecha:</small>";
-    // tmp += "<small data-link='articulo' data-num=':num:'>:descripcion:.</small>";
-    // tmp += "</div>";
-    // tmp += "<div class='noticia-icon align-self-center' data-link='articulo' data-num=':num:'>";
-    // tmp += "<i class='fas fa-angle-right' data-link='articulo' data-num=':num:'></i>";
-    // tmp += "</div>";
-    // tmp += "</div>";
-
-    var dataUser = JSON.parse(sessionStorage.getItem('dataUser'));
-
+function fillNoticias(data, bool) {
     var finale = "";
-    data.forEach(function (el, i) {
-        var temp;
 
-        var headImportant = '', bodyImportant = '';
+    if (bool) {
+        // type 01
+        var tmp = "";
+        tmp += "<section class='notice typeA d-flex justify-content-between mb-2' data-link='articulo' data-num=':num:'>";
+        tmp += "<header class='notice-header d-flex flex-column justify-content-between rounded-left :importantHeader:' data-link='articulo' data-num=':num:'>";
+        tmp += "<div class='notice-title' data-link='articulo' data-num=':num:'>:titulo:</div>";
+        tmp += "<div class='notice-date' data-link='articulo' data-num=':num:'>:fecha:</div>";
+        tmp += "</header>";
+        tmp += "<article class='notice-body d-flex justify-content-between align-items-center rounded-right :importantBody:' data-link='articulo' data-num=':num:'>";
+        tmp += "<div class='notice-text' data-link='articulo' data-num=':num:'>:descripcion:</div>";
+        tmp += "<i class='fas fa-chevron-right' data-link='articulo' data-num=':num:'></i>";
+        tmp += "</article>";
+        tmp += "</section>";
 
-        if (el.importancia === "1") {
-            headImportant = 'is-importHighHead';
-            bodyImportant = 'is-importHighBody';
-        }
-        else if (el.importancia === "2") {
-            headImportant = 'is-importMidHead';
-            bodyImportant = 'is-importMidBody';
-        }
-        else {
-            headImportant = 'is-importLowHead';
-            bodyImportant = 'is-importLowBody';
-        }
+        // type 02
+        var tmp2 = "";
+        tmp2 += "<section class='notice typeB d-flex flex-column mb-2' data-link='articulo' data-num=':num:'>";
+        tmp2 += "<header class='notice-header d-flex flex-column justify-content-between rounded-top :importantHeader:' data-link='articulo' data-num=':num:'>";
+        tmp2 += "<div class='notice-title' data-link='articulo' data-num=':num:'>:titulo:</div>";
+        tmp2 += "<div class='notice-date' data-link='articulo' data-num=':num:'>:fecha:</div>";
+        tmp2 += "</header>";
+        tmp2 += "<article class='notice-body d-flex justify-content-between align-items-center rounded-bottom :importantBody:' data-link='articulo' data-num=':num:'>";
+        tmp2 += "<div class='notice-text' data-link='articulo' data-num=':num:'>:descripcion:</div>";
+        tmp2 += "<i class='fas fa-chevron-right' data-link='articulo' data-num=':num:'></i>";
+        tmp2 += "</article>";
+        tmp2 += "</section>";
 
-        if (i === 0) {
-            temp = tmp.replace(':titulo:', el.titulo)
+        // var tmp = "";
+        // tmp += "<div class='noticia-item border rounded d-flex justify-content-between' data-link='articulo' data-num=':num:'>";
+        // tmp += "<div class='noticia-data d-flex' data-link='articulo' data-num=':num:'>";
+        // tmp += "<h6 data-link='articulo' data-num=':num:'>:titulo:</h6>";
+        // tmp += "<small class='text-muted' data-link='articulo' data-num=':num:'>:fecha:</small>";
+        // tmp += "<small data-link='articulo' data-num=':num:'>:descripcion:.</small>";
+        // tmp += "</div>";
+        // tmp += "<div class='noticia-icon align-self-center' data-link='articulo' data-num=':num:'>";
+        // tmp += "<i class='fas fa-angle-right' data-link='articulo' data-num=':num:'></i>";
+        // tmp += "</div>";
+        // tmp += "</div>";
+
+        var dataUser = JSON.parse(sessionStorage.getItem('user'));
+
+        data.forEach(function (el, i) {
+            var temp;
+
+            var headImportant = '', bodyImportant = '';
+
+            if (el.importancia === "1") {
+                headImportant = 'is-importHighHead';
+                bodyImportant = 'is-importHighBody';
+            }
+            else if (el.importancia === "2") {
+                headImportant = 'is-importMidHead';
+                bodyImportant = 'is-importMidBody';
+            }
+            else {
+                headImportant = 'is-importLowHead';
+                bodyImportant = 'is-importLowBody';
+            }
+
+            if (i === 0) {
+                temp = tmp.replace(':titulo:', el.titulo)
                 .replace(':fecha:', el.fecha)
                 .replace(':descripcion:', el.descripcion)
                 .replace(':importantHeader:', headImportant)
                 .replace(':importantBody:', bodyImportant)
                 .replace(/:num:/g, i);
-        }
-        else {
-            temp = tmp2.replace(':titulo:', el.titulo)
+            }
+            else {
+                temp = tmp2.replace(':titulo:', el.titulo)
                 .replace(':fecha:', el.fecha)
                 .replace(':descripcion:', el.descripcion)
                 .replace(':importantHeader:', headImportant)
                 .replace(':importantBody:', bodyImportant)
                 .replace(/:num:/g, i);
-        }
+            }
 
-        finale += temp;
-    });
+            finale += temp;
+        });
+    }
+    else {
+        finale += "<article class='text-center mx-auto mt-5' style='width:200px;'>";
+        finale += "<i class='fas fa-cloud mb-3' style='font-size:68px; color:rgba(0,0,0,.6)'></i>";
+        finale += "<p class='text-muted'>Por el momento no se han generado noticias.</p>";
+        finale += "</article>";
+    }
 
     var $finale = $(finale);
     $('.noticia-fill').empty();
@@ -846,21 +979,3 @@ function checkEstado(str) {
             return '0'
     }
 }
-
-function onBackKeyDown(e){
-    e.preventDefault();
-    History.go(-1);
-    navigator.app.backHistory();
-}
-
-// if($.mobile.activePage.is('#homepage')){
-//         /*
-//          Event preventDefault/stopPropagation not required as adding backbutton
-//           listener itself override the default behaviour. Refer below PhoneGap link.
-//         */
-//         //e.preventDefault();
-//     navigator.app.exitApp();
-// }
-// else {
-//     navigator.app.backHistory()
-// }

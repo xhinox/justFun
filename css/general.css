@@ -1,8 +1,13 @@
 /* GENERALES */
 body {
+    background: rgb(17, 17, 23);
     overflow: hidden;
-    background: url('../images/fondo.jpg');
-    background-size: cover;
+    /* background: url('../images/fondo.jpg');
+    background-size: cover; */
+    /* padding-top: constant(safe-area-inset-top); /* iOS 11.0 */ */
+    /* padding-top: env(safe-area-inset-top); /* iOS 11.2 */ */
+    /* margin-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */ */
+    /* margin-bottom: env(safe-area-inset-bottom); /* iOS 11.2 */ */
 }
 
 .nav {
@@ -12,7 +17,9 @@ body {
     height:45px;
 }
 
+.menu,
 .container-fluid {
+    background: white;
     height: 100vh;
 }
 
@@ -31,7 +38,8 @@ body {
 
 .is-left,
 .is-center,
-.is-right {
+.is-right,
+.is-half {
     -webkit-transition: all 330ms ease-in;
     transition: all 330ms ease-in;
     will-change: transform;
@@ -53,6 +61,12 @@ body {
     -webkit-transform: translateX(100%);
     -ms-transform: translateX(100%);
     transform: translateX(100%);
+}
+
+.is-half {
+    -webkit-transform: translateX(65%);
+    -ms-transform: translateX(65%);
+    transform: translateX(65%);
 }
 
 .is-hidden {
@@ -129,27 +143,41 @@ label {
     height: 45px;
     width: 45px;
     z-index: 100;
+    left: -14px;
 }
 
 /* Generales */
 
 /* Menu */
+
+.menu {
+    background: rgb(17, 17, 23);
+    width: 60vw;
+}
+
+.menu > .container {
+    padding: 0;
+}
+
 .menu-logo {
-    margin:40px 0;
+    margin:20px 0 !important;
 }
 
 .menu-logo img {
-    width: 60%;
+    width: 90%;
 }
 
 .menu-item {
     cursor: pointer;
-    padding: 15px;
-    background: rgb(241,241,242);
+    /* padding: 15px;
+    background: rgb(241,241,242); */
+    color: white;
+    font-size: 16px;
+    padding: 10px 0px;
 }
 
 .menu-icon {
-    width: 30px;
+    width: 20px;
 }
 
 .menu-text {
@@ -164,11 +192,11 @@ label {
 }
 
 .tecnicoImage {
-    border-radius: 3px;
     overflow: hidden;
-    width: 90px;
-    height: 140px;
-    box-shadow: 0 2px 6px rgba(0,0,0,.2)
+    width: 150px;
+    height: 150px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.2);
+    margin: 0 auto;
 }
 
 .actCamera {
@@ -181,10 +209,6 @@ label {
 
 .actCamera img {
     width: 87px;
-}
-
-.userDetail {
-    font-size: 14px;
 }
 
 .userName {
@@ -285,7 +309,18 @@ label {
 .aviso-body {
     background: #f0f0f0;
     font-size: 14px;
+    height:calc(100vh - 85px);
+    overflow-y: scroll;
 }
+
+.aviso-h6 {
+    background:#c30000;
+    color:white;
+    display: block;
+    margin-bottom: 5px;
+    padding: 3px 10px 5px;
+}
+
 /* Aviso */
 
 /* Acerca */
@@ -293,3 +328,8 @@ label {
     flex-flow: column;
 }
 /* Acerca */
+
+.abDireccion {
+    font-size: 16px;
+    font-weight: bold;
+}
