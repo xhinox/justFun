@@ -428,8 +428,8 @@ $(document).ready(function (){
 
 function onDeviceReady(){
 
-    uuid = 'afb4ae8805f9b60b';
-    // uuid = device.uuid;
+    // uuid = 'afb4ae8805f9b60b';
+    uuid = device.uuid;
 
     // Validacion de usuario
     var url_put = 'https://bdtecnicomirage.firebaseio.com/users/' + uuid + '.json';
