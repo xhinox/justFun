@@ -445,8 +445,9 @@ $(document).ready(function (){
 
 function onDeviceReady(){
 
-    uuid = 'afb4ae8805f9b60b';
-    // uuid = device.uuid;
+    $('#loader').modal('show');
+    // uuid = 'afb4ae8805f9b60b';
+    uuid = device.uuid;
 
     // Validacion de usuario
     var url_put = 'https://bdtecnicomirage.firebaseio.com/users/' + uuid + '.json';
@@ -494,13 +495,13 @@ function onDeviceReady(){
                 $('.noticia').removeClass('is-right').addClass('is-center').css("transition","none");
                 $('.mnu-noticias, .mnu-acerca, .mnu-perfil').removeClass('is-hidden');
 
-                $('#loader').modal('show');
                 $('.noticia-fill').empty();
                 loadNoticias();
             }
             else {
                 $('.regP0').removeClass('is-right').addClass('is-center').css("transition","none");
                 $('.mnu-registro').removeClass('is-hidden');
+                $('#loader').modal('hide');
             }
         },
         error: function(error) {
