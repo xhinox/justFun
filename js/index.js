@@ -12,8 +12,8 @@ $(document).ready(function (){
 
     document.addEventListener("deviceready",onDeviceReady,false);
 
-    $('#txtTelefono').mask('(000) 000.0000');
-    $('#codigoPostal').mask('00000');
+    $('#txtTelefono, #abPhone').mask('(000) 000.0000');
+    $('#codigoPostal, #abLocale').mask('00000');
     $("#NoCsam").prop("checked", true);
     $('#codigoCesam').prop("readonly", true);
 
@@ -218,7 +218,7 @@ $(document).ready(function (){
             else {
 
                 var user = JSON.parse(sessionStorage.getItem('user'));
-                user.csam = parseInt($('input[name=csam]:checked').val());
+                user.isCsam = parseInt($('input[name=csam]:checked').val());
                 user.csamNum = parseInt($('#codigoCesam').val());
                 user.csamAut = 0;
 
@@ -227,10 +227,10 @@ $(document).ready(function (){
                 $('.userMail').text('' + user.correo + '');
                 $('.userPhone').text('' + user.tel + '');
 
-                $('.userCsam').text('' + user.csam == 1 ? 'Si' : 'No' + '');
+                $('.userCsam').text('' + user.isCsam == 1 ? 'Si' : 'No' + '');
 
                 var dataUser = {
-                    isCsam : user.csam,
+                    isCsam : user.isCsam,
                     estado : user.estado
                 }
 
@@ -402,23 +402,6 @@ $(document).ready(function (){
         /************* ACTUALIZA DATOSL **************/
         else if ($target.data('link') == 'update') {
 
-            var user = JSON.parse(sessionStorage.getItem('user'));
-
-            user.nombre = $('#abName').val();
-            user.apellido = $('#abLast').val();
-            user.correo = $('#abMail').val();
-            user.tel = $('#abPhone').val();
-            user.csamNum = $('#abCsam').val();
-
-            user.estado = user.estado;
-            user.municipio = user.municipio;
-            user.cp = cp;
-
-            user.csam = parseInt($('input[name=upCsam]:checked').val());
-
-
-            sessionStorage.setItem('user', JSON.stringify(user));
-
             boolUpdate = true;
         }
         /************* ACTUALIZA DATOSL **************/
@@ -445,9 +428,8 @@ $(document).ready(function (){
 
 function onDeviceReady(){
 
-    $('#loader').modal('show');
-    // uuid = 'afb4ae8805f9b60b';
-    uuid = device.uuid;
+    uuid = 'afb4ae8805f9b60b';
+    // uuid = device.uuid;
 
     // Validacion de usuario
     var url_put = 'https://bdtecnicomirage.firebaseio.com/users/' + uuid + '.json';
@@ -467,12 +449,19 @@ function onDeviceReady(){
                     municipio : data.municipio,
                     cp : data.cp,
                     // photo : data.image,
-                    isCsam : data.csam,
+                    isCsam : data.isCsam,
                     csamNum : data.csamNum,
                     csamAut : data.csamAut,
                 }
 
                 if (data.csamAut == 1) {
+                    $('#abCsamAut').text('CSAM Verificado');
+                }
+                else if (data.csamAut == 0) {
+                    $('#abCsamAut').text('CSAM por verificar');
+                }
+
+                if (data.isCsam == 1) {
                     $('#csamCheck').attr('checked', 'true');
                 }
                 else {
@@ -495,13 +484,13 @@ function onDeviceReady(){
                 $('.noticia').removeClass('is-right').addClass('is-center').css("transition","none");
                 $('.mnu-noticias, .mnu-acerca, .mnu-perfil').removeClass('is-hidden');
 
+                $('#loader').modal('show');
                 $('.noticia-fill').empty();
                 loadNoticias();
             }
             else {
                 $('.regP0').removeClass('is-right').addClass('is-center').css("transition","none");
                 $('.mnu-registro').removeClass('is-hidden');
-                $('#loader').modal('hide');
             }
         },
         error: function(error) {
@@ -586,6 +575,29 @@ function guardarRegistro() {
                 setTimeout(function () {
                     $('.regP0, .regP1, .regP2').removeClass('is-left').addClass('is-right');
                     $('.regP0, .regP1, .regP2').removeClass('is-hidden');
+
+                    $('#abName').val(params.nombre);
+                    $('#abLast').val(params.apellido);
+                    $('.abDireccion').text(params.municipio + ', ' + params.estado + '.');
+                    $('#abLocale').val(params.cp);
+                    $('#abMail').val(params.correo);
+                    $('#abPhone').val(params.tel);
+                    $('#abCsam').val(params.csamNum);
+
+                    if (params.csamAut == 1) {
+                        $('#abCsamAut').text('CSAM Verificado');
+                    }
+                    else  {
+                        $('#abCsamAut').text('CSAM por verificar');
+                    }
+
+                    if (params.isCsam == 1) {
+                        $('#csamCheck').attr('checked', 'true');
+                    }
+                    else {
+                        $('#csamCheck').attr('checked', 'false');
+                    }
+
                 }, 3000);
 
                 $('.mnu-registro').addClass('is-hidden');
@@ -605,12 +617,23 @@ function guardarRegistro() {
 function actualizarRegistro() {
     var url_put = 'https://bdtecnicomirage.firebaseio.com/users/' + uuid + '.json';
 
-    var params = JSON.parse(sessionStorage.getItem('user'));
+    var usuario = sessionStorage.getItem('user');
+    var user = JSON.parse(usuario);
+
+    user.nombre = $('#abName').val();
+    user.apellido = $('#abLast').val();
+    user.correo = $('#abMail').val();
+    user.tel = $('#abPhone').val();
+    user.csamNum = $('#abCsam').val();
+
+    // user.isCsam = parseInt($('input[name=upCsam]:checked').val());
+
+    sessionStorage.setItem('user', JSON.stringify(user));
 
     $.ajax({
         url: url_put,
         type: "PATCH",
-        data: JSON.stringify(params),
+        data: JSON.stringify(user),
         success: function (data) {
 
             setTimeout(function() {

@@ -488,28 +488,29 @@
                     <div class="col">
                         <label for="abPhone">Teléfono</label>
                         <div class="input-group mb-2">
-                            <input type="text" id="abPhone" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abPhone">
+                            <input type="tel" id="abPhone" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abPhone">
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col">
-                        <label for="abPhone">Perteneces a algun CESAM</label>
+                        <label for="csamCheck">Perteneces a algun CESAM</label>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">
-                                    <input type="checkbox" id="csamCheck" name="upCsam" aria-label="Checkbox for following text input" readonly />
+                                    <input type="checkbox" id="csamCheck" name="upCsam" aria-label="Checkbox for following text input" />
                                 </div>
                             </div>
-                            <input type="text" id="abCsam" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abPhone">
+                            <input type="tel" id="abCsam" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abPhone" maxlength="4" readonly>
                         </div>
+                        <div id="abCsamAut" class="my-2 text-center"></div>
                     </div>
                 </div>
 
                 <div class="row mt-2">
                     <div class="col">
-                        <button type="button" class="btn btn-block text-white btn-continuar" data-link="update" data-toggle="modal" data-target="#saveDataLoader">Grabar</button>
+                        <button type="button" class="btn btn-block text-white btn-continuar" data-link="update" data-toggle="modal" data-target="#saveDataLoader">Actualizar datos</button>
                     </div>
                 </div>
             </article>
