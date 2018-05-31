@@ -168,7 +168,6 @@ $(document).ready(function (){
         }
     });
 
-
     reg2.on("tap", function(ev) {
         var $target = $(ev.target);
 
@@ -428,6 +427,8 @@ $(document).ready(function (){
 
 function onDeviceReady(){
 
+    $('#loader').modal('show');
+
     // uuid = 'afb4ae8805f9b60b';
     uuid = device.uuid;
 
@@ -455,17 +456,19 @@ function onDeviceReady(){
                 }
 
                 if (data.csamAut == 1) {
-                    $('#abCsamAut').text('CSAM Verificado');
+                    $('.csamVerify').text('- Verificado'); //374461
+                    $('.csamVerifyBg').addClass('bg-success');
                 }
                 else if (data.csamAut == 0) {
-                    $('#abCsamAut').text('CSAM por verificar');
+                    $('.csamVerify').text('- Sin verificar');
+                    $('.csamVerifyBg').removeClass('bg-success');
                 }
 
                 if (data.isCsam == 1) {
-                    $('#csamCheck').attr('checked', 'true');
+                    $('#csamCheck').prop('checked', true);
                 }
                 else {
-                    $('#csamCheck').attr('checked', 'false');
+                    $('#csamCheck').prop('checked', false);
                 }
 
                 $('#abName').val(dataUser.nombre);
@@ -482,15 +485,19 @@ function onDeviceReady(){
                 sessionStorage.setItem('user', JSON.stringify(dataUser));
 
                 $('.noticia').removeClass('is-right').addClass('is-center').css("transition","none");
-                $('.mnu-noticias, .mnu-acerca, .mnu-perfil').removeClass('is-hidden');
+                $('.menu-logo, .mnu-noticias, .mnu-acerca, .mnu-perfil, .mnu-aviso').removeClass('is-hidden');
 
-                $('#loader').modal('show');
+
                 $('.noticia-fill').empty();
                 loadNoticias();
             }
             else {
                 $('.regP0').removeClass('is-right').addClass('is-center').css("transition","none");
-                $('.mnu-registro').removeClass('is-hidden');
+                $('.menu-logo, .mnu-registro, .mnu-aviso').removeClass('is-hidden');
+
+                setTimeout(function(){
+                    $('#loader').modal('hide');
+                },1000);
             }
         },
         error: function(error) {
@@ -604,6 +611,9 @@ function guardarRegistro() {
                 $('.mnu-noticias, .mnu-perfil, .mnu-acerca').removeClass('is-hidden');
                 $('.regP4').removeClass('is-center').addClass('is-right');
                 $('.noticia').removeClass('is-right').addClass('is-center');
+                $('#loader').modal('show');
+                $('.noticia-fill').empty();
+                loadNoticias();
             }, 1000);
 
         },
@@ -625,6 +635,13 @@ function actualizarRegistro() {
     user.correo = $('#abMail').val();
     user.tel = $('#abPhone').val();
     user.csamNum = $('#abCsam').val();
+
+    if ($('#csamCheck').prop('checked')) {
+        user.isCsam = 1;
+    }
+    else {
+        user.isCsam = 0;
+    }
 
     // user.isCsam = parseInt($('input[name=upCsam]:checked').val());
 

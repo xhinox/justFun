@@ -48,7 +48,7 @@
 
         <section class="menu container-fluid position-absolute">
             <div class="container ">
-                <div class="menu-logo row text-center">
+                <div class="row menu-logo text-center is-hidden">
                     <div class="col">
                         <img src="images/logo-b.png" alt="Técnico Embajador">
                     </div>
@@ -82,7 +82,7 @@
                     </div>
                 </div> -->
 
-                <div class="row">
+                <div class="row mnu-aviso is-hidden">
                     <div class="menu-item col border-bottom d-flex justify-content-center" data-link="video">
                         <div class="menu-icon mr-1" data-link="aviso"><i class="fas fa-book rounded-circle" data-link="aviso"></i></div>
                         <div class="menu-text" data-link="aviso">Aviso de privacidad</div>
@@ -157,7 +157,7 @@
 
                 <div class="row">
                     <div class="col">
-                        <label for="">Apellido</label>
+                        <label for="datoApe">Apellido</label>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="datoApe">
@@ -171,7 +171,7 @@
 
                 <div class="row">
                     <div class="col">
-                        <label for="">Correo</label>
+                        <label for="datoMail">Correo</label>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="datoMail">
@@ -185,7 +185,7 @@
 
                 <div class="row">
                     <div class="col">
-                        <label for="">Teléfono</label>
+                        <label for="datoPhone">Teléfono</label>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="datoPhone">
@@ -221,7 +221,7 @@
 
                 <div class="row m-top20">
                     <div class="col">
-                        <label for="">Capture su código fiscal</label>
+                        <label for="codigoPostal">Capture su código fiscal</label>
                         <div class="input-group mb-3">
                             <input id="codigoPostal" type="tel" class="form-control" placeholder="" aria-label="codigo postal" aria-describedby="basic-addon5">
                             <div class="input-group-append">
@@ -233,7 +233,7 @@
 
                 <div class="row">
                     <div class="col-12">
-                        <label for="">Usted esta en:</label>
+                        <label class="mb-0">Usted esta en:</label>
                     </div>
                     <div class="col-12">
                         <p class="border-bottom UsuarioLocalizado"></p>
@@ -263,7 +263,7 @@
 
                 <div class="row mt-3">
                     <div class="col">
-                        <label for="">Capture el número del CESAM al que pertenece</label>
+                        <label for="codigoCesam">Capture el número del CESAM al que pertenece</label>
                         <div class="input-group">
                             <input id="codigoCesam" type="tel" class="form-control" placeholder="" aria-label="numerocsam" aria-describedby="basic-addon5" maxlength="4" readonly>
                         </div>
@@ -458,7 +458,7 @@
                         <label for="abName">Nombre y Apellido</label>
                         <div class="input-group mb-2">
                             <input type="text" id="abName" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abName">
-                            <input type="text" id="abLast" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abName">
+                            <input type="text" id="abLast" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abLast">
                         </div>
                     </div>
                 </div>
@@ -495,16 +495,15 @@
 
                 <div class="row">
                     <div class="col">
-                        <label for="csamCheck">Perteneces a algun CESAM</label>
+                        <label for="csamCheck">Perteneces a algun CESAM <span class="csamVerify"></span></label>
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <input type="checkbox" id="csamCheck" name="upCsam" aria-label="Checkbox for following text input" />
+                                <div class="input-group-text csamVerifyBg">
+                                    <input type="checkbox" id="csamCheck" name="upCsam" aria-label="Checkbox for following text input" readonly />
                                 </div>
                             </div>
-                            <input type="tel" id="abCsam" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abPhone" maxlength="4" readonly>
+                            <input type="tel" id="abCsam" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abPhone" maxlength="4">
                         </div>
-                        <div id="abCsamAut" class="my-2 text-center"></div>
                     </div>
                 </div>
 
