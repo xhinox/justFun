@@ -323,8 +323,7 @@ $(document).ready(function (){
                 $('.articulo').removeClass('is-right').addClass('is-center');
             }
             else if ($target.data('link') == 'back') {
-                $('.articulo').removeClass('is-center').addClass('is-right');
-                $('.noticia').removeClass('is-left').addClass('is-center');
+                $('.noticia').removeClass('is-center').addClass('is-half');
             }
         }
         else {
@@ -342,7 +341,8 @@ $(document).ready(function (){
         var $target = $(ev.target);
 
         if ($target.data('link') == 'back') {
-            $('.articulo').removeClass('is-center').addClass('is-half');
+            $('.articulo').removeClass('is-center').addClass('is-right');
+            $('.noticia').removeClass('is-left').addClass('is-center');
         }
     });
     // TERMINA ARTICULO
@@ -431,6 +431,8 @@ function onDeviceReady(){
 
     // uuid = 'afb4ae8805f9b60b';
     uuid = device.uuid;
+
+    initPushwoosh();
 
     // Validacion de usuario
     var url_put = 'https://bdtecnicomirage.firebaseio.com/users/' + uuid + '.json';
