@@ -3,7 +3,7 @@
     xmlns="http://www.w3.org/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:gap="http://phonegap.com/ns/1.0"
-    version="1.0.1"
+    version="1.0.2"
     id="mx.mirage.Tecnico"
     >
     <!-- Android -->
@@ -102,6 +102,7 @@
         <icon height="76" platform="ios" src="res/icon/ios/Icon-Small-76.png" width="76" />
         <icon height="152" platform="ios" src="res/icon/ios/Icon-Small-76@2x.png" width="152" />
         <splash height="480" platform="ios" src="res/screen/ios/Default.png" width="320" />
+        <splash height="568" platform="ios" src="res/screen/ios/Default-568h.png" width="320" />
         <splash height="960" platform="ios" src="res/screen/ios/Default@2x.png" width="640" />
         <splash height="1136" platform="ios" src="res/screen/ios/Default-568h@2x.png" width="640" />
         <splash height="1334" platform="ios" src="res/screen/ios/Default-667h@2x.png" width="750" />
