@@ -3,7 +3,7 @@
     xmlns="http://www.w3.org/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:gap="http://phonegap.com/ns/1.0"
-    version="1.0.3"
+    version="1.0.4"
     id="mx.mirage.Tecnico"
     >
     <!-- Android -->
