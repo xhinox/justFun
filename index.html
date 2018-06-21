@@ -4,13 +4,20 @@
         <meta http-equiv="Content-Security-Policy" content="img-src 'self' data:; default-src 'self' https://mirage.mx/ https://www.mirage.mx/ https://bdtecnicomirage.firebaseio.com/ https://api-codigos-postales.herokuapp.com/v2/codigo_postal/ 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; ">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+        <!-- <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1"> -->
+        <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
         <meta http-equiv="X-UA-Compatible" content="IE=10;IE=Edge,chrome=1">
         <meta charset="utf-8" />
         <link rel="stylesheet" href="css/bootstrap.min.css" />
         <link rel="stylesheet" href="css/sweetalert.min.css">
         <link rel="stylesheet" href="css/general.css" />
         <title>Hello World</title>
+        <style>
+            body {
+                padding-top: constant(safe-area-inset-top); /* iOS 11.0 */
+                padding-top: env(safe-area-inset-top); /* iOS 11.2 */
+            }
+        </style>
     </head>
 
     <body>
