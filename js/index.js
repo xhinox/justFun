@@ -314,7 +314,7 @@ $(document).ready(function (){
                 }
             }
             else if ($target.data('link') == 'articulo') {
-                $('.articulo-fill').empty();210
+                $('.articulo-fill').empty();
                 var news = JSON.parse(sessionStorage.getItem('news'));
                 var newIndex = $target.data('num');
                 $('.articulo-fill').append(news[newIndex].articulo);
@@ -432,7 +432,9 @@ function onDeviceReady(){
     // uuid = 'afb4ae8805f9b60b';
     uuid = device.uuid;
 
-    initPushwoosh();
+    Keyboard.hideFormAccessoryBar(true);
+
+    checkConnection();
 
     // Validacion de usuario
     var url_put = 'https://bdtecnicomirage.firebaseio.com/users/' + uuid + '.json';
@@ -486,30 +488,39 @@ function onDeviceReady(){
 
                 sessionStorage.setItem('user', JSON.stringify(dataUser));
 
-                $('.noticia').removeClass('is-right').addClass('is-center').css("transition","none");
-                $('.menu-logo, .mnu-noticias, .mnu-acerca, .mnu-perfil, .mnu-aviso').removeClass('is-hidden');
-
-
-                $('.noticia-fill').empty();
-                loadNoticias();
+                // $('.noticia').removeClass('is-right').addClass('is-center').css("transition","none");
+                $('.mnu-perfil').removeClass('is-hidden');
             }
             else {
-                $('.regP0').removeClass('is-right').addClass('is-center').css("transition","none");
-                $('.menu-logo, .mnu-registro, .mnu-aviso').removeClass('is-hidden');
+                // $('.regP0').removeClass('is-right').addClass('is-center').css("transition","none");
+                $('.mnu-registro').removeClass('is-hidden');
+
+                var dataUser = {
+                    isCsam : 0,
+                }
+
+                sessionStorage.setItem('user', JSON.stringify(dataUser));
 
                 setTimeout(function(){
                     $('#loader').modal('hide');
                 },1000);
             }
+
+            $('.menu-logo, .mnu-noticias, .mnu-aviso').removeClass('is-hidden');
+
+            $('.noticia-fill').empty();
+            loadNoticias();
         },
         error: function(error) {
             swal('', 'Estamos presentando una falla, favor de regresar mas tarde. (err01)');
+            $('.noticia-fill').empty();
+            loadNoticias();
         }
     });
 
     document.addEventListener("offline", onOffline, false);
 
-    checkConnection();
+    initPushwoosh();
 
     // $('.actCamera').on('click', function(){
     //     console.log('entro');
@@ -676,39 +687,44 @@ function loadNoticias() {
         url: url_put,
         type: "GET",
         success: function (data) {
-
             setTimeout(function() {
 
-                if (data != null) {
-                    var dataUser = JSON.parse(sessionStorage.getItem('user'));
-                    var estado = checkEstado(dataUser.estado), today = moment(), isCsam = dataUser.csamAut;
+                try {
 
-                    var arr = [];
-                    arr = $.map(data, function(value, index) {
+                    if (data != null) {
+                        var dataUser = JSON.parse(sessionStorage.getItem('user'));
+                        var estado = checkEstado(dataUser.estado), today = moment(), isCsam = dataUser.csamAut;
 
-                        var fecha = value.fecha;
-                        var realDate = moment().year(parseInt(fecha.substr(6,4))).month(parseInt(fecha.substr(3,2)) -1).date(parseInt(fecha.substr(0,2)));
+                        var arr = [];
+                        arr = $.map(data, function(value, index) {
 
-                        if (today.diff(realDate, 'days') >= 0) {
+                            var fecha = value.fecha;
+                            var realDate = moment().year(parseInt(fecha.substr(6,4))).month(parseInt(fecha.substr(3,2)) -1).date(parseInt(fecha.substr(0,2)));
 
-                            if ((value.estado == estado) || (value.estado == 0)) {
-                                if (isCsam == 1) {
-                                    return [value];
-                                }
-                                else {
-                                    if (value.csam == 0) {
+                            if (today.diff(realDate, 'days') >= 0) {
+
+                                if ((value.estado == estado) || (value.estado == 0)) {
+                                    if (isCsam == 1) {
                                         return [value];
+                                    }
+                                    else {
+                                        if (value.csam == 0) {
+                                            return [value];
+                                        }
                                     }
                                 }
                             }
-                        }
-                    });
-                    arr.reverse();
-                    sessionStorage.setItem('news', JSON.stringify(arr));
-                    fillNoticias(arr, true);
-                }
-                else {
-                    fillNoticias(data, false)
+                        });
+                        arr.reverse();
+                        sessionStorage.setItem('news', JSON.stringify(arr));
+                        fillNoticias(arr, true);
+                    }
+                    else {
+                        fillNoticias(data, false);
+                    }
+
+                } catch (e) {
+                    fillNoticias(data, false);
                 }
 
                 $('#loader').modal('hide');
@@ -720,6 +736,7 @@ function loadNoticias() {
         }
     });
 }
+
 // llenar espacio de Noticias
 function fillNoticias(data, bool) {
     var finale = "";
@@ -807,6 +824,7 @@ function fillNoticias(data, bool) {
         finale += "<article class='text-center mx-auto mt-5' style='width:200px;'>";
         finale += "<i class='fas fa-cloud mb-3' style='font-size:68px; color:rgba(0,0,0,.6)'></i>";
         finale += "<p class='text-muted'>Por el momento no se han generado noticias.</p>";
+        finale += "<small class='text-muted'>Deslize hacia abajo para actualizar.</small>";
         finale += "</article>";
     }
 
@@ -869,37 +887,38 @@ function initPushwoosh() {
 	// //set push notifications handler
 	document.addEventListener('push-notification',
 		function(event) {
-			var message = event.notification.message;
-			var userData = event.notification.userdata;
-            console.log('' + message + '', '' + userData + '');
-            console.log('' + JSON.stringify(event.notification) + '');
-
-			// document.getElementById("pushMessage").innerHTML = message + "<p>";
-			// document.getElementById("pushData").innerHTML = JSON.stringify(event.notification) + "<p>";
-
-			//dump custom data to the console if it exists
-			if (typeof(userData) != "undefined") {
-				console.log('user data: ' + JSON.stringify(userData));
-			}
+			// var message = event.notification.message;
+			// var userData = event.notification.userdata;
+            // console.log('' + message + '', '' + userData + '');
+            // console.log('' + JSON.stringify(event.notification) + '');
+            //
+			// // document.getElementById("pushMessage").innerHTML = message + "<p>";
+			// // document.getElementById("pushData").innerHTML = JSON.stringify(event.notification) + "<p>";
+            //
+			// //dump custom data to the console if it exists
+			// if (typeof(userData) != "undefined") {
+			// 	console.log('user data: ' + JSON.stringify(userData));
+			// }
+            var notification = event.notification;
 		}
     );
     //
-    document.addEventListener('push-receive',
-        function (event) {
-            var message = event.notification.message;
-            var userData = event.notification.userdata;
-            console.log('' + message + '', '' + userData + '');
-            console.log('' + JSON.stringify(event.notification) + '');
-
-            // document.getElementById("pushMessage").innerHTML = message + "<p>";
-            // document.getElementById("pushData").innerHTML = JSON.stringify(event.notification) + "<p>";
-
-            //dump custom data to the console if it exists
-            if (typeof (userData) != "undefined") {
-                console.log('','user data: ' + JSON.stringify(userData));
-            }
-        }
-    );
+    // document.addEventListener('push-receive',
+    //     function (event) {
+    //         var message = event.notification.message;
+    //         var userData = event.notification.userdata;
+    //         console.log('' + message + '', '' + userData + '');
+    //         console.log('' + JSON.stringify(event.notification) + '');
+    //
+    //         // document.getElementById("pushMessage").innerHTML = message + "<p>";
+    //         // document.getElementById("pushData").innerHTML = JSON.stringify(event.notification) + "<p>";
+    //
+    //         //dump custom data to the console if it exists
+    //         if (typeof (userData) != "undefined") {
+    //             console.log('','user data: ' + JSON.stringify(userData));
+    //         }
+    //     }
+    // );
     //
 	// //initialize Pushwoosh with projectid: "GOOGLE_PROJECT_ID", appid : "PUSHWOOSH_APP_ID". This will trigger all pending push notifications on start.
     pushNotification.onDeviceReady({
@@ -912,10 +931,10 @@ function initPushwoosh() {
 	pushNotification.registerDevice(
 		function(status) {
 			// document.getElementById("pushToken").innerHTML = status.pushToken + "<p>";
-			onPushwooshInitialized(pushNotification);
+			// onPushwooshInitialized(pushNotification);
 		},
 		function(status) {
-			swal(JSON.stringify(['failed to register ', status]));
+			swal('', JSON.stringify(['failed to register ', status]));
 		}
 	);
 }

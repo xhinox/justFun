@@ -55,16 +55,10 @@
 
         <section class="menu container-fluid position-absolute">
             <div class="container ">
+
                 <div class="row menu-logo text-center is-hidden">
                     <div class="col">
                         <img src="images/logo-b.png" alt="Técnico Embajador">
-                    </div>
-                </div>
-
-                <div class="row mnu-registro is-hidden">
-                    <div class="menu-item col border-bottom d-flex justify-content-center rounded-top" data-link="registrate">
-                        <div class="menu-icon mr-1" data-link="registrate"><i class="fas fa-user rounded-circle" data-link="registrate"></i></div>
-                        <div class="menu-text" data-link="registrate">Registrate</div>
                     </div>
                 </div>
 
@@ -75,10 +69,24 @@
                     </div>
                 </div>
 
+                <div class="row mnu-registro is-hidden">
+                    <div class="menu-item col border-bottom d-flex justify-content-center rounded-top" data-link="registrate">
+                        <div class="menu-icon mr-1" data-link="registrate"><i class="fas fa-user rounded-circle" data-link="registrate"></i></div>
+                        <div class="menu-text" data-link="registrate">Registrate</div>
+                    </div>
+                </div>
+
                 <div class="row mnu-perfil is-hidden">
                     <div class="menu-item col border-bottom d-flex justify-content-center" data-link="perfil">
                         <div class="menu-icon mr-1" data-link="perfil"><i class="fas fa-user rounded-circle" data-link="perfil"></i></div>
                         <div class="menu-text" data-link="perfil">Mi cuenta</div>
+                    </div>
+                </div>
+
+                <div class="row mnu-aviso is-hidden">
+                    <div class="menu-item col border-bottom d-flex justify-content-center" data-link="video">
+                        <div class="menu-icon mr-1" data-link="aviso"><i class="fas fa-book rounded-circle" data-link="aviso"></i></div>
+                        <div class="menu-text" data-link="aviso">Aviso de privacidad</div>
                     </div>
                 </div>
 
@@ -88,13 +96,6 @@
                         <div class="menu-text" data-link="video">Videos</div>
                     </div>
                 </div> -->
-
-                <div class="row mnu-aviso is-hidden">
-                    <div class="menu-item col border-bottom d-flex justify-content-center" data-link="video">
-                        <div class="menu-icon mr-1" data-link="aviso"><i class="fas fa-book rounded-circle" data-link="aviso"></i></div>
-                        <div class="menu-text" data-link="aviso">Aviso de privacidad</div>
-                    </div>
-                </div>
 
             </div>
         </section>
@@ -157,7 +158,7 @@
                                     <i class="fas fa-user fa-xs"></i>
                                 </span>
                             </div>
-                            <input type="text" id="txtNombre" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="datoNom">
+                            <input type="text" id="txtNombre" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="datoNom" tabindex="-1">
                         </div>
                     </div>
                 </div>
@@ -171,7 +172,7 @@
                                     <i class="fas fa-user fa-xs"></i>
                                 </span>
                             </div>
-                            <input type="text" id=txtApellido class="form-control" placeholder="" aria-label="Apellido" aria-describedby="datoApe">
+                            <input type="text" id=txtApellido class="form-control" placeholder="" aria-label="Apellido" aria-describedby="datoApe" tabindex="-1">
                         </div>
                     </div>
                 </div>
@@ -185,7 +186,7 @@
                                     <i class="fas fa-envelope fa-xs"></i>
                                 </span>
                             </div>
-                            <input type="email" id="txtCorreo" class="form-control" placeholder="" aria-label="Correo" aria-describedby="datoMail">
+                            <input type="email" id="txtCorreo" class="form-control" placeholder="" aria-label="Correo" aria-describedby="datoMail" tabindex="-1">
                         </div>
                     </div>
                 </div>
@@ -199,7 +200,7 @@
                                     <i class="fas fa-phone fa-xs"></i>
                                 </span>
                             </div>
-                            <input type="tel" id="txtTelefono" class="form-control" placeholder="" aria-label="Telefono" aria-describedby="datoPhone">
+                            <input type="tel" id="txtTelefono" class="form-control" placeholder="" aria-label="Telefono" aria-describedby="datoPhone" tabindex="-1">
                         </div>
                     </div>
                 </div>
@@ -230,7 +231,7 @@
                     <div class="col">
                         <label for="codigoPostal">Capture su código fiscal</label>
                         <div class="input-group mb-3">
-                            <input id="codigoPostal" type="tel" class="form-control" placeholder="" aria-label="codigo postal" aria-describedby="basic-addon5">
+                            <input id="codigoPostal" type="tel" class="form-control" placeholder="" aria-label="codigo postal" aria-describedby="basic-addon5" tabindex="-1">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary text-white btn-checar" type="button" data-link="look" data-toggle="modal" data-target="#loader">Buscar</button>
                             </div>
@@ -257,11 +258,11 @@
                     <div class="col">
                         <div class="row justify-content-center">
                             <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" id="SiCsam" name="csam" class="custom-control-input" value="1">
+                                <input type="radio" id="SiCsam" name="csam" class="custom-control-input" value="1" tabindex="-1">
                                 <label class="custom-control-label" for="SiCsam" data-link="check">Si</label>
                             </div>
                             <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" id="NoCsam" name="csam" class="custom-control-input" value="0">
+                                <input type="radio" id="NoCsam" name="csam" class="custom-control-input" value="0" tabindex="-1">
                                 <label class="custom-control-label" for="NoCsam" data-link="check">No</label>
                             </div>
                         </div>
@@ -272,7 +273,7 @@
                     <div class="col">
                         <label for="codigoCesam">Capture el número del CESAM al que pertenece</label>
                         <div class="input-group">
-                            <input id="codigoCesam" type="tel" class="form-control" placeholder="" aria-label="numerocsam" aria-describedby="basic-addon5" maxlength="4" readonly>
+                            <input id="codigoCesam" type="tel" class="form-control" placeholder="" aria-label="numerocsam" aria-describedby="basic-addon5" maxlength="4" readonly tabindex="-1">
                         </div>
                         <small class="text-muted">Este número consiguelo con tu jefe</small>
                     </div>
@@ -387,7 +388,7 @@
         <!-- registro 04 -->
 
         <!-- noticias -->
-        <article class="noticia container-fluid position-absolute is-right">
+        <article class="noticia container-fluid position-absolute is-center">
             <header class="sticky-top">
                 <div class="position-absolute btnMenu-back" data-item="menu"></div>
                 <nav class="nav row align-items-center">
@@ -464,8 +465,8 @@
                     <div class="col">
                         <label for="abName">Nombre y Apellido</label>
                         <div class="input-group mb-2">
-                            <input type="text" id="abName" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abName">
-                            <input type="text" id="abLast" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abLast">
+                            <input type="text" id="abName" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abName" tabindex="-1">
+                            <input type="text" id="abLast" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abLast" tabindex="-1">
                         </div>
                     </div>
                 </div>
@@ -474,7 +475,7 @@
                     <div class="col">
                         <label for="abLocale">Localidad: <span class="abDireccion"></span></label>
                         <div class="input-group mb-2">
-                            <input id="abLocale" type="tel" class="form-control" placeholder="" aria-label="codigo postal" aria-describedby="basic-addon5">
+                            <input id="abLocale" type="tel" class="form-control" placeholder="" aria-label="codigo postal" aria-describedby="basic-addon5" tabindex="-1">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary text-white btn-checar" type="button" data-link="look" data-toggle="modal" data-target="#loader">Buscar</button>
                             </div>
@@ -486,7 +487,7 @@
                     <div class="col">
                         <label for="abMail">Correo electrónico</label>
                         <div class="input-group mb-2">
-                            <input type="text" id="abMail" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abMail">
+                            <input type="text" id="abMail" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abMail" tabindex="-1">
                         </div>
                     </div>
                 </div>
@@ -495,7 +496,7 @@
                     <div class="col">
                         <label for="abPhone">Teléfono</label>
                         <div class="input-group mb-2">
-                            <input type="tel" id="abPhone" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abPhone">
+                            <input type="tel" id="abPhone" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abPhone" tabindex="-1">
                         </div>
                     </div>
                 </div>
@@ -506,10 +507,10 @@
                         <div class="input-group mb-2">
                             <div class="input-group-prepend">
                                 <div class="input-group-text csamVerifyBg">
-                                    <input type="checkbox" id="csamCheck" name="upCsam" aria-label="Checkbox for following text input" readonly />
+                                    <input type="checkbox" id="csamCheck" name="upCsam" aria-label="Checkbox for following text input" tabindex="-1" readonly />
                                 </div>
                             </div>
-                            <input type="tel" id="abCsam" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abPhone" maxlength="4">
+                            <input type="tel" id="abCsam" class="form-control" placeholder="" aria-label="Nombre" aria-describedby="abPhone" maxlength="4" tabindex="-1">
                         </div>
                     </div>
                 </div>
