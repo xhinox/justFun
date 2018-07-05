@@ -2,538 +2,654 @@
 var uuid = '';
 var boolUpdate = false;
 
-$(document).ready(function (){
+var app = {
+    // Application Constructor
+    initialize: function() {
+      this.bindEvents();
+    },
+    // Bind Event Listeners
+    //
+    // Bind any events that are required on startup. Common events are:
+    // 'load', 'deviceready', 'offline', and 'online'.
+    bindEvents: function() {
+      document.addEventListener('deviceready', this.onDeviceReady, false);
+    },
+    // deviceready Event Handler
+    //
+    // The scope of 'this' is the event. In order to call the 'receivedEvent'
+    // function, we must explicity call 'app.receivedEvent(...);'
+    onDeviceReady: function() {
+      initPushwoosh();
 
-    if (window.screen.height > 480) {
-        $('.regP1, .perfil').find('div.input-group').addClass('input-group-lg');
-        $('.regP1, .perfil').find('div.input-group').removeClass('mb-2').addClass('mb-3');
-    }
+      $('#loader').modal('show');
 
-    document.addEventListener("deviceready",onDeviceReady,false);
+      uuid = device.uuid;
+      Keyboard.hideFormAccessoryBar(true);
 
-    $('#txtTelefono, #abPhone').mask('(000) 000.0000');
-    $('#codigoPostal, #abLocale').mask('00000');
-    $("#NoCsam").prop("checked", true);
-    $('#codigoCesam').prop("readonly", true);
+      document.addEventListener("offline", onOffline, false);
+      checkConnection();
 
-    // MODAL SAVE datoApe
-    var svData = document.getElementById('saveDataLoader'), saveData = new Hammer(svData);
+      app.receivedEvent('deviceready');
+    },
+    // Update DOM on a Received Event
+    receivedEvent: function(id) {
+        var url_put = 'https://bdtecnicomirage.firebaseio.com/users/' + uuid + '.json';
 
-    saveData.on('tap', function(ev) {
-        var $target = $(ev.target);
+        $.ajax({
+                url: url_put,
+                type: "GET",
+                success: function (data) {
 
-        if ($target.hasClass('saveData')) {
-            if (!boolUpdate) {
-                guardarRegistro();
-            }
-            else {
-                actualizarRegistro();
-            }
-        }
-    });
+                    if (data) {
+                        var dataUser = {
+                            nombre : data.nombre,
+                            apellido : data.apellido,
+                            correo : data.correo,
+                            tel : data.tel,
+                            estado : data.estado,
+                            municipio : data.municipio,
+                            cp : data.cp,
+                            // photo : data.image,
+                            isCsam : data.isCsam,
+                            csamNum : data.csamNum,
+                            csamAut : data.csamAut,
+                        }
 
-    // INICIA MENU
-    var mnu = document.querySelector('.menu'), menu = new Hammer(mnu);
+                        if (data.csamAut == 1) {
+                            $('.csamVerify').text('- Verificado'); //374461
+                            $('.csamVerifyBg').addClass('bg-success');
+                        }
+                        else if (data.csamAut == 0) {
+                            $('.csamVerify').text('- Sin verificar');
+                            $('.csamVerifyBg').removeClass('bg-success');
+                        }
 
-    menu.on("tap", function(ev) {
-        var $target = $(ev.target), $registro = $('.regP0'), $noticia = $('.noticia'), $perfil = $('.perfil'), $aviso = $('.aviso');
+                        if (data.isCsam == 1) {
+                            $('#csamCheck').prop('checked', true);
+                        }
+                        else {
+                            $('#csamCheck').prop('checked', false);
+                        }
 
-        var fuente = [$registro, $noticia, $perfil, $aviso];
+                        $('#abName').val(dataUser.nombre);
+                        $('#abLast').val(dataUser.apellido);
+                        $('.abDireccion').text(dataUser.municipio + ', ' + dataUser.estado + '.');
+                        $('#abLocale').val(dataUser.cp);
+                        $('#abMail').val(dataUser.correo);
+                        $('#abPhone').val(dataUser.tel);
+                        $('#abCsam').val(dataUser.csamNum);
 
-        $('.regP0, .noticia').css("transition","");
+                        // var abImage = document.getElementById('abImage');
+                        // abImage.src = dataUser.photo;
 
-        if ($target.data('link') == 'registrate') {
-            checkOutMenu($registro, fuente);
-        }
-        else if ($target.data('link') == 'noticias') {
-            checkOutMenu($noticia, fuente);
+                        sessionStorage.setItem('user', JSON.stringify(dataUser));
 
-            $('#loader').modal('show');
-            loadNoticias();
-        }
-        else if ($target.data('link') == 'perfil') {
-            checkOutMenu($perfil, fuente);
-        }
-        else if ($target.data('link') == 'aviso') {
-            checkOutMenu($aviso, fuente);
-        }
-    });
-    // TERMINA MENU
-
-    function checkOutMenu(element, fuente) {
-        var $e1 = $(element[0]);
-
-        for (var i = 0; i < fuente.length; i++) {
-            var e = fuente[i];
-            e.removeClass('is-half').removeClass('is-center').addClass('is-right');
-        }
-
-        $e1.removeClass('is-right').addClass('is-center');
-    }
-
-    // INICIA REGISTRO
-    var registro0 = document.querySelector('.regP0'), reg0 = new Hammer(registro0),
-        registro1 = document.querySelector('.regP1'), reg1 = new Hammer(registro1),
-        registro2 = document.querySelector('.regP2'), reg2 = new Hammer(registro2),
-        // registro3 = document.querySelector('.regP3'), reg3 = new Hammer(registro3),
-        registro4 = document.querySelector('.regP4'), reg4 = new Hammer(registro4);
-
-    reg0.on("tap", function(ev) {
-            var $target = $(ev.target);
-
-            if ($target.data('link') == 'menu') {
-
-                if ($('.regP0').hasClass('is-center')) {
-                    $('.regP0').removeClass('is-center').addClass('is-half');
-                }
-                else {
-                    $('.regP0').removeClass('is-half').addClass('is-center');
-                }
-            }
-            else if ($target.data('link') == 'toRegP1') {
-                $('.regP0').css("transition","");
-                $('.regP0').removeClass('is-center').addClass('is-left');
-                $('.regP1').removeClass('is-right').addClass('is-center');
-            }
-        });
-
-    reg1.on("tap", function(ev) {
-        var $target = $(ev.target);
-
-        if ($target.data('link') == 'back') {
-            $('.regP1').removeClass('is-center').addClass('is-right');
-            $('.regP0').removeClass('is-left').addClass('is-center');
-        }
-        else if ($target.data('link') == 'toRegP2') {
-            var $nombre = $('#txtNombre').val(), $apellido = $('#txtApellido').val(),
-                $correo = $('#txtCorreo').val(), $telefono = $('#txtTelefono').val();
-
-            // Validar formulario
-            if ($nombre === '') {
-                swal ("Un momento", "Favor de capturar su nombre", "warning");
-            }
-            else if ($apellido === '') {
-                swal ("Un momento", "Favor de capturar su apellido", "warning");
-            }
-            else if ($correo === '') {
-                swal ("Un momento", "Favor de capturar su correo electrónico", "warning");
-            }
-            else if ($telefono === '') {
-                swal ("Un momento", "Favor de capturar su teléfono", "warning");
-            }
-            else {
-
-                if ( !validar_email( $correo )) {
-                    swal ("Un momento", "Favor de corregir el formato del correo", "warning" );
-                }
-                else if ($telefono.length <= 13) {
-                    swal ("Un momento", "Favor de capturar su número teléfonico completo", "warning" );
-                }
-                else {
-                    var user = {
-                        nombre : $nombre,
-                        apellido : $apellido,
-                        correo : $correo,
-                        tel : $telefono,
+                        // $('.noticia').removeClass('is-right').addClass('is-center').css("transition","none");
+                        $('.mnu-perfil').removeClass('is-hidden');
                     }
+                    else {
+                        // $('.regP0').removeClass('is-right').addClass('is-center').css("transition","none");
+                        $('.mnu-registro').removeClass('is-hidden');
 
-                    sessionStorage.setItem('user', JSON.stringify(user));
+                        var dataUser = {
+                            isCsam : 0,
+                        }
 
-                    $('.regP1').removeClass('is-center').addClass('is-left');
-                    $('.regP2').removeClass('is-right').addClass('is-center');
-                }
-            }
-        }
-    });
+                        sessionStorage.setItem('user', JSON.stringify(dataUser));
 
-    $('#txtNombre').on('keydown', function(ev) {
-        if ( ev.which == 13 ) {
-            ev.preventDefault();
-            $('#txtApellido').focus();
-        }
-    });
-
-    $('#txtApellido').on('keydown', function(ev) {
-        if ( ev.which == 13 ) {
-            ev.preventDefault();
-            $('#txtCorreo').focus();
-        }
-    });
-
-    $('#txtCorreo').on('keydown', function(ev) {
-        if ( ev.which == 13 ) {
-            ev.preventDefault();
-            $('#txtTelefono').focus();
-        }
-    });
-
-    reg2.on("tap", function(ev) {
-        var $target = $(ev.target);
-
-        if ($target.data('link') == 'back') {
-            $('.regP2').removeClass('is-center').addClass('is-right');
-            $('.regP1').removeClass('is-left').addClass('is-center');
-        }
-        else if ($target.data('link') == 'look') {
-            var $codigo = $('#codigoPostal').val();
-            var cp = parseInt($codigo);
-
-            if ($codigo.length < 5) {
-                swal ("Un momento", "Favor de capturar su código postal completo", "warning");
-            }
-            else {
-                var url_link = 'https://api-codigos-postales.herokuapp.com/v2/codigo_postal/' + cp + '';
-
-                $.ajax({
-                    type: 'GET',
-                    dataType: 'json',
-                    url: url_link,
-                    success: function(data) {
-                        setTimeout(function() {
+                        setTimeout(function(){
                             $('#loader').modal('hide');
-                            var user = JSON.parse(sessionStorage.getItem('user'));
-                            $('.UsuarioLocalizado').text(data.estado + ', ' + data.municipio);
-                            user.estado = data.estado;
-                            user.municipio = data.municipio;
-                            user.cp = cp;
-
-                            sessionStorage.setItem('user', JSON.stringify(user));
-                        }, 1000);
-
-                    },
-                    error: function(data) {
-                        swal('Un momento', 'Fallo la conexión, favor de intentarlo de nuevo', 'warning');
+                        },1000);
                     }
-                });
-            }
-        }
-        else if ($target.data('link') == 'toRegP3') {
-            var $Codigo = $('.UsuarioLocalizado').text();
 
-            if ($Codigo === '') {
-                swal('Un momento', 'Favor de localizar su ubicación por medio de su código postal', 'warning')
-            }
-            else {
+                    $('.menu-logo, .mnu-noticias, .mnu-aviso').removeClass('is-hidden');
 
-                var user = JSON.parse(sessionStorage.getItem('user'));
-                user.isCsam = parseInt($('input[name=csam]:checked').val());
-                user.csamNum = parseInt($('#codigoCesam').val());
-                user.csamAut = 0;
-
-                $('.userName').text('' + user.nombre + ' ' + user.apellido );
-                $('.userLocale').text('' + user.municipio + ', ' + user.estado + '. ' + user.cp);
-                $('.userMail').text('' + user.correo + '');
-                $('.userPhone').text('' + user.tel + '');
-
-                $('.userCsam').text('' + user.isCsam == 1 ? 'Si' : 'No' + '');
-
-                var dataUser = {
-                    isCsam : user.isCsam,
-                    estado : user.estado
+                    $('.noticia-fill').empty();
+                    loadNoticias();
+                },
+                error: function(error) {
+                    swal('', 'Estamos presentando una falla, favor de regresar mas tarde. (err01)');
+                    $('.noticia-fill').empty();
+                    loadNoticias();
                 }
-
-                sessionStorage.setItem('user', JSON.stringify(user));
-
-                $('.regP2').removeClass('is-center').addClass('is-left');
-                $('.regP4').removeClass('is-right').addClass('is-center');
-            }
-        }
-    });
-
-    $('input[name=csam]').on('change', function (ev) {
-        if (ev.target.id == 'SiCsam') {
-            $('#codigoCesam').attr('readonly', false);
-        }
-        else {
-            $('#codigoCesam').prop("readonly", true);
-        }
-    });
-
-    // reg3.on("tap", function(ev) {
-    //     var $target = $(ev.target);
-    //
-    //     if ($target.data('link') == 'back') {
-    //         $('.regP3').removeClass('is-center').addClass('is-right');
-    //         $('.regP2').removeClass('is-left').addClass('is-center');
-    //     }
-    //     else if ($target.data('link') == 'toRegP4') {
-    //         var user = JSON.parse(sessionStorage.getItem('user'));
-    //         $('.userName').text('' + user.nombre + ' ' + user.apellido );
-    //         $('.userLocale').text('' + user.municipio + ', ' + user.estado + '. ' + user.cp);
-    //         $('.userMail').text('' + user.correo + '');
-    //         $('.userPhone').text('' + user.tel + '');
-    //         $('.userCsam').text('' + user.csam == 1 ? 'Si' : 'No' + '');
-    //
-    //         var dataUser = {
-    //             isCsam : user.csam,
-    //             estado : user.estado
-    //         }
-    //
-    //         sessionStorage.setItem('dataUser', JSON.stringify(dataUser));
-    //
-    //         $('.regP3').removeClass('is-center').addClass('is-left');
-    //         $('.regP4').removeClass('is-right').addClass('is-center');
-    //     }
-    // });
-
-    reg4.on('tap', function(ev) {
-        var $target = $(ev.target);
-
-        if ($target.data('link') == 'back') {
-            $('.regP4').removeClass('is-center').addClass('is-right');
-            $('.regP3').removeClass('is-left').addClass('is-center');
-        }
-        else if ($target.data('toRegFinish')) {
-            boolUpdate = false;
-        }
-    });
-    // TERMINA REGISTRO
-
-    // INICIA NOTICIA
-    var noticia = document.querySelector('.noticia'), ntc = new Hammer(noticia);
-
-    ntc.get('swipe').set({
-        direction: Hammer.DIRECTION_DOWN,
-        threshold: 1,
-        velocity:0.1
-    });
-
-    ntc.on("tap swipedown", function(ev) {
-        var $target = $(ev.target);
-
-        if (ev.type == 'tap') {
-            $('.noticia').css("transition","");
-
-            if ($target.data('item') == 'menu') {
-                if ($('.noticia').hasClass('is-center')) {
-                    $('.noticia').removeClass('is-center').addClass('is-half');
-                }
-                else {
-                    $('.noticia').removeClass('is-half').addClass('is-center');
-                }
-            }
-            else if ($target.data('link') == 'articulo') {
-                $('.articulo-fill').empty();
-                var news = JSON.parse(sessionStorage.getItem('news'));
-                var newIndex = $target.data('num');
-                $('.articulo-fill').append(news[newIndex].articulo);
-
-                $('.noticia').removeClass('is-center').addClass('is-left');
-                $('.articulo').removeClass('is-right').addClass('is-center');
-            }
-            else if ($target.data('link') == 'back') {
-                $('.noticia').removeClass('is-center').addClass('is-half');
-            }
-        }
-        else if (ev.type == 'swipedown') {
-            $('#loader').modal('show');
-            $('.noticia-fill').empty();
-            loadNoticias();
-        }
-    });
-    // TERMINA NOTICIA
-
-    // INICIA ARTICULO
-    var articulo = document.querySelector('.articulo'), art = new Hammer(articulo);
-
-    art.on("tap", function(ev) {
-        var $target = $(ev.target);
-
-        if ($target.data('link') == 'back') {
-            $('.articulo').removeClass('is-center').addClass('is-right');
-            $('.noticia').removeClass('is-left').addClass('is-center');
-        }
-    });
-    // TERMINA ARTICULO
-
-    // INICIA ACERCA
-    var perfil = document.querySelector('.perfil'), prf = new Hammer(perfil);
-
-    prf.on("tap", function(ev) {
-        var $target = $(ev.target);
-
-        if ($target.data('item') == 'perfil') {
-            if ($('.perfil').hasClass('is-center')) {
-                $('.perfil').removeClass('is-center').addClass('is-half');
-            }
-            else {
-                $('.perfil').removeClass('is-half').addClass('is-center');
-            }
-        }
-        /************* BUSCA CODIGO FISCAL **************/
-        else if ($target.data('link') == 'look') {
-            var $codigo = $('#abLocale').val();
-            var cp = parseInt($codigo);
-
-            if ($codigo.length < 5) {
-                swal ("Un momento", "Favor de capturar su código postal completo", "warning");
-            }
-            else {
-                var url_link = 'https://api-codigos-postales.herokuapp.com/v2/codigo_postal/' + cp + '';
-
-                $.ajax({
-                    type: 'GET',
-                    dataType: 'json',
-                    url: url_link,
-                    success: function(data) {
-
-                        setTimeout(function() {
-
-                            $('#loader').modal('hide');
-                            var user = JSON.parse(sessionStorage.getItem('user'));
-                            $('.abDireccion').text(data.estado + ', ' + data.municipio);
-                            user.estado = data.estado;
-                            user.municipio = data.municipio;
-                            user.cp = cp;
-
-                            sessionStorage.setItem('user', JSON.stringify(user));
-                        }, 1000);
-
-                    },
-                    error: function(data) {
-                        swal('Un momento', 'Fallo la conexión, favor de intentarlo de nuevo', 'warning');
-                    }
-                });
-            }
-        }
-        /************* BUSCA CODIGO FISCAL **************/
-        /************* ACTUALIZA DATOSL **************/
-        else if ($target.data('link') == 'update') {
-
-            boolUpdate = true;
-        }
-        /************* ACTUALIZA DATOSL **************/
-    });
-    // TERMINA ACERCA
-
-    // INICIA AVISO
-    var aviso = document.querySelector('.aviso'), vso = new Hammer(aviso);
-
-    vso.on("tap", function(ev) {
-        var $target = $(ev.target);
-
-        if ($target.data('item') == 'aviso') {
-            if ($('.aviso').hasClass('is-center')) {
-                $('.aviso').removeClass('is-center').addClass('is-half');
-            }
-            else {
-                $('.aviso').removeClass('is-half').addClass('is-center');
-            }
-        }
-    });
-
-});
-
-function onDeviceReady(){
-
-    $('#loader').modal('show');
-
-    // uuid = 'afb4ae8805f9b60b';
-    uuid = device.uuid;
-
-    Keyboard.hideFormAccessoryBar(true);
-
-    checkConnection();
-
-    // Validacion de usuario
-    var url_put = 'https://bdtecnicomirage.firebaseio.com/users/' + uuid + '.json';
-
-    $.ajax({
-        url: url_put,
-        type: "GET",
-        success: function (data) {
-
-            if (data) {
-                var dataUser = {
-                    nombre : data.nombre,
-                    apellido : data.apellido,
-                    correo : data.correo,
-                    tel : data.tel,
-                    estado : data.estado,
-                    municipio : data.municipio,
-                    cp : data.cp,
-                    // photo : data.image,
-                    isCsam : data.isCsam,
-                    csamNum : data.csamNum,
-                    csamAut : data.csamAut,
-                }
-
-                if (data.csamAut == 1) {
-                    $('.csamVerify').text('- Verificado'); //374461
-                    $('.csamVerifyBg').addClass('bg-success');
-                }
-                else if (data.csamAut == 0) {
-                    $('.csamVerify').text('- Sin verificar');
-                    $('.csamVerifyBg').removeClass('bg-success');
-                }
-
-                if (data.isCsam == 1) {
-                    $('#csamCheck').prop('checked', true);
-                }
-                else {
-                    $('#csamCheck').prop('checked', false);
-                }
-
-                $('#abName').val(dataUser.nombre);
-                $('#abLast').val(dataUser.apellido);
-                $('.abDireccion').text(dataUser.municipio + ', ' + dataUser.estado + '.');
-                $('#abLocale').val(dataUser.cp);
-                $('#abMail').val(dataUser.correo);
-                $('#abPhone').val(dataUser.tel);
-                $('#abCsam').val(dataUser.csamNum);
-
-                // var abImage = document.getElementById('abImage');
-                // abImage.src = dataUser.photo;
-
-                sessionStorage.setItem('user', JSON.stringify(dataUser));
-
-                // $('.noticia').removeClass('is-right').addClass('is-center').css("transition","none");
-                $('.mnu-perfil').removeClass('is-hidden');
-            }
-            else {
-                // $('.regP0').removeClass('is-right').addClass('is-center').css("transition","none");
-                $('.mnu-registro').removeClass('is-hidden');
-
-                var dataUser = {
-                    isCsam : 0,
-                }
-
-                sessionStorage.setItem('user', JSON.stringify(dataUser));
-
-                setTimeout(function(){
-                    $('#loader').modal('hide');
-                },1000);
-            }
-
-            $('.menu-logo, .mnu-noticias, .mnu-aviso').removeClass('is-hidden');
-
-            $('.noticia-fill').empty();
-            loadNoticias();
-        },
-        error: function(error) {
-            swal('', 'Estamos presentando una falla, favor de regresar mas tarde. (err01)');
-            $('.noticia-fill').empty();
-            loadNoticias();
-        }
-    });
-
-    document.addEventListener("offline", onOffline, false);
-
-    // initPushwoosh();
+            });
 
 
-    // $('.actCamera').on('click', function(){
-    //     console.log('entro');
-    //     navigator.camera.getPicture(uploadPhotoSuccess, cameraError, {
-    //         quality: 100,
-    //         destinationType: Camera.DestinationType.DATA_URL,
-    //         sourceType : Camera.PictureSourceType.CAMERA,
-    //         targetWidth: 150,
-    //         targetHeight: 150,
-    //         correctOrientation: true
-    //     });
-    // });
-}
+    }
+};
+
+// $(document).ready(function (){
+//
+//     if (window.screen.height > 480) {
+//         $('.regP1, .perfil').find('div.input-group').addClass('input-group-lg');
+//         $('.regP1, .perfil').find('div.input-group').removeClass('mb-2').addClass('mb-3');
+//     }
+//
+//     document.addEventListener("deviceready",onDeviceReady,false);
+//
+//     $('#txtTelefono, #abPhone').mask('(000) 000.0000');
+//     $('#codigoPostal, #abLocale').mask('00000');
+//     $("#NoCsam").prop("checked", true);
+//     $('#codigoCesam').prop("readonly", true);
+//
+//     // MODAL SAVE datoApe
+//     var svData = document.getElementById('saveDataLoader'), saveData = new Hammer(svData);
+//
+//     saveData.on('tap', function(ev) {
+//         var $target = $(ev.target);
+//
+//         if ($target.hasClass('saveData')) {
+//             if (!boolUpdate) {
+//                 guardarRegistro();
+//             }
+//             else {
+//                 actualizarRegistro();
+//             }
+//         }
+//     });
+//
+//     // INICIA MENU
+//     var mnu = document.querySelector('.menu'), menu = new Hammer(mnu);
+//
+//     menu.on("tap", function(ev) {
+//         var $target = $(ev.target), $registro = $('.regP0'), $noticia = $('.noticia'), $perfil = $('.perfil'), $aviso = $('.aviso');
+//
+//         var fuente = [$registro, $noticia, $perfil, $aviso];
+//
+//         $('.regP0, .noticia').css("transition","");
+//
+//         if ($target.data('link') == 'registrate') {
+//             checkOutMenu($registro, fuente);
+//         }
+//         else if ($target.data('link') == 'noticias') {
+//             checkOutMenu($noticia, fuente);
+//
+//             $('#loader').modal('show');
+//             loadNoticias();
+//         }
+//         else if ($target.data('link') == 'perfil') {
+//             checkOutMenu($perfil, fuente);
+//         }
+//         else if ($target.data('link') == 'aviso') {
+//             checkOutMenu($aviso, fuente);
+//         }
+//     });
+//     // TERMINA MENU
+//
+//     function checkOutMenu(element, fuente) {
+//         var $e1 = $(element[0]);
+//
+//         for (var i = 0; i < fuente.length; i++) {
+//             var e = fuente[i];
+//             e.removeClass('is-half').removeClass('is-center').addClass('is-right');
+//         }
+//
+//         $e1.removeClass('is-right').addClass('is-center');
+//     }
+//
+//     // INICIA REGISTRO
+//     var registro0 = document.querySelector('.regP0'), reg0 = new Hammer(registro0),
+//         registro1 = document.querySelector('.regP1'), reg1 = new Hammer(registro1),
+//         registro2 = document.querySelector('.regP2'), reg2 = new Hammer(registro2),
+//         // registro3 = document.querySelector('.regP3'), reg3 = new Hammer(registro3),
+//         registro4 = document.querySelector('.regP4'), reg4 = new Hammer(registro4);
+//
+//     reg0.on("tap", function(ev) {
+//             var $target = $(ev.target);
+//
+//             if ($target.data('link') == 'menu') {
+//
+//                 if ($('.regP0').hasClass('is-center')) {
+//                     $('.regP0').removeClass('is-center').addClass('is-half');
+//                 }
+//                 else {
+//                     $('.regP0').removeClass('is-half').addClass('is-center');
+//                 }
+//             }
+//             else if ($target.data('link') == 'toRegP1') {
+//                 $('.regP0').css("transition","");
+//                 $('.regP0').removeClass('is-center').addClass('is-left');
+//                 $('.regP1').removeClass('is-right').addClass('is-center');
+//             }
+//         });
+//
+//     reg1.on("tap", function(ev) {
+//         var $target = $(ev.target);
+//
+//         if ($target.data('link') == 'back') {
+//             $('.regP1').removeClass('is-center').addClass('is-right');
+//             $('.regP0').removeClass('is-left').addClass('is-center');
+//         }
+//         else if ($target.data('link') == 'toRegP2') {
+//             var $nombre = $('#txtNombre').val(), $apellido = $('#txtApellido').val(),
+//                 $correo = $('#txtCorreo').val(), $telefono = $('#txtTelefono').val();
+//
+//             // Validar formulario
+//             if ($nombre === '') {
+//                 swal ("Un momento", "Favor de capturar su nombre", "warning");
+//             }
+//             else if ($apellido === '') {
+//                 swal ("Un momento", "Favor de capturar su apellido", "warning");
+//             }
+//             else if ($correo === '') {
+//                 swal ("Un momento", "Favor de capturar su correo electrónico", "warning");
+//             }
+//             else if ($telefono === '') {
+//                 swal ("Un momento", "Favor de capturar su teléfono", "warning");
+//             }
+//             else {
+//
+//                 if ( !validar_email( $correo )) {
+//                     swal ("Un momento", "Favor de corregir el formato del correo", "warning" );
+//                 }
+//                 else if ($telefono.length <= 13) {
+//                     swal ("Un momento", "Favor de capturar su número teléfonico completo", "warning" );
+//                 }
+//                 else {
+//                     var user = {
+//                         nombre : $nombre,
+//                         apellido : $apellido,
+//                         correo : $correo,
+//                         tel : $telefono,
+//                     }
+//
+//                     sessionStorage.setItem('user', JSON.stringify(user));
+//
+//                     $('.regP1').removeClass('is-center').addClass('is-left');
+//                     $('.regP2').removeClass('is-right').addClass('is-center');
+//                 }
+//             }
+//         }
+//     });
+//
+//     $('#txtNombre').on('keydown', function(ev) {
+//         if ( ev.which == 13 ) {
+//             ev.preventDefault();
+//             $('#txtApellido').focus();
+//         }
+//     });
+//
+//     $('#txtApellido').on('keydown', function(ev) {
+//         if ( ev.which == 13 ) {
+//             ev.preventDefault();
+//             $('#txtCorreo').focus();
+//         }
+//     });
+//
+//     $('#txtCorreo').on('keydown', function(ev) {
+//         if ( ev.which == 13 ) {
+//             ev.preventDefault();
+//             $('#txtTelefono').focus();
+//         }
+//     });
+//
+//     reg2.on("tap", function(ev) {
+//         var $target = $(ev.target);
+//
+//         if ($target.data('link') == 'back') {
+//             $('.regP2').removeClass('is-center').addClass('is-right');
+//             $('.regP1').removeClass('is-left').addClass('is-center');
+//         }
+//         else if ($target.data('link') == 'look') {
+//             var $codigo = $('#codigoPostal').val();
+//             var cp = parseInt($codigo);
+//
+//             if ($codigo.length < 5) {
+//                 swal ("Un momento", "Favor de capturar su código postal completo", "warning");
+//             }
+//             else {
+//                 var url_link = 'https://api-codigos-postales.herokuapp.com/v2/codigo_postal/' + cp + '';
+//
+//                 $.ajax({
+//                     type: 'GET',
+//                     dataType: 'json',
+//                     url: url_link,
+//                     success: function(data) {
+//                         setTimeout(function() {
+//                             $('#loader').modal('hide');
+//                             var user = JSON.parse(sessionStorage.getItem('user'));
+//                             $('.UsuarioLocalizado').text(data.estado + ', ' + data.municipio);
+//                             user.estado = data.estado;
+//                             user.municipio = data.municipio;
+//                             user.cp = cp;
+//
+//                             sessionStorage.setItem('user', JSON.stringify(user));
+//                         }, 1000);
+//
+//                     },
+//                     error: function(data) {
+//                         swal('Un momento', 'Fallo la conexión, favor de intentarlo de nuevo', 'warning');
+//                     }
+//                 });
+//             }
+//         }
+//         else if ($target.data('link') == 'toRegP3') {
+//             var $Codigo = $('.UsuarioLocalizado').text();
+//
+//             if ($Codigo === '') {
+//                 swal('Un momento', 'Favor de localizar su ubicación por medio de su código postal', 'warning')
+//             }
+//             else {
+//
+//                 var user = JSON.parse(sessionStorage.getItem('user'));
+//                 user.isCsam = parseInt($('input[name=csam]:checked').val());
+//                 user.csamNum = parseInt($('#codigoCesam').val());
+//                 user.csamAut = 0;
+//
+//                 $('.userName').text('' + user.nombre + ' ' + user.apellido );
+//                 $('.userLocale').text('' + user.municipio + ', ' + user.estado + '. ' + user.cp);
+//                 $('.userMail').text('' + user.correo + '');
+//                 $('.userPhone').text('' + user.tel + '');
+//
+//                 $('.userCsam').text('' + user.isCsam == 1 ? 'Si' : 'No' + '');
+//
+//                 var dataUser = {
+//                     isCsam : user.isCsam,
+//                     estado : user.estado
+//                 }
+//
+//                 sessionStorage.setItem('user', JSON.stringify(user));
+//
+//                 $('.regP2').removeClass('is-center').addClass('is-left');
+//                 $('.regP4').removeClass('is-right').addClass('is-center');
+//             }
+//         }
+//     });
+//
+//     $('input[name=csam]').on('change', function (ev) {
+//         if (ev.target.id == 'SiCsam') {
+//             $('#codigoCesam').attr('readonly', false);
+//         }
+//         else {
+//             $('#codigoCesam').prop("readonly", true);
+//         }
+//     });
+//
+//     // reg3.on("tap", function(ev) {
+//     //     var $target = $(ev.target);
+//     //
+//     //     if ($target.data('link') == 'back') {
+//     //         $('.regP3').removeClass('is-center').addClass('is-right');
+//     //         $('.regP2').removeClass('is-left').addClass('is-center');
+//     //     }
+//     //     else if ($target.data('link') == 'toRegP4') {
+//     //         var user = JSON.parse(sessionStorage.getItem('user'));
+//     //         $('.userName').text('' + user.nombre + ' ' + user.apellido );
+//     //         $('.userLocale').text('' + user.municipio + ', ' + user.estado + '. ' + user.cp);
+//     //         $('.userMail').text('' + user.correo + '');
+//     //         $('.userPhone').text('' + user.tel + '');
+//     //         $('.userCsam').text('' + user.csam == 1 ? 'Si' : 'No' + '');
+//     //
+//     //         var dataUser = {
+//     //             isCsam : user.csam,
+//     //             estado : user.estado
+//     //         }
+//     //
+//     //         sessionStorage.setItem('dataUser', JSON.stringify(dataUser));
+//     //
+//     //         $('.regP3').removeClass('is-center').addClass('is-left');
+//     //         $('.regP4').removeClass('is-right').addClass('is-center');
+//     //     }
+//     // });
+//
+//     reg4.on('tap', function(ev) {
+//         var $target = $(ev.target);
+//
+//         if ($target.data('link') == 'back') {
+//             $('.regP4').removeClass('is-center').addClass('is-right');
+//             $('.regP3').removeClass('is-left').addClass('is-center');
+//         }
+//         else if ($target.data('toRegFinish')) {
+//             boolUpdate = false;
+//         }
+//     });
+//     // TERMINA REGISTRO
+//
+//     // INICIA NOTICIA
+//     var noticia = document.querySelector('.noticia'), ntc = new Hammer(noticia);
+//
+//     ntc.get('swipe').set({
+//         direction: Hammer.DIRECTION_DOWN,
+//         threshold: 1,
+//         velocity:0.1
+//     });
+//
+//     ntc.on("tap swipedown", function(ev) {
+//         var $target = $(ev.target);
+//
+//         if (ev.type == 'tap') {
+//             $('.noticia').css("transition","");
+//
+//             if ($target.data('item') == 'menu') {
+//                 if ($('.noticia').hasClass('is-center')) {
+//                     $('.noticia').removeClass('is-center').addClass('is-half');
+//                 }
+//                 else {
+//                     $('.noticia').removeClass('is-half').addClass('is-center');
+//                 }
+//             }
+//             else if ($target.data('link') == 'articulo') {
+//                 $('.articulo-fill').empty();
+//                 var news = JSON.parse(sessionStorage.getItem('news'));
+//                 var newIndex = $target.data('num');
+//                 $('.articulo-fill').append(news[newIndex].articulo);
+//
+//                 $('.noticia').removeClass('is-center').addClass('is-left');
+//                 $('.articulo').removeClass('is-right').addClass('is-center');
+//             }
+//             else if ($target.data('link') == 'back') {
+//                 $('.noticia').removeClass('is-center').addClass('is-half');
+//             }
+//         }
+//         else if (ev.type == 'swipedown') {
+//             $('#loader').modal('show');
+//             $('.noticia-fill').empty();
+//             loadNoticias();
+//         }
+//     });
+//     // TERMINA NOTICIA
+//
+//     // INICIA ARTICULO
+//     var articulo = document.querySelector('.articulo'), art = new Hammer(articulo);
+//
+//     art.on("tap", function(ev) {
+//         var $target = $(ev.target);
+//
+//         if ($target.data('link') == 'back') {
+//             $('.articulo').removeClass('is-center').addClass('is-right');
+//             $('.noticia').removeClass('is-left').addClass('is-center');
+//         }
+//     });
+//     // TERMINA ARTICULO
+//
+//     // INICIA ACERCA
+//     var perfil = document.querySelector('.perfil'), prf = new Hammer(perfil);
+//
+//     prf.on("tap", function(ev) {
+//         var $target = $(ev.target);
+//
+//         if ($target.data('item') == 'perfil') {
+//             if ($('.perfil').hasClass('is-center')) {
+//                 $('.perfil').removeClass('is-center').addClass('is-half');
+//             }
+//             else {
+//                 $('.perfil').removeClass('is-half').addClass('is-center');
+//             }
+//         }
+//         /************* BUSCA CODIGO FISCAL **************/
+//         else if ($target.data('link') == 'look') {
+//             var $codigo = $('#abLocale').val();
+//             var cp = parseInt($codigo);
+//
+//             if ($codigo.length < 5) {
+//                 swal ("Un momento", "Favor de capturar su código postal completo", "warning");
+//             }
+//             else {
+//                 var url_link = 'https://api-codigos-postales.herokuapp.com/v2/codigo_postal/' + cp + '';
+//
+//                 $.ajax({
+//                     type: 'GET',
+//                     dataType: 'json',
+//                     url: url_link,
+//                     success: function(data) {
+//
+//                         setTimeout(function() {
+//
+//                             $('#loader').modal('hide');
+//                             var user = JSON.parse(sessionStorage.getItem('user'));
+//                             $('.abDireccion').text(data.estado + ', ' + data.municipio);
+//                             user.estado = data.estado;
+//                             user.municipio = data.municipio;
+//                             user.cp = cp;
+//
+//                             sessionStorage.setItem('user', JSON.stringify(user));
+//                         }, 1000);
+//
+//                     },
+//                     error: function(data) {
+//                         swal('Un momento', 'Fallo la conexión, favor de intentarlo de nuevo', 'warning');
+//                     }
+//                 });
+//             }
+//         }
+//         /************* BUSCA CODIGO FISCAL **************/
+//         /************* ACTUALIZA DATOSL **************/
+//         else if ($target.data('link') == 'update') {
+//
+//             boolUpdate = true;
+//         }
+//         /************* ACTUALIZA DATOSL **************/
+//     });
+//     // TERMINA ACERCA
+//
+//     // INICIA AVISO
+//     var aviso = document.querySelector('.aviso'), vso = new Hammer(aviso);
+//
+//     vso.on("tap", function(ev) {
+//         var $target = $(ev.target);
+//
+//         if ($target.data('item') == 'aviso') {
+//             if ($('.aviso').hasClass('is-center')) {
+//                 $('.aviso').removeClass('is-center').addClass('is-half');
+//             }
+//             else {
+//                 $('.aviso').removeClass('is-half').addClass('is-center');
+//             }
+//         }
+//     });
+//
+// });
+//
+// function onDeviceReady(){
+//
+//     $('#loader').modal('show');
+//
+//     // uuid = 'afb4ae8805f9b60b';
+//     uuid = device.uuid;
+//
+//     Keyboard.hideFormAccessoryBar(true);
+//
+//     checkConnection();
+//
+//     // Validacion de usuario
+//     var url_put = 'https://bdtecnicomirage.firebaseio.com/users/' + uuid + '.json';
+//
+//     $.ajax({
+//         url: url_put,
+//         type: "GET",
+//         success: function (data) {
+//
+//             if (data) {
+//                 var dataUser = {
+//                     nombre : data.nombre,
+//                     apellido : data.apellido,
+//                     correo : data.correo,
+//                     tel : data.tel,
+//                     estado : data.estado,
+//                     municipio : data.municipio,
+//                     cp : data.cp,
+//                     // photo : data.image,
+//                     isCsam : data.isCsam,
+//                     csamNum : data.csamNum,
+//                     csamAut : data.csamAut,
+//                 }
+//
+//                 if (data.csamAut == 1) {
+//                     $('.csamVerify').text('- Verificado'); //374461
+//                     $('.csamVerifyBg').addClass('bg-success');
+//                 }
+//                 else if (data.csamAut == 0) {
+//                     $('.csamVerify').text('- Sin verificar');
+//                     $('.csamVerifyBg').removeClass('bg-success');
+//                 }
+//
+//                 if (data.isCsam == 1) {
+//                     $('#csamCheck').prop('checked', true);
+//                 }
+//                 else {
+//                     $('#csamCheck').prop('checked', false);
+//                 }
+//
+//                 $('#abName').val(dataUser.nombre);
+//                 $('#abLast').val(dataUser.apellido);
+//                 $('.abDireccion').text(dataUser.municipio + ', ' + dataUser.estado + '.');
+//                 $('#abLocale').val(dataUser.cp);
+//                 $('#abMail').val(dataUser.correo);
+//                 $('#abPhone').val(dataUser.tel);
+//                 $('#abCsam').val(dataUser.csamNum);
+//
+//                 // var abImage = document.getElementById('abImage');
+//                 // abImage.src = dataUser.photo;
+//
+//                 sessionStorage.setItem('user', JSON.stringify(dataUser));
+//
+//                 // $('.noticia').removeClass('is-right').addClass('is-center').css("transition","none");
+//                 $('.mnu-perfil').removeClass('is-hidden');
+//             }
+//             else {
+//                 // $('.regP0').removeClass('is-right').addClass('is-center').css("transition","none");
+//                 $('.mnu-registro').removeClass('is-hidden');
+//
+//                 var dataUser = {
+//                     isCsam : 0,
+//                 }
+//
+//                 sessionStorage.setItem('user', JSON.stringify(dataUser));
+//
+//                 setTimeout(function(){
+//                     $('#loader').modal('hide');
+//                 },1000);
+//             }
+//
+//             $('.menu-logo, .mnu-noticias, .mnu-aviso').removeClass('is-hidden');
+//
+//             $('.noticia-fill').empty();
+//             loadNoticias();
+//         },
+//         error: function(error) {
+//             swal('', 'Estamos presentando una falla, favor de regresar mas tarde. (err01)');
+//             $('.noticia-fill').empty();
+//             loadNoticias();
+//         }
+//     });
+//
+//     document.addEventListener("offline", onOffline, false);
+//
+//     // initPushwoosh();
+//
+//
+//     // $('.actCamera').on('click', function(){
+//     //     console.log('entro');
+//     //     navigator.camera.getPicture(uploadPhotoSuccess, cameraError, {
+//     //         quality: 100,
+//     //         destinationType: Camera.DestinationType.DATA_URL,
+//     //         sourceType : Camera.PictureSourceType.CAMERA,
+//     //         targetWidth: 150,
+//     //         targetHeight: 150,
+//     //         correctOrientation: true
+//     //     });
+//     // });
+// }
 
 // function uploadPhotoSuccess(imageURI) {
 //     $('.actCamera').css('background', 'green');
@@ -843,102 +959,102 @@ function validar_email( email ) {
 }
 
 // Pushwoosh
-// function onPushwooshInitialized(pushNotification) {
-//
-// 	// if you need push token at a later time you can always get it from Pushwoosh plugin
-// 	// pushNotification.getPushToken(
-// 	// 	function(token) {
-// 	// 		console.log('push token: ' + token);
-// 	// 	}
-// 	// );
-//
-// 	// and HWID if you want to communicate with Pushwoosh API
-// 	pushNotification.getPushwooshHWID(
-// 		function(token) {
-// 			console.log('Pushwoosh HWID: ' + token);
-// 		}
-// 	);
-//
-// 	// settings tags
-// 	// pushNotification.setTags({
-// 	// 		tagName: "tagValue",
-// 	// 		intTagName: 10
-// 	// 	},
-// 	// 	function(status) {
-// 	// 		console.log('setTags success: ' + JSON.stringify(status));
-// 	// 	},
-// 	// 	function(status) {
-// 	// 		console.log('setTags failed');
-// 	// 	}
-// 	// );
-//
-// 	// pushNotification.getTags(
-// 	// 	function(status) {
-// 	// 		console.log('getTags success: ' + JSON.stringify(status));
-// 	// 	},
-// 	// 	function(status) {
-// 	// 		console.log('getTags failed');
-// 	// 	}
-// 	// );
-//
-// }
-//
-// function initPushwoosh() {
-// 	var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
-//     //
-// 	// //set push notifications handler
-// 	document.addEventListener('push-notification',
-// 		function(event) {
-// 			var message = event.notification.message;
-// 			var userData = event.notification.userdata;
-//             // console.log('' + message + '', '' + userData + '');
-//             // console.log('' + JSON.stringify(event.notification) + '');
-//             //
-// 			// // document.getElementById("pushMessage").innerHTML = message + "<p>";
-// 			// // document.getElementById("pushData").innerHTML = JSON.stringify(event.notification) + "<p>";
-//             //
-// 			//dump custom data to the console if it exists
-// 			if (typeof(userData) != "undefined") {
-// 				console.log('user data: ' + JSON.stringify(userData));
-// 			}
-// 		}
-//     );
-//     //
-//     // document.addEventListener('push-receive',
-//     //     function (event) {
-//     //         var message = event.notification.message;
-//     //         var userData = event.notification.userdata;
-//     //         console.log('' + message + '', '' + userData + '');
-//     //         console.log('' + JSON.stringify(event.notification) + '');
-//     //
-//     //         // document.getElementById("pushMessage").innerHTML = message + "<p>";
-//     //         // document.getElementById("pushData").innerHTML = JSON.stringify(event.notification) + "<p>";
-//     //
-//     //         //dump custom data to the console if it exists
-//     //         if (typeof (userData) != "undefined") {
-//     //             console.log('','user data: ' + JSON.stringify(userData));
-//     //         }
-//     //     }
-//     // );
-//     //
-// 	// //initialize Pushwoosh with projectid: "GOOGLE_PROJECT_ID", appid : "PUSHWOOSH_APP_ID". This will trigger all pending push notifications on start.
-//     pushNotification.onDeviceReady({
-//         projectid: "430274723087",
-//         appid: "3FD66-F50FD",
-//         serviceName: ""
-//     });
-//
-// 	//register for push notifications
-// 	pushNotification.registerDevice(
-// 		function(status) {
-// 			// document.getElementById("pushToken").innerHTML = status.pushToken + "<p>";
-// 			onPushwooshInitialized(pushNotification);
-// 		},
-// 		function(status) {
-// 			swal('', JSON.stringify(['failed to register ', status]));
-// 		}
-// 	);
-// }
+function onPushwooshInitialized(pushNotification) {
+
+	// if you need push token at a later time you can always get it from Pushwoosh plugin
+	// pushNotification.getPushToken(
+	// 	function(token) {
+	// 		console.log('push token: ' + token);
+	// 	}
+	// );
+
+	// and HWID if you want to communicate with Pushwoosh API
+	pushNotification.getPushwooshHWID(
+		function(token) {
+			console.log('Pushwoosh HWID: ' + token);
+		}
+	);
+
+	// settings tags
+	// pushNotification.setTags({
+	// 		tagName: "tagValue",
+	// 		intTagName: 10
+	// 	},
+	// 	function(status) {
+	// 		console.log('setTags success: ' + JSON.stringify(status));
+	// 	},
+	// 	function(status) {
+	// 		console.log('setTags failed');
+	// 	}
+	// );
+
+	// pushNotification.getTags(
+	// 	function(status) {
+	// 		console.log('getTags success: ' + JSON.stringify(status));
+	// 	},
+	// 	function(status) {
+	// 		console.log('getTags failed');
+	// 	}
+	// );
+
+}
+
+function initPushwoosh() {
+	var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
+    //
+	// //set push notifications handler
+	document.addEventListener('push-notification',
+		function(event) {
+			var message = event.notification.message;
+			var userData = event.notification.userdata;
+            // console.log('' + message + '', '' + userData + '');
+            // console.log('' + JSON.stringify(event.notification) + '');
+            //
+			// // document.getElementById("pushMessage").innerHTML = message + "<p>";
+			// // document.getElementById("pushData").innerHTML = JSON.stringify(event.notification) + "<p>";
+            //
+			//dump custom data to the console if it exists
+			if (typeof(userData) != "undefined") {
+				console.log('user data: ' + JSON.stringify(userData));
+			}
+		}
+    );
+    //
+    // document.addEventListener('push-receive',
+    //     function (event) {
+    //         var message = event.notification.message;
+    //         var userData = event.notification.userdata;
+    //         console.log('' + message + '', '' + userData + '');
+    //         console.log('' + JSON.stringify(event.notification) + '');
+    //
+    //         // document.getElementById("pushMessage").innerHTML = message + "<p>";
+    //         // document.getElementById("pushData").innerHTML = JSON.stringify(event.notification) + "<p>";
+    //
+    //         //dump custom data to the console if it exists
+    //         if (typeof (userData) != "undefined") {
+    //             console.log('','user data: ' + JSON.stringify(userData));
+    //         }
+    //     }
+    // );
+    //
+	// //initialize Pushwoosh with projectid: "GOOGLE_PROJECT_ID", appid : "PUSHWOOSH_APP_ID". This will trigger all pending push notifications on start.
+    pushNotification.onDeviceReady({
+        projectid: "430274723087",
+        appid: "3FD66-F50FD",
+        serviceName: ""
+    });
+
+	//register for push notifications
+	pushNotification.registerDevice(
+		function(status) {
+			// document.getElementById("pushToken").innerHTML = status.pushToken + "<p>";
+			onPushwooshInitialized(pushNotification);
+		},
+		function(status) {
+			swal('', JSON.stringify(['failed to register ', status]));
+		}
+	);
+}
 
 function checkEstado(str) {
     switch (str) {
