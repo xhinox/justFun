@@ -1,4 +1,4 @@
-
+no
 var uuid = '';
 var boolUpdate = false;
 
@@ -19,8 +19,7 @@ var app = {
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
-        console.log('hola');
-        // initPushwoosh();
+        initPushwoosh();
 
         $('#loader').modal('show');
 
@@ -115,7 +114,6 @@ var app = {
                 }
             });
 
-
         if (window.screen.height > 480) {
             $('.regP1, .perfil').find('div.input-group').addClass('input-group-lg');
             $('.regP1, .perfil').find('div.input-group').removeClass('mb-2').addClass('mb-3');
@@ -125,6 +123,8 @@ var app = {
         $('#codigoPostal, #abLocale').mask('00000');
         $("#NoCsam").prop("checked", true);
         $('#codigoCesam').prop("readonly", true);
+        $('#txtNombre, #txtApellido, #txtCorreo, #txtTelefono, #codigoPostal, #codigoCesam').blur();
+        $('#abName, #abLast, #abLocale, #abMail, #abPhone, #abCsam').blur();
 
         // MODAL SAVE datoApe
         var svData = document.getElementById('saveDataLoader'), saveData = new Hammer(svData);
