@@ -352,7 +352,7 @@ var app = {
 
             if ($target.data('link') == 'back') {
                 $('.regP4').removeClass('is-center').addClass('is-right');
-                $('.regP3').removeClass('is-left').addClass('is-center');
+                $('.regP2').removeClass('is-left').addClass('is-center');
             }
             else if ($target.data('toRegFinish')) {
                 boolUpdate = false;
