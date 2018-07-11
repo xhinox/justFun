@@ -1,6 +1,5 @@
 /* GENERALES */
 body {
-    background: rgb(17, 17, 23);
     overflow: hidden;
     /* background: url('../images/fondo.jpg');
     background-size: cover; */
@@ -8,6 +7,10 @@ body {
     /* padding-top: env(safe-area-inset-top); /* iOS 11.2 */ */
     /* margin-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */ */
     /* margin-bottom: env(safe-area-inset-bottom); /* iOS 11.2 */ */
+}
+
+body, .menu {
+    background: rgb(17, 17, 23) !important;
 }
 
 .nav {
@@ -18,7 +21,6 @@ body {
     height:45px;
 }
 
-.menu,
 .container-fluid {
     background: white;
     height: 100vh;
@@ -162,12 +164,19 @@ label {
     left: -14px;
 }
 
+.btnMenu-update {
+    height: 45px;
+    width: 45px;
+    z-index: 100;
+    right: -14px;
+}
+
 /* Generales */
 
 /* Menu */
 
 .menu {
-    background: rgb(17, 17, 23);
+    /* width: 60vw; // ANCHO ORIGINAL */
     width: 60vw;
 }
 

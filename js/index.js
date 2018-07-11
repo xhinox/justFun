@@ -2,28 +2,19 @@ var uuid = '';
 var boolUpdate = false;
 
 var app = {
-    // Application Constructor
     initialize: function() {
       this.bindEvents();
     },
-    // Bind Event Listeners
-    //
-    // Bind any events that are required on startup. Common events are:
-    // 'load', 'deviceready', 'offline', and 'online'.
     bindEvents: function() {
       document.addEventListener('deviceready', this.onDeviceReady, false);
     },
-    // deviceready Event Handler
-    //
-    // The scope of 'this' is the event. In order to call the 'receivedEvent'
-    // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         initPushwoosh();
 
         $('#loader').modal('show');
 
-        uuid = 'afb4ae8805f9b60b';
-        // uuid = device.uuid;
+        uuid = device.uuid;
+
         Keyboard.hideFormAccessoryBar(true);
 
         document.addEventListener("offline", onOffline, false);
@@ -49,14 +40,13 @@ var app = {
                             estado : data.estado,
                             municipio : data.municipio,
                             cp : data.cp,
-                            // photo : data.image,
                             isCsam : data.isCsam,
                             csamNum : data.csamNum,
                             csamAut : data.csamAut,
                         }
 
                         if (data.csamAut == 1) {
-                            $('.csamVerify').text('- Verificado'); //374461
+                            $('.csamVerify').text('- Verificado');
                             $('.csamVerifyBg').addClass('bg-success');
                         }
                         else if (data.csamAut == 0) {
@@ -79,16 +69,11 @@ var app = {
                         $('#abPhone').val(dataUser.tel);
                         $('#abCsam').val(dataUser.csamNum);
 
-                        // var abImage = document.getElementById('abImage');
-                        // abImage.src = dataUser.photo;
-
                         sessionStorage.setItem('user', JSON.stringify(dataUser));
 
-                        // $('.noticia').removeClass('is-right').addClass('is-center').css("transition","none");
                         $('.mnu-perfil').removeClass('is-hidden');
                     }
                     else {
-                        // $('.regP0').removeClass('is-right').addClass('is-center').css("transition","none");
                         $('.mnu-registro').removeClass('is-hidden');
 
                         var dataUser = {
@@ -126,7 +111,6 @@ var app = {
         $('#txtNombre, #txtApellido, #txtCorreo, #txtTelefono, #codigoPostal, #codigoCesam').blur();
         $('#abName, #abLast, #abLocale, #abMail, #abPhone, #abCsam').blur();
 
-        // MODAL SAVE datoApe
         var svData = document.getElementById('saveDataLoader'), saveData = new Hammer(svData);
 
         saveData.on('tap', function(ev) {
@@ -142,7 +126,6 @@ var app = {
             }
         });
 
-        // INICIA MENU
         var mnu = document.querySelector('.menu'), menu = new Hammer(mnu);
 
         menu.on("tap", function(ev) {
@@ -168,32 +151,29 @@ var app = {
                 checkOutMenu($aviso, fuente);
             }
         });
-        // TERMINA MENU
 
         var registro0 = document.querySelector('.regP0'), reg0 = new Hammer(registro0),
             registro1 = document.querySelector('.regP1'), reg1 = new Hammer(registro1),
             registro2 = document.querySelector('.regP2'), reg2 = new Hammer(registro2),
-            // registro3 = document.querySelector('.regP3'), reg3 = new Hammer(registro3),
             registro4 = document.querySelector('.regP4'), reg4 = new Hammer(registro4);
 
         reg0.on("tap", function(ev) {
-                var $target = $(ev.target);
+            var $target = $(ev.target);
 
-                if ($target.data('link') == 'menu') {
-
-                    if ($('.regP0').hasClass('is-center')) {
-                        $('.regP0').removeClass('is-center').addClass('is-half');
-                    }
-                    else {
-                        $('.regP0').removeClass('is-half').addClass('is-center');
-                    }
+            if ($target.data('link') == 'menu') {
+                if ($('.regP0').hasClass('is-center')) {
+                    $('.regP0').removeClass('is-center').addClass('is-half');
                 }
-                else if ($target.data('link') == 'toRegP1') {
-                    $('.regP0').css("transition","");
-                    $('.regP0').removeClass('is-center').addClass('is-left');
-                    $('.regP1').removeClass('is-right').addClass('is-center');
+                else {
+                    $('.regP0').removeClass('is-half').addClass('is-center');
                 }
-            });
+            }
+            else if ($target.data('link') == 'toRegP1') {
+                $('.regP0').css("transition","");
+                $('.regP0').removeClass('is-center').addClass('is-left');
+                $('.regP1').removeClass('is-right').addClass('is-center');
+            }
+        });
 
         reg1.on("tap", function(ev) {
             var $target = $(ev.target);
@@ -220,7 +200,6 @@ var app = {
                     swal ("Un momento", "Favor de capturar su teléfono", "warning");
                 }
                 else {
-
                     if ( !validar_email( $correo )) {
                         swal ("Un momento", "Favor de corregir el formato del correo", "warning" );
                     }
@@ -297,7 +276,6 @@ var app = {
 
                                 sessionStorage.setItem('user', JSON.stringify(user));
                             }, 1000);
-
                         },
                         error: function(data) {
                             swal('Un momento', 'Fallo la conexión, favor de intentarlo de nuevo', 'warning');
@@ -358,18 +336,10 @@ var app = {
                 boolUpdate = false;
             }
         });
-        // TERMINA REGISTRO
 
-        // INICIA NOTICIA
         var noticia = document.querySelector('.noticia'), ntc = new Hammer(noticia);
 
-        ntc.get('swipe').set({
-            direction: Hammer.DIRECTION_DOWN,
-            threshold: 1,
-            velocity:0.1
-        });
-
-        ntc.on("tap swipedown", function(ev) {
+        ntc.on("tap", function(ev) {
             var $target = $(ev.target);
 
             if (ev.type == 'tap') {
@@ -395,16 +365,14 @@ var app = {
                 else if ($target.data('link') == 'back') {
                     $('.noticia').removeClass('is-center').addClass('is-half');
                 }
-            }
-            else if (ev.type == 'swipedown') {
-                $('#loader').modal('show');
-                $('.noticia-fill').empty();
-                loadNoticias();
+                else if ($target.data('item') == 'update') {
+                    $('#loader').modal('show');
+                    $('.noticia-fill').empty();
+                    loadNoticias();
+                }
             }
         });
-        // TERMINA NOTICIA
 
-        // INICIA ARTICULO
         var articulo = document.querySelector('.articulo'), art = new Hammer(articulo);
 
         art.on("tap", function(ev) {
@@ -415,9 +383,7 @@ var app = {
                 $('.noticia').removeClass('is-left').addClass('is-center');
             }
         });
-        // TERMINA ARTICULO
 
-        // INICIA ACERCA
         var perfil = document.querySelector('.perfil'), prf = new Hammer(perfil);
 
         prf.on("tap", function(ev) {
@@ -431,7 +397,7 @@ var app = {
                     $('.perfil').removeClass('is-half').addClass('is-center');
                 }
             }
-            /************* BUSCA CODIGO FISCAL **************/
+
             else if ($target.data('link') == 'look') {
                 var $codigo = $('#abLocale').val();
                 var cp = parseInt($codigo);
@@ -467,17 +433,13 @@ var app = {
                     });
                 }
             }
-            /************* BUSCA CODIGO FISCAL **************/
-            /************* ACTUALIZA DATOSL **************/
-            else if ($target.data('link') == 'update') {
 
+            else if ($target.data('link') == 'update') {
                 boolUpdate = true;
             }
-            /************* ACTUALIZA DATOSL **************/
-        });
-        // TERMINA ACERCA
 
-        // INICIA AVISO
+        });
+
         var aviso = document.querySelector('.aviso'), vso = new Hammer(aviso);
 
         vso.on("tap", function(ev) {
@@ -492,8 +454,6 @@ var app = {
                 }
             }
         });
-        // TERMINA AVISO
-
     }
 };
 
@@ -508,7 +468,6 @@ function checkOutMenu(element, fuente) {
     $e1.removeClass('is-right').addClass('is-center');
 }
 
-// Validar que no se desconecte de la red
 function onOffline() {
     swal('', 'Favor de conectarse a la red');
 }
@@ -527,7 +486,6 @@ function checkConnection() {
     states[Connection.NONE]     = 'No network connection';
 }
 
-// guardar datos
 function guardarRegistro() {
 
     var url_put = 'https://bdtecnicomirage.firebaseio.com/users/' + uuid + '/.json';
@@ -690,14 +648,10 @@ function loadNoticias() {
     });
 }
 
-// llenar espacio de Noticias
 function fillNoticias(data, bool) {
-    initPushwoosh();
-
     var finale = "";
 
     if (bool) {
-        // type 01
         var tmp = "";
         tmp += "<section class='notice typeA d-flex justify-content-between mb-2' data-link='articulo' data-num=':num:'>";
         tmp += "<header class='notice-header d-flex flex-column justify-content-between rounded-left :importantHeader:' data-link='articulo' data-num=':num:'>";
@@ -710,7 +664,6 @@ function fillNoticias(data, bool) {
         tmp += "</article>";
         tmp += "</section>";
 
-        // type 02
         var tmp2 = "";
         tmp2 += "<section class='notice typeB d-flex flex-column mb-2' data-link='articulo' data-num=':num:'>";
         tmp2 += "<header class='notice-header d-flex flex-column justify-content-between rounded-top :importantHeader:' data-link='articulo' data-num=':num:'>";
@@ -776,16 +729,13 @@ function fillNoticias(data, bool) {
     $('.noticia-fill').append($finale);
 }
 
-// Validar correo electronico
 function validar_email( email ) {
     var regex = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     return regex.test(email) ? true : false;
 }
 
-// Pushwoosh
 function onPushwooshInitialized(pushNotification) {
 
-	// and HWID if you want to communicate with Pushwoosh API
 	pushNotification.getPushwooshHWID(
 		function(token) {
 			console.log('Pushwoosh HWID: ' + token);
@@ -796,8 +746,7 @@ function onPushwooshInitialized(pushNotification) {
 
 function initPushwoosh() {
 	var pushNotification = cordova.require("pushwoosh-cordova-plugin.PushNotification");
-    //
-	// //set push notifications handler
+
 	document.addEventListener('push-notification',
 		function(event) {
 			var message = event.notification.message;
@@ -815,10 +764,8 @@ function initPushwoosh() {
         serviceName: ""
     });
 
-	//register for push notifications
 	pushNotification.registerDevice(
 		function(status) {
-			// document.getElementById("pushToken").innerHTML = status.pushToken + "<p>";
 			onPushwooshInitialized(pushNotification);
 		},
 		function(status) {
