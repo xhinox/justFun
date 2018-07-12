@@ -3,14 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:gap="http://phonegap.com/ns/1.0"
     id="org.tecnico.mrg"
-    version="1.0.9"
+    version="1.0.10"
     >
     <!-- Android -->
-    <!-- version="1.0.7" -->
+    <!-- version="1.0.10" -->
     <!-- id="org.tecnico.mrg" -->
 
     <!-- iOS -->
-    <!-- version="1.0.25" -->
+    <!-- version="1.0.26" -->
     <!-- id="mx.mirage.Tecnico" -->
 
     <name>Técnico Mirage</name>
