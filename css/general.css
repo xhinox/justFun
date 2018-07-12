@@ -177,7 +177,7 @@ label {
 
 .menu {
     /* width: 60vw; // ANCHO ORIGINAL */
-    width: 60vw;
+    width: 100vw;
 }
 
 .menu > .container {

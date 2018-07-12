@@ -2,8 +2,8 @@
 <widget xmlns="http://www.w3.org/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:gap="http://phonegap.com/ns/1.0"
-    id="org.tecnico.mrg"
-    version="1.0.10"
+    id="mx.mirage.Tecnico"
+    version="1.0.27"
     >
     <!-- Android -->
     <!-- version="1.0.10" -->
@@ -13,9 +13,9 @@
     <!-- version="1.0.26" -->
     <!-- id="mx.mirage.Tecnico" -->
 
-    <name>Técnico Mirage</name>
+    <name>Mirage News</name>
     <description>
-        Aplicacion para mantener una comunicacion con nuestros tecnicos.
+        Mirage es una aplicación de noticias relevantes de la marca para todo público.
     </description>
     <author email="androiddev@airesmirage.com" href="http://mirage.mx">
         Mirage Dev Team
