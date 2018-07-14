@@ -230,17 +230,17 @@ function fillNoticias(data, bool) {
         tmp += "</article>";
         tmp += "</section>";
 
-        var tmp2 = "";
-        tmp2 += "<section class='notice typeB d-flex flex-column mb-2' data-link='articulo' data-num=':num:'>";
-        tmp2 += "<header class='notice-header d-flex flex-column justify-content-between rounded-top :importantHeader:' data-link='articulo' data-num=':num:'>";
-        tmp2 += "<div class='notice-title' data-link='articulo' data-num=':num:'>:titulo:</div>";
-        tmp2 += "<div class='notice-date' data-link='articulo' data-num=':num:'>:fecha:</div>";
-        tmp2 += "</header>";
-        tmp2 += "<article class='notice-body d-flex justify-content-between align-items-center rounded-bottom :importantBody:' data-link='articulo' data-num=':num:'>";
-        tmp2 += "<div class='notice-text' data-link='articulo' data-num=':num:'>:descripcion:</div>";
-        tmp2 += "<i class='fas fa-chevron-right' data-link='articulo' data-num=':num:'></i>";
-        tmp2 += "</article>";
-        tmp2 += "</section>";
+        // var tmp2 = "";
+        // tmp2 += "<section class='notice typeB d-flex flex-column mb-2' data-link='articulo' data-num=':num:'>";
+        // tmp2 += "<header class='notice-header d-flex flex-column justify-content-between rounded-top :importantHeader:' data-link='articulo' data-num=':num:'>";
+        // tmp2 += "<div class='notice-title' data-link='articulo' data-num=':num:'>:titulo:</div>";
+        // tmp2 += "<div class='notice-date' data-link='articulo' data-num=':num:'>:fecha:</div>";
+        // tmp2 += "</header>";
+        // tmp2 += "<article class='notice-body d-flex justify-content-between align-items-center rounded-bottom :importantBody:' data-link='articulo' data-num=':num:'>";
+        // tmp2 += "<div class='notice-text' data-link='articulo' data-num=':num:'>:descripcion:</div>";
+        // tmp2 += "<i class='fas fa-chevron-right' data-link='articulo' data-num=':num:'></i>";
+        // tmp2 += "</article>";
+        // tmp2 += "</section>";
 
         var dataUser = JSON.parse(sessionStorage.getItem('user'));
 
@@ -262,22 +262,29 @@ function fillNoticias(data, bool) {
                 bodyImportant = 'is-importLowBody';
             }
 
-            if (i === 0) {
-                temp = tmp.replace(':titulo:', el.titulo)
+            temp = tmp.replace(':titulo:', el.titulo)
                 .replace(':fecha:', el.fecha)
                 .replace(':descripcion:', el.descripcion)
                 .replace(':importantHeader:', headImportant)
                 .replace(':importantBody:', bodyImportant)
                 .replace(/:num:/g, i);
-            }
-            else {
-                temp = tmp2.replace(':titulo:', el.titulo)
-                .replace(':fecha:', el.fecha)
-                .replace(':descripcion:', el.descripcion)
-                .replace(':importantHeader:', headImportant)
-                .replace(':importantBody:', bodyImportant)
-                .replace(/:num:/g, i);
-            }
+
+            // if (i === 0) {
+            //     temp = tmp.replace(':titulo:', el.titulo)
+            //     .replace(':fecha:', el.fecha)
+            //     .replace(':descripcion:', el.descripcion)
+            //     .replace(':importantHeader:', headImportant)
+            //     .replace(':importantBody:', bodyImportant)
+            //     .replace(/:num:/g, i);
+            // }
+            // else {
+            //     temp = tmp2.replace(':titulo:', el.titulo)
+            //     .replace(':fecha:', el.fecha)
+            //     .replace(':descripcion:', el.descripcion)
+            //     .replace(':importantHeader:', headImportant)
+            //     .replace(':importantBody:', bodyImportant)
+            //     .replace(/:num:/g, i);
+            // }
 
             finale += temp;
         });
@@ -286,7 +293,7 @@ function fillNoticias(data, bool) {
         finale += "<article class='text-center mx-auto mt-5' style='width:200px;'>";
         finale += "<i class='fas fa-cloud mb-3' style='font-size:68px; color:rgba(0,0,0,.6)'></i>";
         finale += "<p class='text-muted'>Por el momento no se han generado noticias.</p>";
-        finale += "<small class='text-muted'>Deslize hacia abajo para actualizar.</small>";
+        finale += "<small class='text-muted'>Toque el boton de actualización en la parte superior de la derecha.</small>";
         finale += "</article>";
     }
 
