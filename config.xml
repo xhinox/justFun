@@ -128,6 +128,7 @@
         <splash src="res/screen/ios/Default-568h@2x.png" width="640" height="1136" />
         <splash src="res/screen/ios/Default-667h@2x.png" width="750" height="1334" />
         <splash src="res/screen/ios/Default-736h@3x.png" width="1242" height="2208" />
+        <splash src="www/splash/ios/Default@2x~universal~anyany.png" />
     </platform>
 
     <engine name="android" spec="^7.0.0" />
