@@ -2,15 +2,15 @@
 <widget xmlns="http://www.w3.org/ns/widgets"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:gap="http://phonegap.com/ns/1.0"
-    id="mx.mirage.news"
-    version="1.0.2"
+    id="org.news.mrg"
+    version="1.0.0"
     >
     <!-- Android -->
-    <!-- version="1.0.10" -->
-    <!-- id="org.tecnico.mrg" -->
+    <!-- version="1.0.0" -->
+    <!-- id="org.news.mrg" -->
 
     <!-- iOS -->
-    <!-- version="1.0.0" -->
+    <!-- version="1.0.2" -->
     <!-- id="mx.mirage.news" -->
 
     <name>Mirage News</name>
