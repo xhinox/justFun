@@ -219,28 +219,16 @@ function fillNoticias(data, bool) {
 
     if (bool) {
         var tmp = "";
-        tmp += "<section class='notice typeA d-flex justify-content-between mb-2' data-link='articulo' data-num=':num:'>";
-        tmp += "<header class='notice-header d-flex flex-column justify-content-between rounded-left :importantHeader:' data-link='articulo' data-num=':num:'>";
+        tmp += "<section class='notice typeA d-flex flex-column justify-content-between mb-2'>";
+        tmp += "<header class='notice-header d-flex flex-column justify-content-between :importantHeader:'>";
         tmp += "<div class='notice-title' data-link='articulo' data-num=':num:'>:titulo:</div>";
         tmp += "<div class='notice-date' data-link='articulo' data-num=':num:'>:fecha:</div>";
         tmp += "</header>";
-        tmp += "<article class='notice-body d-flex justify-content-between align-items-center rounded-right :importantBody:' data-link='articulo' data-num=':num:'>";
+        tmp += "<article class='notice-body d-flex justify-content-between align-items-center :importantBody:' data-link='articulo' data-num=':num:'>";
         tmp += "<div class='notice-text' data-link='articulo' data-num=':num:'>:descripcion:</div>";
         tmp += "<i class='fas fa-chevron-right' data-link='articulo' data-num=':num:'></i>";
         tmp += "</article>";
         tmp += "</section>";
-
-        // var tmp2 = "";
-        // tmp2 += "<section class='notice typeB d-flex flex-column mb-2' data-link='articulo' data-num=':num:'>";
-        // tmp2 += "<header class='notice-header d-flex flex-column justify-content-between rounded-top :importantHeader:' data-link='articulo' data-num=':num:'>";
-        // tmp2 += "<div class='notice-title' data-link='articulo' data-num=':num:'>:titulo:</div>";
-        // tmp2 += "<div class='notice-date' data-link='articulo' data-num=':num:'>:fecha:</div>";
-        // tmp2 += "</header>";
-        // tmp2 += "<article class='notice-body d-flex justify-content-between align-items-center rounded-bottom :importantBody:' data-link='articulo' data-num=':num:'>";
-        // tmp2 += "<div class='notice-text' data-link='articulo' data-num=':num:'>:descripcion:</div>";
-        // tmp2 += "<i class='fas fa-chevron-right' data-link='articulo' data-num=':num:'></i>";
-        // tmp2 += "</article>";
-        // tmp2 += "</section>";
 
         var dataUser = JSON.parse(sessionStorage.getItem('user'));
 
